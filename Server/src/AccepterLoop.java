@@ -29,7 +29,15 @@ public class AccepterLoop extends Thread{
 
             //<CODE>
             //integration of client into the server
-            //isPlayer?addPlayer:addViewer
+
+
+            //info.getGame() returns String
+            //server: has instances of every game
+//            game=info.getGame()
+//            if(info.isPlayer)
+//                game.addPlayer(info.getPlayerName());
+//            else
+//                game.addViewer();
 
 
             for(;;){
