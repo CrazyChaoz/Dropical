@@ -7,6 +7,7 @@ import java.net.Socket;
 public class AccepterLoop extends Thread{
     private static int port;
 
+
     public AccepterLoop(int port) {
         this.port = port;
 
@@ -27,7 +28,12 @@ public class AccepterLoop extends Thread{
 
 
             //<CODE>
+            //integration of client into the server
+            //isPlayer?addPlayer:addViewer
 
+
+            for(;;){
+            }
             //<!CODE>
         } catch (IOException e) {
             e.printStackTrace();
