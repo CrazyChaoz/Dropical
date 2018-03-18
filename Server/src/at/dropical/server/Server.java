@@ -1,3 +1,5 @@
+package at.dropical.server;
+
 /**
  * The Top Level Class
  * Callable with Server.exe();
@@ -47,6 +49,10 @@ public class Server {
         return games.get(gameID);
     }
 
-//  Setter
+    public List<Transmitter> getConnected() {
+        return connected;
+    }
+
+    //  Setter
 
 }
