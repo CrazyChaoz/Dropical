@@ -1,6 +1,7 @@
 import at.dropical.server.gamefield.TetrisArena;
 import at.dropical.server.gamefield.Tetromino;
 
+//TODO Kannst du auf WhatsApp schauen oder einen Gist einrichten? -Julian
 
 //TODO: Besseren namen geben
 public class A_Single_Game {
