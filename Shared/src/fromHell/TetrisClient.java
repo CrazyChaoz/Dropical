@@ -1,4 +1,4 @@
-package at.dropical.shared.fromHell;
+package fromHell;
 
 public interface TetrisClient {
 	

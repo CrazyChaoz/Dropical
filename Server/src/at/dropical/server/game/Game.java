@@ -1,3 +1,7 @@
+package at.dropical.server.game;
+
+import at.dropical.server.net.Viewer;
+
 import java.util.ArrayList;
 import java.util.List;
 

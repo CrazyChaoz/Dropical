@@ -1,6 +1,6 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+package at.dropical.server.net;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -25,7 +25,8 @@ public class AccepterLoop extends Thread{
             //create new open connection on creation of a new open connection
             new AccepterLoop(port);
 
-
+            //Reader r=new InputStreamReader(inputStream);
+//TODO: Server.addTransmitter(new HumanTransmitter(inputStream,outputStream));
 
             //<CODE>
             //integration of client into the server
@@ -41,6 +42,7 @@ public class AccepterLoop extends Thread{
 
 
             for(;;){
+
             }
             //<!CODE>
         } catch (IOException e) {

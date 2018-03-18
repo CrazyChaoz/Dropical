@@ -1,4 +1,4 @@
-package at.dropical.shared.fromHell;
+package fromHell;
 
 import java.io.Serializable;
 
