@@ -5,11 +5,8 @@ public class Game{
     //Zuseher
     private List<Viewer> viewers=new ArrayList();
 
-    //Spieler
-    private Player[] players;
-
-    //Arenas
-    private int[][][] arenas;
+    //Games
+    private A_Single_Game[] game;
 
     //Level
     private int level=0;
@@ -25,34 +22,16 @@ public class Game{
     //Classic
     public Game() {
         int playercount=2;
-
-        players=new Player[playercount];
-        arenas=new int[playercount][20][10];
+        game=new A_Single_Game[playercount];
     }
 
     //Variable Players
     public Game(int playercount) {
-        players=new Player[playercount];
-        arenas=new int[playercount][20][10];
-    }
-
-    //Variable Size
-    public Game(int y,int x) {
-        int playercount=2;
-        players=new Player[playercount];
-        arenas=new int[playercount][y][x];
-    }
-
-    //Variable Size & Playercount
-    public Game(int playercount,int y,int x) {
-        players=new Player[playercount];
-        arenas=new int[playercount][y][x];
+        game=new A_Single_Game[playercount];
     }
 
     /**
      <!Constructors>
      **/
-
-
 
 }
