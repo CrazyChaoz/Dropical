@@ -26,8 +26,12 @@ public class Server {
 
 
 //  Getter
-    public Map<String, Game> getGames() {
+    public Map<String, Game> getAllGames() {
         return games;
+    }
+
+    public Game getGame(String gameID){
+        return games.get(gameID);
     }
 
 //  Setter
