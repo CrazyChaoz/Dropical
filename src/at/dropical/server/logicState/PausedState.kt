@@ -13,7 +13,7 @@ import at.dropical.shared.PlayerAction
 class PausedState(
         val stateManager: StateManager
 ) : GameLogicState {
-
+    override val state: GameState=GameState.GAME_PAUSE
     override val tetrisArena: TetrisArena = TetrisArena()
     override val tetromino: Tetromino = Tetromino(TetrominoTypes.emptyMatrix, 0)
     override val nextTetromino: Tetromino = Tetromino(TetrominoTypes.emptyMatrix, 0)

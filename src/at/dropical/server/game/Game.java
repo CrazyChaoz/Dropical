@@ -2,7 +2,7 @@ package at.dropical.server.game;
 
 import at.dropical.server.Player;
 import at.dropical.server.Viewer;
-import at.dropical.shared.net.requests.UpdateUIRequest;
+import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class Game{
     private List<Viewer> viewers=new ArrayList();
 
     //Games
-    private A_Single_Game[] game;
+    private A_Single_Game[] games;
 
     //Level
     private int level=0;
@@ -21,7 +21,7 @@ public class Game{
     //Time
     private Object time;    //TODO: Implement time
 
-    UpdateUIRequest uiRequest=new UpdateUIRequest();
+    GameDataContainer gameData=new GameDataContainer();
 
     /**
      <Constructors>
@@ -30,12 +30,12 @@ public class Game{
     //Classic
     public Game() {
         int playercount=2;
-        game=new A_Single_Game[playercount];
+        games=new A_Single_Game[playercount];
     }
 
     //Variable Players
     public Game(int playercount) {
-        game=new A_Single_Game[playercount];
+        games=new A_Single_Game[playercount];
     }
 
     /**
@@ -50,10 +50,15 @@ public class Game{
         viewers.add(new Viewer(transmitter));
     }
 
-    public void updateViewers(){
-
+    public void updateClients(){
+        int i=0;
+        for (A_Single_Game game : games) {
+            gameData.getPlayernames()[i]=game.getPlayer().getName();
+            gameData.getArenas()[i]=game
+            i++;
+        }
         for (Viewer viewer : viewers) {
-            viewer.getTransmitter().writeRequest(uiRequest);
+            viewer.getTransmitter().writeRequest(gameData);
         }
     }
 }

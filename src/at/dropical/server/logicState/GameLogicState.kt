@@ -2,6 +2,7 @@ package at.dropical.server.logicState
 
 import at.dropical.server.gamefield.TetrisArena
 import at.dropical.server.gamefield.Tetromino
+import at.dropical.shared.GameState
 import at.dropical.shared.PlayerAction
 
 // Created by julian on 01.03.18.
@@ -31,6 +32,8 @@ interface GameLogicState {
     val h: Int
     /** Distance from left. */
     val w: Int
+
+    val state:GameState
 
     /** @return number of lines cleared. */
     fun run(goDown: Boolean, action: PlayerAction) :Int

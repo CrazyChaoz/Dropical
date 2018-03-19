@@ -28,7 +28,7 @@ class SinglePlayer(
     private var currentGameState = GameState.GAME_RUNNING
 
     /** The number of steps that have happened. */
-    private var tick: Int = 0;
+    private var tick: Int = 0
 
 
 //    internal fun run(request: PollRequest): PollRequest {

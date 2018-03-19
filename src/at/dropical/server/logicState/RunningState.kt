@@ -57,6 +57,7 @@ import at.dropical.shared.PlayerAction
 class RunningState(
         val stateManager: StateManager
 ) : GameLogicState {
+    override val state: GameState=GameState.GAME_RUNNING
 
     override val tetrisArena: TetrisArena = TetrisArena()
     /** Current Tetromino  */
