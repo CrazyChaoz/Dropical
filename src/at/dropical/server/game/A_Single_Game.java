@@ -35,4 +35,7 @@ public class A_Single_Game extends Thread{
         return currTrockY;
     }
 
+    public int[][] getVisualArena(){
+        return null; //TODO: IMPLEMENT PL0X
+    }
 }
