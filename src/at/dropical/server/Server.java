@@ -6,14 +6,12 @@ package at.dropical.server;
  * */
 
 import at.dropical.server.game.Game;
-import at.dropical.server.net.AccepterLoop;
-import at.dropical.server.net.transmitter.Transmitter;
+import at.dropical.shared.net.requests.JoinRequest;
+import at.dropical.shared.net.requests.ListRequest;
+import at.dropical.shared.net.transmitter.Transmitter;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Server {
 
@@ -52,7 +50,16 @@ public class Server {
     public List<Transmitter> getConnected() {
         return connected;
     }
+//  Setter
 
-    //  Setter
+//  Methods
+    private ListRequest listRequest(){
+        ListRequest request=new ListRequest();
 
+        return request;
+    }
+
+    private void joinRequest(JoinRequest joinRequest){
+
+    }
 }

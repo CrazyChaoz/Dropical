@@ -69,7 +69,7 @@ public class TetrisArena {
     }
 
     /** Return a 2D Array with the normal dimensions
-     * (height*width), that is sent to the client.*/
+     * (height*width), that is sent to the at.dropical.client.*/
     public int[][] toArray() {
         int[][] actualArena = new int[height][width];
 

@@ -1,8 +1,8 @@
-package at.dropical.server.net;
+package at.dropical.server;
 
-import at.dropical.server.net.requests.JoinRequest;
-import at.dropical.server.net.requests.ListRequest;
-import at.dropical.server.net.requests.Request;
+import at.dropical.shared.net.requests.JoinRequest;
+import at.dropical.shared.net.requests.ListRequest;
+import at.dropical.shared.net.requests.Request;
 
 public class RequestHandler extends Thread {
     private Request request;
@@ -16,7 +16,7 @@ public class RequestHandler extends Thread {
         if(request instanceof ListRequest){
 
         }else if(request instanceof JoinRequest){
-
+            ((JoinRequest) request).getGameID();
         }
     }
 }

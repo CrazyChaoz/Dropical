@@ -1,7 +1,6 @@
-package at.dropical.server.net;
+package at.dropical.server;
 
-import at.dropical.server.Server;
-import at.dropical.server.net.transmitter.HumanTransmitter;
+import at.dropical.shared.net.transmitter.HumanTransmitter;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -37,7 +36,7 @@ public class AccepterLoop extends Thread{
 
 
             //info.getGame() returns String
-            //server: has instances of every game
+
 //            game=info.getGame()
 //            if(info.isPlayer)
 //                game.addPlayer(info.getPlayerName());
