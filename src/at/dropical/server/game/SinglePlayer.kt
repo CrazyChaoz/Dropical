@@ -61,7 +61,7 @@ class SinglePlayer(
         gameLogicState = when(state) {
             GameState.GAME_RUNNING -> runningGameLogic
             GameState.GAME_PAUSE -> pausedGameLogic
-            GameState.GAME_LOST, GameState.GAME_WON -> wonLostGameLogic
+            GameState.GAME_LOST, GameState.GAME_WON, GameState.GAME_OVER  -> wonLostGameLogic
         }
     }
 

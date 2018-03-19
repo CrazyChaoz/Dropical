@@ -54,7 +54,7 @@ public class Game{
         int i=0;
         for (A_Single_Game game : games) {
             gameData.getPlayernames()[i]=game.getPlayer().getName();
-            gameData.getArenas()[i]=game
+//            gameData.getArenas()[i]=game
             i++;
         }
         for (Viewer viewer : viewers) {

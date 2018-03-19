@@ -1,4 +1,4 @@
-package at.dropical.server.logicState
+package fromWolli.logicState
 
 import at.dropical.server.gamefield.TetrisArena
 import at.dropical.server.gamefield.Tetromino

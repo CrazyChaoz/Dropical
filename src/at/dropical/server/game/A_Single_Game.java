@@ -1,27 +1,18 @@
 package at.dropical.server.game;
 
 import at.dropical.server.Player;
-import at.dropical.server.logicState.*;
-import at.dropical.shared.GameState;
-import org.jetbrains.annotations.NotNull;
+import at.dropical.server.gamefield.TetrisArena;
+import at.dropical.server.gamefield.Tetromino;
 
 //TODO: Besseren namen geben
-public class A_Single_Game implements StateManager{
+public class A_Single_Game extends Thread{
 
     private Player player;
-    //private TetrisArena arena;
-    //private Tetromino currTrock=Tetromino.createRandom();
-    //private Tetromino nextTrock=Tetromino.createRandom();
-    //private int currTrockX;
-    //private int currTrockY;
-
-    /** Only the state that is currently stored in
-     * curState gets updated. */
-    private RunningState runningGameLogic = new RunningState(this);
-    private PausedState pausedGameLogic = new PausedState(this);
-    private WonLostState wonLostGameLogic = new WonLostState(this, runningGameLogic);
-
-    private GameLogicState curState = runningGameLogic;
+    private TetrisArena arena;
+    private Tetromino currTrock=Tetromino.createRandom();
+    private Tetromino nextTrock=Tetromino.createRandom();
+    private int currTrockX;
+    private int currTrockY;
 
 
     public A_Single_Game(Player player) {
@@ -32,32 +23,16 @@ public class A_Single_Game implements StateManager{
         return player;
     }
 
-
     public int[][] getNextTrock() {
-        return curState.getNextTetromino().toArray();
+        return nextTrock.toArray();
     }
 
-    @Override
-    public void changeGameState(@NotNull GameState state) {
-        switch (state) {
-            case GAME_RUNNING:
-                curState = runningGameLogic;
-                break;
-            case GAME_PAUSE:
-                curState = pausedGameLogic;
-                break;
-            case GAME_WON:
-                curState = wonLostGameLogic;
-                break;
-            case GAME_LOST:
-                curState = wonLostGameLogic;
-                break;
-            case GAME_OVER:
-                curState = wonLostGameLogic;
-                break;
-        }
+    public int getCurrTrockX() {
+        return currTrockX;
     }
 
-    @Override
-    public void resetGame(){}
+    public int getCurrTrockY() {
+        return currTrockY;
+    }
+
 }
