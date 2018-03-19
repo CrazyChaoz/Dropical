@@ -3,7 +3,9 @@
 [![Join the chat at https://gitter.im/Dropical/Lobby](https://badges.gitter.im/Dropical/Lobby.svg)](https://gitter.im/Dropical/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <br>
 
+<code>
 This is a Tetris spinnoff we are making for school.
+</code>
 
 <br><br>
 
@@ -16,6 +18,8 @@ This is a Tetris spinnoff we are making for school.
 >
 > ### Shared 
 >> Classes that are sheared between Client & Server
->
+
+<br>
+
 > ### Other
 >> Sources that are not used within our Project
