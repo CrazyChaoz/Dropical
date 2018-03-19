@@ -1,8 +1,7 @@
 package at.htlwels.it.wollersbergerjulian.tetris.server.main
 
-import at.htlwels.it.wollersbergerjulian.tetris.server.logicState.StateManager
-import at.htlwels.it.wollersbergerjulian.tetris.shared.com.GameState
-import at.htlwels.it.wollersbergerjulian.tetris.shared.com.PollRequest
+import at.dropical.server.logicState.StateManager
+import at.dropical.shared.GameState
 
 
 // Created by julian on 01.02.18.
@@ -16,17 +15,18 @@ class MultiPlayerManager : StateManager {
     /* A list of all (usually 2) games that run. */
     private val playersMap = HashMap<Int, SinglePlayer>()
 
-    fun handleClientRequest(request: PollRequest): PollRequest {
-        val players = playersMap.get(request.playerNo)
-        if(players == null) {
-            // Make the new game
-            val newGameLoop = SinglePlayer(this)
-            playersMap.put(request.playerNo, newGameLoop)
 
-            return newGameLoop.run(request)
-        } else
-            return players.run(request)
-    }
+//    fun handleClientRequest(request: PollRequest): PollRequest {
+//        val players = playersMap[request.playerNo]
+//        if(players == null) {
+//            // Make the new game
+//            val newGameLoop = SinglePlayer(this)
+//            playersMap.put(request.playerNo, newGameLoop)
+//
+//            return newGameLoop.run(request)
+//        } else
+//            return players.run(request)
+//    }
 
     /** If one player clears some lines,
      * they are added to the other/all other players.

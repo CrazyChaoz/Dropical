@@ -2,7 +2,7 @@ package at.dropical.server.game;
 
 import at.dropical.server.Player;
 import at.dropical.server.Viewer;
-import at.dropical.shared.net.requests.UiRequest;
+import at.dropical.shared.net.requests.UpdateUIRequest;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class Game{
     //Time
     private Object time;    //TODO: Implement time
 
-    UiRequest uiRequest=new UiRequest();
+    UpdateUIRequest uiRequest=new UpdateUIRequest();
 
     /**
      <Constructors>
@@ -51,9 +51,9 @@ public class Game{
     }
 
     public void updateViewers(){
-        uiRequest.
+
         for (Viewer viewer : viewers) {
-            viewer.getTransmitter().writeRequest();
+            viewer.getTransmitter().writeRequest(uiRequest);
         }
     }
 }
