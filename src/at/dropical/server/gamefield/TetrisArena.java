@@ -200,7 +200,10 @@ public class TetrisArena {
      * This is for multiplayer.
      * Maybe add a mode with this in singleplayer too?
      * @return wherever a block got over the top of
-     * the arena. True -> game over!*/
+     * the arena. True -> game over!
+     *
+     * fixme The current Tetroino must go up too,
+     * otherwise it can lead to a wrong game over. */
     public boolean addLines(int lineCount) {
         boolean overTop = false;
         Random rand = new Random();
