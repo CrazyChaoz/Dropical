@@ -2,63 +2,76 @@ package at.dropical.server.game;
 
 import at.dropical.server.Player;
 import at.dropical.server.Viewer;
+import at.dropical.server.gamestates.StartingState;
+import at.dropical.server.gamestates.State;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game{
+public class Game {
     //Zuseher
-    private List<Viewer> viewers=new ArrayList();
+    private List<Viewer> viewers = new ArrayList();
 
     //Games
     private A_Single_Game[] games;
 
     //Level
-    private int level=0;
+    private int level = 0;
 
     //Time
     private Object time;    //TODO: Implement time
 
-    GameDataContainer gameData=new GameDataContainer();
+    private State gameState = new StartingState();
+    private GameDataContainer gameDataContainer = new GameDataContainer();
 
     /**
-     <Constructors>
+     * <Constructors>
      **/
 
     //Classic
     public Game() {
-        int playercount=2;
-        games=new A_Single_Game[playercount];
+        int playercount = 2;
+        games = new A_Single_Game[playercount];
     }
 
     //Variable Players
     public Game(int playercount) {
-        games=new A_Single_Game[playercount];
+        games = new A_Single_Game[playercount];
     }
 
     /**
-     <!Constructors>
+     * <!Constructors>
      **/
 
-    public void addPlayer(String playerName, Transmitter transmitter){
-        new A_Single_Game(new Player(transmitter,playerName));
+    //Getter
+    public A_Single_Game[] getGames() {
+        return games;
     }
 
-    public void addViewer(Transmitter transmitter){
+    public int getLevel() {
+        return level;
+    }
+
+    //Method
+    public void addPlayer(String playerName, Transmitter transmitter) {
+        new A_Single_Game(new Player(transmitter, playerName));
+    }
+
+    public void addViewer(Transmitter transmitter) {
         viewers.add(new Viewer(transmitter));
     }
 
-    public void updateClients(){
-        int i=0;
+    public void updateClients() {
+
+        gameState.fillGameDataContainer(this,gameDataContainer);
+
         for (A_Single_Game game : games) {
-            gameData.getPlayernames()[i]=game.getPlayer().getName();
-//            gameData.getArenas()[i]=game
-            i++;
+            game.getPlayer().getTransmitter().writeRequest(gameDataContainer);
         }
         for (Viewer viewer : viewers) {
-            viewer.getTransmitter().writeRequest(gameData);
+            viewer.getTransmitter().writeRequest(gameDataContainer);
         }
     }
 }
