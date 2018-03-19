@@ -35,17 +35,8 @@ public class AccepterLoop extends Thread{
 
 
 
-            //info.getGame() returns String
-
-//            game=info.getGame()
-//            if(info.isPlayer)
-//                game.addPlayer(info.getPlayerName());
-//            else
-//                game.addViewer();
-
-
             for(;;){
-                new RequestHandler(transi.readRequest());
+                new RequestHandler(transi.readRequest(),transi);
             }
             //<!CODE>
         } catch (IOException e) {

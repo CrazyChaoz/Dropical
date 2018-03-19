@@ -1,6 +1,7 @@
 package at.dropical.server.logicState
 
-import at.dropical.shared.fromHell.GameState
+import at.dropical.shared.GameState
+
 
 // Created by julian on 01.03.18.
 /**

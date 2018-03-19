@@ -2,8 +2,8 @@ package at.dropical.server.logicState
 
 import at.dropical.server.gamefield.TetrisArena
 import at.dropical.server.gamefield.Tetromino
-import at.dropical.shared.fromHell.GameState
-import at.dropical.shared.fromHell.PlayerAction
+import at.dropical.shared.GameState
+import at.dropical.shared.PlayerAction
 
 // Created by julian on 24.11.17.
 /**

@@ -5,7 +5,7 @@ import at.dropical.server.gamefield.Tetromino;
 import at.dropical.server.Player;
 
 //TODO: Besseren namen geben
-public class A_Single_Game {
+public class A_Single_Game extends Thread{
 
     private Player player;
     private TetrisArena arena;
@@ -13,7 +13,13 @@ public class A_Single_Game {
     private int currTrockX;
     private int currTrockY;
 
-    public A_Single_Game() {
+    public A_Single_Game(Player player) {
+        this.player=player;
         this.arena = new TetrisArena();
+    }
+
+    @Override
+    public void run() {
+
     }
 }
