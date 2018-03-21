@@ -3,16 +3,15 @@ package com.dropical.client.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
 
 public class Menu implements Screen {
-    private OrthographicCamera cam;
+    private DropicalCam cam;
+
     private Sprite background;
     private BitmapFont bitmapFont;
 
@@ -33,22 +32,14 @@ public class Menu implements Screen {
         bitmapFont.getData().setScale(0.9f);
         bitmapFont.setColor(new Color(0x4C4C4Cff));
 
-        //Cam
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        cam = new OrthographicCamera(1280, 1280 * (h / w));
-        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
-        cam.update();
+        //Kamera
+        cam = new DropicalCam(1280, 720);
     }
 
     @Override
     public void render(float delta) {
         //Tastatureingaben
         handleInput();
-
-        //Kamera
-        cam.update();
-        game.getBatch().setProjectionMatrix(cam.combined);
 
         //Hintergrundfarbe (weiß)
         Gdx.gl.glClearColor(1, 1, 1, 0);
@@ -69,7 +60,7 @@ public class Menu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        cam.update(width, height);
     }
 
     @Override
@@ -94,9 +85,6 @@ public class Menu implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
             game.setScreen(new Game(game, 2));
         }
-//        if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-//            game.setScreen(new NetworkGame(game));
-//        }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }

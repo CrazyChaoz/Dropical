@@ -5,10 +5,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.server.TetrisServerImpl;
 import com.dropical.client.serverEssentials.GameState;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements Screen {
-    private OrthographicCamera cam;
+    private DropicalCam cam;
     private Sprite background;
     private Sprite overlay;
     private BitmapFont bitmapFont;
@@ -98,12 +98,8 @@ public class Game implements Screen {
         overlay.setPosition(0, 0);
         overlay.setSize(1280, 720);
 
-        //Cam
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        cam = new OrthographicCamera(1280, 1280 * (h / w));
-        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
-        cam.update();
+        //Kamera
+        cam = new DropicalCam(1280, 720);
     }
     private void createServer(int anzahlSpieler) throws Exception {
         server = new TetrisServerImpl(anzahlSpieler);
@@ -113,10 +109,6 @@ public class Game implements Screen {
     public void render(float delta) {
         //Tastatureingaben
         handleInput();
-
-        //Kamera
-        cam.update();
-        game.getBatch().setProjectionMatrix(cam.combined);
 
         //Hintergrundfarbe (weiß)
         Gdx.gl.glClearColor(1, 1, 1, 0);
@@ -345,7 +337,7 @@ public class Game implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        cam.update(width, height);
     }
 
     @Override

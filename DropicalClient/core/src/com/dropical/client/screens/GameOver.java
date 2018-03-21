@@ -5,20 +5,20 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameOver implements Screen {
-    private OrthographicCamera cam;
+    private DropicalCam cam;
     private Sprite background;
     private Sprite overlay;
     private BitmapFont bitmapFont;
@@ -624,22 +624,14 @@ public class GameOver implements Screen {
         sharkAnimationP1 = new Animation<TextureRegion>(1f/36f, sharkAnimationFramesP1);
         sharkAnimationP2 = new Animation<TextureRegion>(1f/36f, sharkAnimationFramesP2);
 
-        //Cam
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        cam = new OrthographicCamera(1280, 1280 * (h / w));
-        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
-        cam.update();
+        //Kamera
+        cam = new DropicalCam(1280, 720);
     }
 
     @Override
     public void render(float delta) {
         //Tastatureingaben
         handleInput();
-
-        //Kamera
-        cam.update();
-        game.getBatch().setProjectionMatrix(cam.combined);
 
         //Hintergrundfarbe (weiß)
         Gdx.gl.glClearColor(1, 1, 1, 0);
@@ -764,7 +756,7 @@ public class GameOver implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        cam.update(width, height);
     }
 
     @Override

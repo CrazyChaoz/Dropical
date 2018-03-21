@@ -10,7 +10,6 @@ public class DesktopLauncher {
 		config.width = 1280;
 		config.height = 720;
 		config.title = "Dropical";
-		config.resizable = false;
 		new LwjglApplication(new DropicalMain(), config);
 	}
 }
