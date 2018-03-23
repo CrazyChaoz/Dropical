@@ -5,22 +5,14 @@ import at.dropical.shared.GameState;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
 
-public class RunningState implements State {
-
+public class PausedState implements State {
     @Override
     public GameDataContainer fillGameDataContainer(Game game, GameDataContainer gameDataContainer) {
-
-        //static, ez
-        gameDataContainer.getArenas()[0]=game.getGames()[0].getVisualArena();
-        gameDataContainer.getArenas()[1]=game.getGames()[1].getVisualArena();
-
-        gameDataContainer.getNextTrock()[0]=game.getGames()[0].getNextTrock();
-        gameDataContainer.getNextTrock()[1]=game.getGames()[1].getNextTrock();
 
         gameDataContainer.getPlayernames()[0]=game.getGames()[0].getName();
         gameDataContainer.getPlayernames()[1]=game.getGames()[1].getName();
 
-        gameDataContainer.setState(GameState.GAME_RUNNING);
+        gameDataContainer.setState(GameState.GAME_PAUSE);
 
         gameDataContainer.setLevel(game.getLevel());
 

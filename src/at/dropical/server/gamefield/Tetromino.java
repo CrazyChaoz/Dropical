@@ -46,17 +46,19 @@ public class Tetromino {
     }
 
     /** Rotates the Tetromino in one direction. */
-    public void rotate() {
+    public Tetromino rotate() {
         /* Cycle through all the rotations.
         * Every type can have a different amount
         * of possible rotations. (4, 2 or 1) */
         rotation = (rotation +1) % type.length;
+        return this;
     }
 
     /** Rotates the Tetromino in the other direction. */
-    public void rotateBack() {
+    public Tetromino rotateBack() {
         /* Decrement rotation while avoiding becoming negative. */
         rotation = (type.length + (rotation -1)) % type.length;
+        return this;
     }
 
     public int getRotation() {

@@ -1,6 +1,8 @@
 package at.dropical.server.gamefield;
 // Created by julian on 17.11.17.
 
+import at.dropical.server.game.GameOverException;
+
 import java.util.Random;
 
 /**
@@ -23,12 +25,12 @@ public class TetrisArena {
     public static final int width = 10;
 
     /** How much free space on the side is. */
-    static final int marginLeftRight = 4;
-    static final int marginBottom = 4;
-    static final int marginTop = 4;
+    private static final int marginLeftRight = 4;
+    private static final int marginBottom = 4;
+    private static final int marginTop = 4;
     /** The resulting internal dimensions. */
-    static final int internalHeight = height + marginBottom + marginTop;
-    static final int internalWidth = width + 2*marginLeftRight;
+    private static final int internalHeight = height + marginBottom + marginTop;
+    private static final int internalWidth = width + 2*marginLeftRight;
 
     /** Axis of the Arena: <br>
      *  Height is the first dimension and goes down,<br>
@@ -91,10 +93,12 @@ public class TetrisArena {
      * @param overTopAllowed should this return true when tetromino is out top?
      * @return false if it's out of bounds or if there are already
      * blocks at those positions. */
-    public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) {
+    public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) throws GameOverException {
         int[][] tetrominoArr = tetromino.toArray();
+
         for(int i = 0; i < Tetromino.size; i++) {
             for(int j = 0; j < Tetromino.size; j++) {
+
                 // Only care if there is a block
                 if(tetrominoArr[i][j] >= 1) {
 
@@ -102,12 +106,13 @@ public class TetrisArena {
                     if(arena[marginTop + h + i][marginLeftRight + w + j] >= 1
                             || w+j < 0    // Out left
                             || w+j >= width // Out right
-                            || h+i >= height // Out bottom
-                            || !overTopAllowed && (h+i <0))
-                            /* Out top is sometimes allowed because the tetromino
-                             * has to start falling down from over the top.*/
-
+                            || h+i >= height) // Out bottom
                         return false; //Stop if one block fails.
+
+                    /* Out top is sometimes allowed because the tetromino
+                     * has to start falling down from over the top.*/
+                    if(!overTopAllowed && (h+i <0))
+                        throw new GameOverException();
                 }
             }
         }
@@ -120,7 +125,7 @@ public class TetrisArena {
      * @return result of checkTetromino.
      * If it returns false, the tetromino is in a invalid
      * position. -> Game Over! */
-    public boolean placeTetromino(Tetromino tetromino, int h, int w) {
+    public boolean placeTetromino(Tetromino tetromino, int h, int w) throws GameOverException {
         // Can it be placed here?
         boolean canBePlaced = checkTetromino(tetromino, h, w, false);
         if(canBePlaced) {
