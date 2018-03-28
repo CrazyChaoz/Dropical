@@ -61,6 +61,8 @@ public class Tetromino {
         return this;
     }
 
+    /** @return the "ghost" version of the current tetromino*/
+
     public int getRotation() {
         return rotation;
     }

@@ -227,6 +227,24 @@ public class TetrisArena {
         return overTop;
     }
 
+
+
+    public void placeGhost(Tetromino tetromino, int h, int w) throws GameOverException {
+        // Can it be placed here?
+
+        while(checkTetromino(tetromino, --h, w, false)) {
+            // Place it.
+            int[][] tetrominoArr = tetromino.toArray();
+            for(int i = 0; i < Tetromino.size; i++) {
+                for(int j = 0; j < Tetromino.size; j++) {
+                    arena[marginTop + h + i][marginLeftRight + w + j] += tetrominoArr[i][j]!=0?666:0;
+                }
+            }
+        }
+    }
+
+
+
     /** Only the actual arena. */
     @Override
     public String toString() {
