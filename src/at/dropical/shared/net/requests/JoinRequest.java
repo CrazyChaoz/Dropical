@@ -5,6 +5,18 @@ public class JoinRequest implements Request {
     private boolean isPlayer;
     private String playerName;
 
+    public JoinRequest(String gameID, String playerName) {
+        this.gameID = gameID;
+        this.isPlayer = true;
+        this.playerName = playerName;
+    }
+
+    public JoinRequest(String gameID) {
+        this.gameID = gameID;
+        this.isPlayer = false;
+        this.playerName = null;
+    }
+
     public String getGameID() {
         return gameID;
     }

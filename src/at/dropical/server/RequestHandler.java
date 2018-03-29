@@ -1,9 +1,7 @@
 package at.dropical.server;
 
 import at.dropical.server.game.Game;
-import at.dropical.shared.net.requests.JoinRequest;
-import at.dropical.shared.net.requests.ListRequest;
-import at.dropical.shared.net.requests.Request;
+import at.dropical.shared.net.requests.*;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.Map;
@@ -38,6 +36,14 @@ public class RequestHandler extends Thread {
                 game.addPlayer(((JoinRequest) request).getPlayerName(),transmitter);
             else
                 game.addViewer(transmitter);
+        }else if(request instanceof AddAiToGameRequest){
+            Game game=Server.exe().getGame(((AddAiToGameRequest) request).getGameID());
+
+            if(Server.isAiAllowed){
+                //TODO: if pure ai is allowed
+            }
+        }else if(request instanceof InputDataContainer){
+
         }
     }
 }

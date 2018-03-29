@@ -8,15 +8,12 @@ import java.io.*;
 //Currently just a ObjectStreamTransmitter
 //Future: JSON or complete bytewise
 
-public class HumanTransmitter implements Transmitter {
+public class ObjectTransmitter extends Transmitter {
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
-    public HumanTransmitter(InputStream inputStream, OutputStream outputStream) {
-        try {
-            this.inputStream = new ObjectInputStream(inputStream);
-            this.outputStream = new ObjectOutputStream(outputStream);
-        } catch (IOException e) {e.printStackTrace();}
+    public ObjectTransmitter(InputStream inputStream, OutputStream outputStream) throws IOException {
+        super(new ObjectInputStream(inputStream),new ObjectOutputStream(outputStream));
     }
 
     @Override

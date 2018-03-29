@@ -1,6 +1,7 @@
 package at.dropical.server;
 
-import at.dropical.shared.net.transmitter.HumanTransmitter;
+
+import at.dropical.shared.net.transmitter.ObjectTransmitter;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -30,7 +31,7 @@ public class AccepterLoop extends Thread{
 
             //<CODE>
             //add new connection to Server
-            HumanTransmitter transi=new HumanTransmitter(inputStream,outputStream);
+            ObjectTransmitter transi=new ObjectTransmitter(inputStream,outputStream);
             Server.exe().getConnected().add(transi);
 
 

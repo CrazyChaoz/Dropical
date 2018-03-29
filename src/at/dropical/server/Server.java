@@ -15,6 +15,7 @@ import java.util.*;
 
 public class Server {
 
+
     //Singleton code
     //NO TOUCHY-TOUCHY
     private static Server privateInstance = new Server();
@@ -27,9 +28,19 @@ public class Server {
  * The Server starts here
  */
 
+//  STATICS
+
+    //spamprotection
+    public static final boolean isPureAiGameAllowed=true;
+    //human tournaments
+    public static final boolean isAiAllowed=true;
+
+    //The port 
+    private static final int port=2345;
+
 //  Constructor
     private Server() {
-        new AccepterLoop(2345);
+        new AccepterLoop(port);
     }
 
 
@@ -53,13 +64,4 @@ public class Server {
 //  Setter
 
 //  Methods
-    private ListRequest listRequest(){
-        ListRequest request=new ListRequest();
-
-        return request;
-    }
-
-    private void joinRequest(JoinRequest joinRequest){
-
-    }
 }
