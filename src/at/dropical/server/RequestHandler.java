@@ -11,39 +11,48 @@ public class RequestHandler extends Thread {
     private Transmitter transmitter;
 
     public RequestHandler(Request request, Transmitter transmitter) {
-        this.request=request;
-        this.transmitter=transmitter;
+        this.request = request;
+        this.transmitter = transmitter;
 
         this.start();
     }
 
     @Override
     public void run() {
-        if(request instanceof ListRequest){
-            if(((ListRequest) request).isGameListRequest()){
-                for (Map.Entry<String, Game> stringGameEntry : Server.exe().getAllGames().entrySet()) {
+        if (request instanceof ListRequest) {
+            if (((ListRequest) request).isGameListRequest()) {
+                for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
                     ((ListRequest) request).addName(stringGameEntry.getKey());
                 }
-            }else{
+            } else {
                 //TODO: Transmit Server selection
             }
             transmitter.writeRequest(request);
-        }else if(request instanceof JoinRequest){
+        } else if (request instanceof JoinRequest) {
 
-            Game game=Server.exe().getGame(((JoinRequest) request).getGameID());
+            Game game = Server.instance().getGame(((JoinRequest) request).getGameID());
 
-            if(((JoinRequest) request).isPlayer())
-                game.addPlayer(((JoinRequest) request).getPlayerName(),transmitter);
-            else
+            if (((JoinRequest) request).isPlayer()) {
+                game.addPlayer(((JoinRequest) request).getPlayerName(), transmitter); //TODO: send message to client ?
+                transmitter.setPlayingGame(game);
+            } else
                 game.addViewer(transmitter);
-        }else if(request instanceof AddAiToGameRequest){
-            Game game=Server.exe().getGame(((AddAiToGameRequest) request).getGameID());
+        } else if (request instanceof AddAiToGameRequest) {
 
-            if(Server.isAiAllowed){
-                //TODO: if pure ai is allowed
+            Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
+
+
+            if (Server.isAiAllowed && game.getNumAI() == 0) {               //FIXME: curr AI count < max player count
+                game.addAI();                                               //
+            } else if (Server.isPureAiGameAllowed) {
+                game.addAI();
             }
-        }else if(request instanceof InputDataContainer){
 
+
+        } else if (request instanceof InputDataContainer) {
+            if(transmitter.getPlayingGame()!=null){
+                transmitter.getPlayingGame().handleInput((InputDataContainer) request);
+            }
         }
     }
 }

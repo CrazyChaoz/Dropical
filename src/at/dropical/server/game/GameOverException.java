@@ -1,3 +1,4 @@
 package at.dropical.server.game;
 
-public class GameOverException extends Exception{}
+public class GameOverException extends Exception{
+}

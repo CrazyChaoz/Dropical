@@ -1,15 +1,19 @@
 package at.dropical.server.game;
 
+import at.dropical.AI.SimpleAI;
 import at.dropical.server.Viewer;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.shared.net.requests.GameDataContainer;
+import at.dropical.shared.net.requests.InputDataContainer;
+import at.dropical.shared.net.transmitter.AiTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
+
     //Zuseher
     private List<Viewer> viewers = new ArrayList();
 
@@ -28,6 +32,9 @@ public class Game {
     private State gameState = new StartingState();
     private GameDataContainer gameDataContainer = new GameDataContainer();
 
+    //how many AI are connected
+    private int numAI=0;
+
     /**
      * <Constructors>
      **/
@@ -40,10 +47,11 @@ public class Game {
     }
 
     //Variable Players
+    /*
     public Game(int playercount) {
         games = new A_Single_Game[playercount];
         players = new Viewer[playercount];
-    }
+    }*/
 
     /**
      * <!Constructors>
@@ -56,6 +64,10 @@ public class Game {
 
     public int getLevel() {
         return level;
+    }
+
+    public int getNumAI() {
+        return numAI;
     }
 
     //Method
@@ -74,14 +86,25 @@ public class Game {
         return false;
     }
 
+    public void addAI(){
+        addPlayer("Zufallsname: Rüdiger",new AiTransmitter(new SimpleAI()));
+        numAI++;
+    }
     public void addViewer(Transmitter transmitter) {
         viewers.add(new Viewer(transmitter));
+    }
+
+    public void handleInput(InputDataContainer idc){
+        gameState.handleInput(this,idc);
     }
 
     public void updateClients() {
 
         gameState.fillGameDataContainer(this,gameDataContainer);
 
+        for (Viewer player : players) {
+            player.getTransmitter().writeRequest(gameDataContainer);
+        }
         for (Viewer viewer : viewers) {
             viewer.getTransmitter().writeRequest(gameDataContainer);
         }

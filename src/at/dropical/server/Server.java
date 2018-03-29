@@ -6,8 +6,6 @@ package at.dropical.server;
  * */
 
 import at.dropical.server.game.Game;
-import at.dropical.shared.net.requests.JoinRequest;
-import at.dropical.shared.net.requests.ListRequest;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 
@@ -19,7 +17,7 @@ public class Server {
     //Singleton code
     //NO TOUCHY-TOUCHY
     private static Server privateInstance = new Server();
-    public static Server exe() {
+    public static Server instance() {
         return privateInstance;
     }
 

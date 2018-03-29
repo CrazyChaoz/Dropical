@@ -6,11 +6,12 @@ import at.dropical.server.gamefield.Tetromino;
 //TODO: Besseren namen geben
 public class A_Single_Game extends Thread {
 
+    //FIXME: use correct values
     public static int STARTVAL_X = -1;
     public static int STARTVAL_Y = -1;
 
     private String playername;
-    private TetrisArena arena;
+    private TetrisArena arena=new TetrisArena();
     private Tetromino currTrock = Tetromino.createRandom();
     private Tetromino nextTrock = Tetromino.createRandom();
     private int currTrockX = STARTVAL_X;

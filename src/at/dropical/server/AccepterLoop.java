@@ -32,7 +32,7 @@ public class AccepterLoop extends Thread{
             //<CODE>
             //add new connection to Server
             ObjectTransmitter transi=new ObjectTransmitter(inputStream,outputStream);
-            Server.exe().getConnected().add(transi);
+            Server.instance().getConnected().add(transi);
 
 
 
