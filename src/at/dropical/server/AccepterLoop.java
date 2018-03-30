@@ -37,7 +37,7 @@ public class AccepterLoop extends Thread{
 
 
             for(;;){
-                new RequestHandler(transi.readRequest(),transi);
+                new ServerSideRequestHandler(transi.readRequest(),transi);
             }
             //<!CODE>
         } catch (IOException e) {

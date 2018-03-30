@@ -1,19 +1,20 @@
 package at.dropical.AI;
 
 import at.dropical.Client;
+import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.ListRequest;
 import at.dropical.shared.net.requests.Request;
 
-public class InputRequestHandler extends Thread{
+public class ClientSideRequestHandler implements RequestHandler {
     private Request r;
     private Client client;
 
-    public InputRequestHandler(Request r, Client client){
+    public ClientSideRequestHandler(Request r, Client client){
         this.r=r;
         this.client=client;
 
-        start();
+        new Thread(this).start();
     }
 
 

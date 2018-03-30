@@ -1,21 +1,23 @@
 package at.dropical.server;
 
+import at.dropical.AI.SimpleAI;
 import at.dropical.server.game.Game;
+import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.*;
 import at.dropical.AI.AiTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.Map;
 
-public class RequestHandler extends Thread {
+public class ServerSideRequestHandler implements RequestHandler {
     private Request request;
     private Transmitter transmitter;
 
-    public RequestHandler(Request request, Transmitter transmitter) {
+    public ServerSideRequestHandler(Request request, Transmitter transmitter) {
         this.request = request;
         this.transmitter = transmitter;
 
-        this.start();
+        new Thread(this).start();
     }
 
     @Override
@@ -44,7 +46,7 @@ public class RequestHandler extends Thread {
             Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
 
             if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
-                AiTransmitter transmitter=new AiTransmitter();
+                AiTransmitter transmitter=new AiTransmitter(new SimpleAI());
                 transmitter.setPlayerNumber(game.addAI(transmitter));
                 transmitter.setPlayingGame(game);
             }

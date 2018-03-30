@@ -1,42 +1,31 @@
 package at.dropical.AI;
 
-import at.dropical.server.RequestHandler;
+import at.dropical.server.ServerSideRequestHandler;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 
 public class AiTransmitter extends Transmitter {
-    private Request cachedRequest=null;
+    private SimpleAI instance;
 
-    public AiTransmitter() {
+    public AiTransmitter(SimpleAI instance) {
         super(null,null);
+        this.instance=instance;
     }
 
     public void toServer(Request r){
-        new RequestHandler(r,this);
+        new ServerSideRequestHandler(r,this);
     }
 
 
+    //called by server
     @Override
     public void writeRequest(Request r) {
-        cachedRequest=r;
+        new ClientSideRequestHandler(r,instance);
     }
 
     @Override
-    @NotNull
     public Request readRequest() {
-        while (cachedRequest==null);
-        Request r=cachedRequest;
-        cachedRequest=null;
-        return r;
-    }
-
-    @Nullable
-    public Request readRequestNonBlocking(){
-        Request r=cachedRequest;
-        cachedRequest=null;
-        return r;
+        return null;
     }
 }
