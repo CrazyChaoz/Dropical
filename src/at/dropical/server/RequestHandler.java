@@ -26,7 +26,7 @@ public class RequestHandler extends Thread {
                     ((ListRequest) request).addName(stringGameEntry.getKey());
                 }
             } else {
-                //TODO: Transmit Server selection
+                //TODO: Transmit Server list
             }
             transmitter.writeRequest(request);
         } else if (request instanceof JoinRequest) {
@@ -34,7 +34,7 @@ public class RequestHandler extends Thread {
             Game game = Server.instance().getGame(((JoinRequest) request).getGameID());
 
             if (((JoinRequest) request).isPlayer()) {
-                int playerNumber=game.addPlayer(((JoinRequest) request).getPlayerName(), transmitter); //TODO: send message to client ?
+                int playerNumber=game.addPlayer(((JoinRequest) request).getPlayerName(), transmitter);  //TODO: send message to client ?
                 transmitter.setPlayingGame(game);
                 transmitter.setPlayerNumber(playerNumber);
             } else

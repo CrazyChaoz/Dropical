@@ -7,6 +7,7 @@ import at.dropical.shared.net.transmitter.Transmitter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+
 public class AiTransmitter extends Transmitter {
     private Request cachedRequest=null;
 

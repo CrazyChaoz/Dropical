@@ -1,5 +1,6 @@
 package at.dropical.client;
 
+import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
 
@@ -10,7 +11,6 @@ public class ClientSideTransmitter extends Transmitter {
 
     public ClientSideTransmitter(Socket socket) throws IOException {
         super(new ObjectInputStream(socket.getInputStream()), new ObjectOutputStream(socket.getOutputStream()));
-
     }
 
     @Override

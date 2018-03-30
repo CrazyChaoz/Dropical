@@ -1,6 +1,8 @@
 package at.dropical.AI;
 
 
+import at.dropical.shared.net.requests.InputDataContainer;
+import at.dropical.shared.net.requests.ListRequest;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
 
@@ -11,8 +13,12 @@ public class SimpleAI extends Thread {
         return instance;
     }
 
+    private AiTransmitter transmitter=new AiTransmitter();
+
+
     @Override
     public void run() {
-        new AiTransmitter().readRequest();
+        transmitter.toServer(new ListRequest(true));//transmitter.write();
+        transmitter.readRequest();
     }
 }
