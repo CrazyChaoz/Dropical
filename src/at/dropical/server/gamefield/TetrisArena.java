@@ -1,7 +1,7 @@
 package at.dropical.server.gamefield;
 // Created by julian on 17.11.17.
 
-import at.dropical.server.game.GameOverException;
+import at.dropical.server.game.GenericGameOverException;
 
 import java.util.Random;
 
@@ -93,7 +93,7 @@ public class TetrisArena {
      * @param overTopAllowed should this return true when tetromino is out top?
      * @return false if it's out of bounds or if there are already
      * blocks at those positions. */
-    public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) throws GameOverException {
+    public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) throws GenericGameOverException {
         int[][] tetrominoArr = tetromino.toArray();
 
         for(int i = 0; i < Tetromino.size; i++) {
@@ -112,7 +112,7 @@ public class TetrisArena {
                     /* Out top is sometimes allowed because the tetromino
                      * has to start falling down from over the top.*/
                     if(!overTopAllowed && (h+i <0))
-                        throw new GameOverException();
+                        throw new GenericGameOverException();
                 }
             }
         }
@@ -125,7 +125,7 @@ public class TetrisArena {
      * @return result of checkTetromino.
      * If it returns false, the tetromino is in a invalid
      * position. -> Game Over! */
-    public boolean placeTetromino(Tetromino tetromino, int h, int w) throws GameOverException {
+    public boolean placeTetromino(Tetromino tetromino, int h, int w) throws GenericGameOverException {
         // Can it be placed here?
         boolean canBePlaced = checkTetromino(tetromino, h, w, false);
         if(canBePlaced) {
@@ -229,7 +229,7 @@ public class TetrisArena {
 
 
 
-    public void placeGhost(Tetromino tetromino, int h, int w) throws GameOverException {
+    public void placeGhost(Tetromino tetromino, int h, int w) throws GenericGameOverException {
         // Can it be placed here?
 
         while(checkTetromino(tetromino, --h, w, false)) {

@@ -51,8 +51,13 @@ public class A_Single_Game extends Thread {
 
     //FUNCTIONALITY
 
-    public boolean moveTrockDown() throws GameOverException {
-        boolean retval = arena.placeTetromino(currTrock, currTrockY - 1, currTrockX);
+    public boolean moveTrockDown() throws SpecialGameOverException {
+        boolean retval = false;
+        try {
+            retval = arena.placeTetromino(currTrock, currTrockY - 1, currTrockX);
+        } catch (GenericGameOverException e) {
+            throw new SpecialGameOverException(playername);
+        }
 
         if (retval == false)
             newTrock();
@@ -66,32 +71,32 @@ public class A_Single_Game extends Thread {
         return retval;
     }
 
-    public void moveTrockLeft() throws GameOverException {
+    public void moveTrockLeft() throws GenericGameOverException {
         if (arena.placeTetromino(currTrock, currTrockY, currTrockX - 1))
             currTrockX -= 1;
     }
 
-    public void moveTrockRight() throws GameOverException {
-        if (arena.placeTetromino(currTrock, currTrockY, currTrockX + 1) == true)
+    public void moveTrockRight() throws GenericGameOverException {
+        if (arena.placeTetromino(currTrock, currTrockY, currTrockX + 1))
             currTrockX += 1;
 
     }
 
-    public void rotateLeft() throws GameOverException {
+    public void rotateLeft() throws GenericGameOverException {
         if (!arena.placeTetromino(currTrock.rotate(), currTrockY, currTrockX))
             currTrock.rotateBack();
     }
 
-    public void rotateRight() throws GameOverException {
+    public void rotateRight() throws GenericGameOverException {
         if (!arena.placeTetromino(currTrock.rotateBack(), currTrockY, currTrockX))
             currTrock.rotate();
     }
 
-    public void dropTrock() throws GameOverException {
+    public void dropTrock() throws SpecialGameOverException {
         while (moveTrockDown()) ;
     }
 
-    public void placeGhostTrock() throws GameOverException {
+    public void placeGhostTrock() throws GenericGameOverException {
         arena.placeGhost(currTrock, currTrockY, currTrockX);
 
     }
