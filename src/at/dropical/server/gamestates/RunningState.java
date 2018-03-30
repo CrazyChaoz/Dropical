@@ -28,7 +28,7 @@ public class RunningState implements State {
     }
 
     @Override
-    public void handleInput(Game game, InputDataContainer inputDataContainer) {
+    public void handleInput(Game game, InputDataContainer inputDataContainer,int playerNumber) {
         //TODO: handle input, duh
     }
 }

@@ -8,6 +8,7 @@ import java.io.OutputStream;
 
 public abstract class Transmitter {
     private Game game;
+    private int playerNumber;
 
     private InputStream inputStream;
     private OutputStream outputStream;
@@ -33,6 +34,14 @@ public abstract class Transmitter {
 
     public Game getPlayingGame() {
         return game;
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
+    }
+
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
     }
 
     public abstract void writeRequest(Request r);

@@ -2,16 +2,17 @@ package at.dropical.AI;
 
 
 import at.dropical.shared.net.requests.Request;
+import at.dropical.shared.net.transmitter.Transmitter;
 
-public class SimpleAI {
+public class SimpleAI extends Thread {
 
-
-
-    //TODO: impl reaction to those method calls
-    public void inbox(Request r){
-
+    private static SimpleAI instance=new SimpleAI();
+    public static SimpleAI getInstance() {
+        return instance;
     }
-    public Request outbox(){
-        return null;
+
+    @Override
+    public void run() {
+        new AiTransmitter().readRequest();
     }
 }

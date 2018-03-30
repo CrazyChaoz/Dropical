@@ -2,6 +2,7 @@ package at.dropical.server;
 
 import at.dropical.server.game.Game;
 import at.dropical.shared.net.requests.*;
+import at.dropical.AI.AiTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.Map;
@@ -33,25 +34,24 @@ public class RequestHandler extends Thread {
             Game game = Server.instance().getGame(((JoinRequest) request).getGameID());
 
             if (((JoinRequest) request).isPlayer()) {
-                game.addPlayer(((JoinRequest) request).getPlayerName(), transmitter); //TODO: send message to client ?
+                int playerNumber=game.addPlayer(((JoinRequest) request).getPlayerName(), transmitter); //TODO: send message to client ?
                 transmitter.setPlayingGame(game);
+                transmitter.setPlayerNumber(playerNumber);
             } else
                 game.addViewer(transmitter);
         } else if (request instanceof AddAiToGameRequest) {
 
             Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
 
-
-            if (Server.isAiAllowed && game.getNumAI() == 0) {               //FIXME: curr AI count < max player count
-                game.addAI();                                               //
-            } else if (Server.isPureAiGameAllowed) {
-                game.addAI();
+            if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
+                AiTransmitter transmitter=new AiTransmitter();
+                transmitter.setPlayerNumber(game.addAI(transmitter));
+                transmitter.setPlayingGame(game);
             }
-
 
         } else if (request instanceof InputDataContainer) {
             if(transmitter.getPlayingGame()!=null){
-                transmitter.getPlayingGame().handleInput((InputDataContainer) request);
+                transmitter.getPlayingGame().handleInput((InputDataContainer) request,transmitter.getPlayerNumber());
             }
         }
     }

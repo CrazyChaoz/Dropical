@@ -1,12 +1,11 @@
 package at.dropical.server.game;
 
-import at.dropical.AI.SimpleAI;
 import at.dropical.server.Viewer;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
-import at.dropical.shared.net.transmitter.AiTransmitter;
+import at.dropical.AI.AiTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 
@@ -71,32 +70,40 @@ public class Game {
         return numAI;
     }
 
+    //easy for the AI
+    public GameDataContainer getGameDataContainer() {
+        return gameDataContainer;
+    }
+
     //Method
 
-    /**@return false if no players can be added*/
-    public boolean addPlayer(String playerName, Transmitter transmitter) {
+    /**@return -1 if no players can be added*/
+    public int addPlayer(String playerName, Transmitter transmitter) {
         if(players[0]==null&&games[0]==null){
             players[0]=new Viewer(transmitter);
             games[0]=new A_Single_Game(playerName);
-            return true;
+            return 0;
         }else if(players[1]==null&&games[1]==null){
             players[1]=new Viewer(transmitter);
             games[1]=new A_Single_Game(playerName);
-            return true;
+            return 1;
         }
-        return false;
+        return -1;
     }
 
-    public void addAI(){
-        addPlayer("Zufallsname: Rüdiger",new AiTransmitter(new SimpleAI()));
-        numAI++;
+    public int addAI(AiTransmitter transmitter){
+        int retval=addPlayer("Zufallsname: Rüdiger",transmitter);
+        if(retval!=-1){
+            numAI++;
+        }
+        return retval;
     }
     public void addViewer(Transmitter transmitter) {
         viewers.add(new Viewer(transmitter));
     }
 
-    public void handleInput(InputDataContainer idc){
-        gameState.handleInput(this,idc);
+    public void handleInput(InputDataContainer idc,int playerNumber){
+        gameState.handleInput(this,idc,playerNumber);
     }
 
     public void updateClients() {
@@ -110,4 +117,5 @@ public class Game {
             viewer.getTransmitter().writeRequest(gameDataContainer);
         }
     }
+
 }

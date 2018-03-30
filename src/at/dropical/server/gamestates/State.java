@@ -6,5 +6,5 @@ import at.dropical.shared.net.requests.InputDataContainer;
 
 public interface State{
     GameDataContainer fillGameDataContainer(Game game,GameDataContainer gameDataContainer);
-    void handleInput(Game game,InputDataContainer inputDataContainer);
+    void handleInput(Game game,InputDataContainer inputDataContainer,int playerNumber);
 }
