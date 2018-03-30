@@ -1,6 +1,5 @@
 package at.dropical.AI;
 
-import at.dropical.AI.SimpleAI;
 import at.dropical.server.RequestHandler;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
@@ -14,7 +13,6 @@ public class AiTransmitter extends Transmitter {
     public AiTransmitter() {
         super(null,null);
     }
-
 
     public void toServer(Request r){
         new RequestHandler(r,this);

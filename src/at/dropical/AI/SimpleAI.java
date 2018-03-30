@@ -1,12 +1,12 @@
 package at.dropical.AI;
 
 
-import at.dropical.shared.net.requests.InputDataContainer;
+import at.dropical.Client;
+import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.ListRequest;
-import at.dropical.shared.net.requests.Request;
-import at.dropical.shared.net.transmitter.Transmitter;
 
-public class SimpleAI extends Thread {
+
+public class SimpleAI extends Thread implements Client {
 
     private static SimpleAI instance=new SimpleAI();
     public static SimpleAI getInstance() {
@@ -14,7 +14,17 @@ public class SimpleAI extends Thread {
     }
 
     private AiTransmitter transmitter=new AiTransmitter();
+    private GameDataContainer currentGameDataContainer;
+    private ListRequest lastListRequest;
 
+
+    public void setCurrentGameDataContainer(GameDataContainer currentGameDataContainer) {
+        this.currentGameDataContainer = currentGameDataContainer;
+    }
+
+    public void setLastListRequest(ListRequest lastListRequest) {
+        this.lastListRequest = lastListRequest;
+    }
 
     @Override
     public void run() {

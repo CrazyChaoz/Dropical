@@ -1,6 +1,5 @@
 package at.dropical.client;
 
-import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
 
@@ -33,4 +32,5 @@ public class ClientSideTransmitter extends Transmitter {
         }
         return null;
     }
+
 }
