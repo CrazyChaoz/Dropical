@@ -4,37 +4,40 @@ import at.dropical.AI.SimpleAI;
 import at.dropical.server.RequestHandler;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class AiTransmitter extends Transmitter {
-    private Request lastRequest=null;
+    private Request cachedRequest=null;
 
     public AiTransmitter() {
         super(null,null);
     }
 
 
-//    public void toServer(Request r){
-//        new RequestHandler(r,this);
-//    }
+    public void toServer(Request r){
+        new RequestHandler(r,this);
+    }
 
 
     @Override
     public void writeRequest(Request r) {
-//        SimpleAI.getInstance().inbox(r);
-        lastRequest=r;
+        cachedRequest=r;
     }
 
     @Override
+    @NotNull
     public Request readRequest() {
-        while (lastRequest==null);
-        Request r=lastRequest;
-        lastRequest=null;
+        while (cachedRequest==null);
+        Request r=cachedRequest;
+        cachedRequest=null;
         return r;
     }
 
+    @Nullable
     public Request readRequestNonBlocking(){
-        Request r=lastRequest;
-        lastRequest=null;
+        Request r=cachedRequest;
+        cachedRequest=null;
         return r;
     }
 }
