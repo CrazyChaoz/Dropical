@@ -4,10 +4,10 @@ package at.dropical.client.ai;
 import at.dropical.shared.net.requests.*;
 
 
-public class SimpleAI extends ArtificialIntelligence {
+public class ServerInvokedAI extends ArtificialIntelligence {
     private String name;
 
-    public SimpleAI(String name) {
+    public ServerInvokedAI(String name) {
         this.name = name;
     }
 
@@ -37,6 +37,6 @@ public class SimpleAI extends ArtificialIntelligence {
     }
 
     public static void main(String[] args) {
-        new SimpleAI("Rudi");
+        new ServerInvokedAI("Rudi");
     }
 }
