@@ -1,21 +1,21 @@
 package at.dropical.client;
 
-import at.dropical.client.CommonClientSideInterface;
+import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.Request;
 
 public abstract class Client implements Runnable {
-    private CommonClientSideInterface cci;
+    private CommonClientSideInterface ccsi;
 
-    public Client(CommonClientSideInterface cci) {
-        this.cci = cci;
+    public Client(CommonClientSideInterface ccsi) {
+        this.ccsi = ccsi;
+        new ClientSideRequestHandler(this,ccsi);
+        new Thread(this).start();
     }
 
     protected void toServer(Request r){
-        cci.toServer(r);
+        ccsi.toServer(r);
     }
 
-    private Request fromServer(){
-        return cci.fromServer();
-    }
+    protected abstract void handleRequest(Request request);
 
 }
