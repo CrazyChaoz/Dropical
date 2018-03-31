@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1"
+     xmlns="http://www.w3.org/2000/svg"
+     width="140" height="30"
+>
+    <rect width="140" height="30" fill="grey"
+          fill-opacity="0.5"/>
+    <text font-size="24" x="5" y="22">
+        <tspan fill="red">D</tspan>
+        <tspan fill="orange">r</tspan>
+        <tspan fill="yellow">o</tspan>
+        <tspan fill="green">p</tspan>
+        <tspan fill="blue">i</tspan>
+        <tspan fill="indigo">c</tspan>
+        <tspan fill="violet">a</tspan>
+        <tspan fill="red">l</tspan>
+    </text>
+</svg>
