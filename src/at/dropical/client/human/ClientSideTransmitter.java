@@ -1,5 +1,6 @@
-package at.dropical.client;
+package at.dropical.client.human;
 
+import at.dropical.Client;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
 
@@ -7,9 +8,11 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientSideTransmitter extends Transmitter {
+    private Client client;
 
-    public ClientSideTransmitter(Socket socket) throws IOException {
+    public ClientSideTransmitter(Socket socket, Client client) throws IOException {
         super(new ObjectInputStream(socket.getInputStream()), new ObjectOutputStream(socket.getOutputStream()));
+        this.client=client;
     }
 
     @Override

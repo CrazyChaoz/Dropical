@@ -1,4 +1,4 @@
-package at.dropical.AI;
+package at.dropical.client;
 
 import at.dropical.Client;
 import at.dropical.shared.net.handler.RequestHandler;

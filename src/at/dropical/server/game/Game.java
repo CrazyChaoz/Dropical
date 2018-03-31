@@ -5,9 +5,8 @@ import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
-import at.dropical.AI.AiTransmitter;
+import at.dropical.shared.net.transmitter.ServerSideAiTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Game {
     private GameDataContainer gameDataContainer = new GameDataContainer();
 
     //how many AI are connected
-    private int numAI=0;
+    private int numAI = 0;
 
     /**
      * <Constructors>
@@ -77,38 +76,41 @@ public class Game {
 
     //Method
 
-    /**@return -1 if no players can be added*/
+    /**
+     * @return -1 if no players can be added
+     */
     public int addPlayer(String playerName, Transmitter transmitter) {
-        if(players[0]==null&&games[0]==null){
-            players[0]=new Viewer(transmitter);
-            games[0]=new A_Single_Game(playerName);
+        if (players[0] == null && games[0] == null) {
+            players[0] = new Viewer(transmitter);
+            games[0] = new A_Single_Game(playerName);
             return 0;
-        }else if(players[1]==null&&games[1]==null){
-            players[1]=new Viewer(transmitter);
-            games[1]=new A_Single_Game(playerName);
+        } else if (players[1] == null && games[1] == null) {
+            players[1] = new Viewer(transmitter);
+            games[1] = new A_Single_Game(playerName);
             return 1;
         }
         return -1;
     }
 
-    public int addAI(AiTransmitter transmitter){
-        int retval=addPlayer("Zufallsname: Rüdiger",transmitter);
-        if(retval!=-1){
+    public int addAI(ServerSideAiTransmitter transmitter) {
+        int retval = addPlayer("Zufallsname: Rüdiger", transmitter);
+        if (retval != -1) {
             numAI++;
         }
         return retval;
     }
+
     public void addViewer(Transmitter transmitter) {
         viewers.add(new Viewer(transmitter));
     }
 
-    public void handleInput(InputDataContainer idc,int playerNumber){
-        gameState.handleInput(this,idc,playerNumber);
+    public void handleInput(InputDataContainer idc, int playerNumber) {
+        gameState.handleInput(this, idc, playerNumber);
     }
 
     public void updateClients() {
 
-        gameState.fillGameDataContainer(this,gameDataContainer);
+        gameState.fillGameDataContainer(this, gameDataContainer);
 
         for (Viewer player : players) {
             player.getTransmitter().writeRequest(gameDataContainer);

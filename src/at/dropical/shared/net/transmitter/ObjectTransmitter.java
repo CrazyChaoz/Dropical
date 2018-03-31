@@ -6,7 +6,7 @@ import java.io.*;
 
 
 //Currently just a ObjectStreamTransmitter
-//Future: JSON or complete bytewise
+//Future: JSON or completely bytewise
 
 public class ObjectTransmitter extends Transmitter {
     ObjectInputStream inputStream;
