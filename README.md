@@ -1,10 +1,12 @@
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/CrazyChaoz/Dropical/master/Resources/Dropical.svg?sanitize=true">
+</p>
 
+-----
 
-____
-<code>A Tetris spinnoff we are making for school.</code>
+<p align="center">
+    <code>A Tetris spinnoff we are making for school.</code>
 </p>
 
 [![Join the chat at https://gitter.im/Dropical/Lobby](https://badges.gitter.im/Dropical/Lobby.svg)](https://gitter.im/Dropical/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
