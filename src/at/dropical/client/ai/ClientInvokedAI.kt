@@ -17,4 +17,9 @@ class ClientInvokedAI: ArtificialIntelligence() {
     override fun handleRequest(request: Request?) {
 
     }
+
+}
+
+fun main(vararg args:String){
+
 }
