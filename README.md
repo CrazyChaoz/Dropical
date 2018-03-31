@@ -3,16 +3,14 @@
 [![Join the chat at https://gitter.im/Dropical/Lobby](https://badges.gitter.im/Dropical/Lobby.svg)](https://gitter.im/Dropical/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <br>
 
-<code>
-This is a Tetris spinnoff we are making for school.
-</code>
+```diff
++ This is a Tetris spinnoff we are making for school.
+```
 
 <br><br>
 
-```diff
-+ this will be highlighted in green
-- this will be highlighted in red
-```
+
+# **Folderstructure**
 > ### <code>Client</code>
 >Everything that looks like a client to the server
 >
@@ -31,8 +29,8 @@ This is a Tetris spinnoff we are making for school.
 >> ##### <code>Gamefield</code>
 >> The Arena & the Tetromino
 >
->> ##### <code>Game</code>
->> A unique Game
+>> ##### <code>Gamestates</code>
+>> The different States of a Game
 >
 > ### <code>Shared</code>
 >> Classes that are sheared between Client & Server
