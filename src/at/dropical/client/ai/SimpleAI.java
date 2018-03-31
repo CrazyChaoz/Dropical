@@ -1,19 +1,13 @@
 package at.dropical.client.ai;
 
 
-import at.dropical.Client;
+import at.dropical.client.ai.ArtificialIntelligence;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.ListRequest;
 
 
-public class SimpleAI implements Client {
+public class SimpleAI extends ArtificialIntelligence {
 
-    private static SimpleAI instance=new SimpleAI();
-    public static SimpleAI getInstance() {
-        return instance;
-    }
-
-    private AiRequestCache requestCache;
     private GameDataContainer currentGameDataContainer;
     private ListRequest lastListRequest;
 
@@ -26,12 +20,9 @@ public class SimpleAI implements Client {
         this.lastListRequest = lastListRequest;
     }
 
-    public AiRequestCache getRequestCache() {
-        return requestCache;
-    }
 
     @Override
     public void run() {
-
+//        (new ListRequest(true));
     }
 }

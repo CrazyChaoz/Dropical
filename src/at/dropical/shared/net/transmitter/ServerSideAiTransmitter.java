@@ -1,29 +1,24 @@
 package at.dropical.shared.net.transmitter;
 
-import at.dropical.Client;
-import at.dropical.client.ClientSideRequestHandler;
-import at.dropical.client.ai.SimpleAI;
+import at.dropical.client.ai.ArtificialIntelligence;
 import at.dropical.shared.net.requests.Request;
 
 
 public class ServerSideAiTransmitter extends Transmitter {
-    private SimpleAI ai;
+    private ArtificialIntelligence ai;
 
-    public ServerSideAiTransmitter(SimpleAI ai) {
+    public ServerSideAiTransmitter(ArtificialIntelligence ai) {
         super(null, null);
         this.ai = ai;
     }
 
     @Override
     public void writeRequest(Request r) {
-        new ClientSideRequestHandler(r, ai);
+        ai.getRequestCache().toClient(r);
     }
 
     @Override
     public Request readRequest() {
-        while (ai.getRequestCache().getCachedRequest()==null);
-        Request r=ai.getRequestCache().getCachedRequest();
-        ai.getRequestCache().setCachedRequest(null);
-        return r;
+        return ai.getRequestCache().getToServer();
     }
 }
