@@ -1,11 +1,11 @@
 
+![Alt Dropical](https://raw.githubusercontent.com/CrazyChaoz/Dropical/master/Resources/Dropical.svg?sanitize=true)
+===
 
 [![Join the chat at https://gitter.im/Dropical/Lobby](https://badges.gitter.im/Dropical/Lobby.svg)](https://gitter.im/Dropical/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 <br>
 
-```diff
-+ This is a Tetris spinnoff we are making for school.
-```
+<code>This is a Tetris spinnoff we are making for school.</code>
 
 <br><br>
 

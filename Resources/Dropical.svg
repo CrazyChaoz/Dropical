@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg version="1.1"
      xmlns="http://www.w3.org/2000/svg"
-     width="140" height="30"
+     width="340" height="70"
 >
-    <rect width="140" height="30" fill="grey"
-          fill-opacity="0.5"/>
-    <text font-size="24" x="5" y="22">
+    <rect width="340" height="70" fill="grey" fill-opacity="0.3"/>
+
+    <text font-size="60" x="12" y="50">
         <tspan fill="red">D</tspan>
         <tspan fill="orange">r</tspan>
         <tspan fill="yellow">o</tspan>
