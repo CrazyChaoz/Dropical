@@ -3,7 +3,7 @@
      xmlns="http://www.w3.org/2000/svg"
      width="340" height="70"
 >
-    <rect width="340" height="70" fill="grey" fill-opacity="0.3"/>
+    <rect width="340" height="70" fill="grey" fill-opacity="0.1"/>
 
     <text font-size="60" x="12" y="50">
         <tspan fill="red">D</tspan>
