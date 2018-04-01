@@ -35,6 +35,9 @@ public class Server {
 
     //The port 
     private static final int port=2345;
+    
+    //
+    private static final boolean isTounamentServer=true;
 
 //  Constructor
     private Server() {
