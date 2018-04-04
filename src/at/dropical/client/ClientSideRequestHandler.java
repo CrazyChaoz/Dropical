@@ -1,16 +1,17 @@
 package at.dropical.client;
 
 import at.dropical.shared.net.handler.RequestHandler;
+import at.dropical.shared.net.transmitter.Transmitter;
 
 public class ClientSideRequestHandler implements RequestHandler {
 
     private Client client;
-    private CommonClientSideInterface ccsi;
+    private Transmitter transmitter;
 
 
-    public ClientSideRequestHandler(Client client, CommonClientSideInterface ccsi) {
+    public ClientSideRequestHandler(Client client, Transmitter t) {
         this.client = client;
-        this.ccsi = ccsi;
+        this.transmitter = t;
         new Thread(this).start();
     }
 
@@ -18,7 +19,7 @@ public class ClientSideRequestHandler implements RequestHandler {
     @Override
     public void run() {
         for (; ; ) {
-            client.handleRequest(ccsi.fromServer());
+            client.handleRequest(transmitter.readRequest());
         }
     }
 }

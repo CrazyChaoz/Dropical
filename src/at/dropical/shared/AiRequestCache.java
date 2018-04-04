@@ -18,7 +18,7 @@ public class AiRequestCache {
         return r;
     }
 
-    public void toServer(Request toServerCachedRequest) {
+    public void writeToServer(Request toServerCachedRequest) {
         this.toServerCachedRequest = toServerCachedRequest;
     }
 
@@ -29,7 +29,7 @@ public class AiRequestCache {
         return r;
     }
 
-    public void toClient(Request fromServerCachedRequest) {
+    public void writeToClient(Request fromServerCachedRequest) {
         this.toClientCachedRequest = fromServerCachedRequest;
     }
 }

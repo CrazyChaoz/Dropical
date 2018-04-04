@@ -1,6 +1,7 @@
 package at.dropical.client.ai;
 
 
+import at.dropical.shared.AiRequestCache;
 import at.dropical.shared.net.requests.*;
 
 
@@ -8,6 +9,7 @@ public class ServerInvokedAI extends ArtificialIntelligence {
     private String name;
 
     public ServerInvokedAI(String name) {
+        super(new AiRequestCache());
         this.name = name;
     }
 

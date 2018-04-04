@@ -14,7 +14,7 @@ public class ServerSideAiTransmitter extends Transmitter {
 
     @Override
     public void writeRequest(Request r) {
-        ai.getRequestCache().toClient(r);
+        ai.getRequestCache().writeToClient(r);
     }
 
     @Override

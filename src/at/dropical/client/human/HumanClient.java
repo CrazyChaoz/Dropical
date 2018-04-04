@@ -9,11 +9,11 @@ import java.net.Socket;
 
 public abstract class HumanClient extends Client {
     public HumanClient(Socket server) throws IOException {
-        super(new HumanClientSideInterface(new GeneralClientSideTransmitter(server)));
+        super(new GeneralClientSideTransmitter(server));
     }
 
     //when more than one client side transmitters are implemented
     public HumanClient(Transmitter specialTransmitter) {
-        super(new HumanClientSideInterface(specialTransmitter));
+        super(specialTransmitter);
     }
 }
