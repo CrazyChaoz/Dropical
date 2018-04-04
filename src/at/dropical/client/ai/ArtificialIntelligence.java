@@ -1,7 +1,6 @@
 package at.dropical.client.ai;
 
 import at.dropical.client.Client;
-import at.dropical.client.ai.transmitter.AiSideTransmitter;
 import at.dropical.shared.AiRequestCache;
 
 public abstract class ArtificialIntelligence extends Client {

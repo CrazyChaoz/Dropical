@@ -1,4 +1,4 @@
-package at.dropical.client.ai.transmitter;
+package at.dropical.client.ai;
 
 import at.dropical.shared.AiRequestCache;
 import at.dropical.shared.net.requests.Request;
