@@ -6,8 +6,6 @@ import at.dropical.shared.net.requests.CreateGameRequest
 import at.dropical.shared.net.requests.JoinRequest
 import at.dropical.shared.net.requests.Request
 
-/**
- * there is currently *no* method for getting the client into the server*/
 
 class ClientInvokedAI: LocalClient(LocalRequestCache()) {
     val name="ClientInvokedAI"

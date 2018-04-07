@@ -47,7 +47,9 @@ public class ServerSideRequestHandler implements RequestHandler {
 
             if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
 
+
                 LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
+
                 transmitter.setPlayerNumber(game.addAI(transmitter));
                 transmitter.setPlayingGame(game);
             }
