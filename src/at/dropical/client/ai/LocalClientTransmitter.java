@@ -1,13 +1,13 @@
 package at.dropical.client.ai;
 
-import at.dropical.shared.AiRequestCache;
+import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
 
-public class AiSideTransmitter extends Transmitter {
-    private AiRequestCache cache;
+public class LocalClientTransmitter extends Transmitter {
+    private LocalRequestCache cache;
 
-    public AiSideTransmitter(AiRequestCache cache) {
+    public LocalClientTransmitter(LocalRequestCache cache) {
         super(null,null);
         this.cache=cache;
     }
@@ -22,7 +22,4 @@ public class AiSideTransmitter extends Transmitter {
         return cache.getToClient();
     }
 
-    public AiRequestCache getCache() {
-        return cache;
-    }
 }

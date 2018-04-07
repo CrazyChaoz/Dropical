@@ -1,15 +1,15 @@
 package at.dropical.client.ai;
 
 
-import at.dropical.shared.AiRequestCache;
+import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.requests.*;
 
 
-public class ServerInvokedAI extends ArtificialIntelligence {
+public class ServerInvokedAI extends LocalClient {
     private String name;
 
     public ServerInvokedAI(String name) {
-        super(new AiRequestCache());
+        super(new LocalRequestCache());
         this.name = name;
     }
 
@@ -36,9 +36,5 @@ public class ServerInvokedAI extends ArtificialIntelligence {
         toServer(new ListRequest(true));
         toServer(new CreateGameRequest("Super Secret Game"));
 
-    }
-
-    public static void main(String[] args) {
-        new ServerInvokedAI("Rudi");
     }
 }

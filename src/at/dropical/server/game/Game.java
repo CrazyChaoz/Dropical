@@ -5,7 +5,7 @@ import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
-import at.dropical.shared.net.transmitter.ServerSideAiTransmitter;
+import at.dropical.shared.net.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class Game {
         return -1;
     }
 
-    public int addAI(ServerSideAiTransmitter transmitter) {
+    public int addAI(LocalServerTransmitter transmitter) {
         int retval = addPlayer("Zufallsname: Rüdiger", transmitter);
         if (retval != -1) {
             numAI++;

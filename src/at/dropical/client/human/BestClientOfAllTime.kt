@@ -6,7 +6,7 @@ import at.dropical.shared.net.requests.ListRequest
 import at.dropical.shared.net.requests.Request
 import java.net.Socket
 
-class BestClientOfAllTime(socket: Socket) : HumanClient(socket){
+class BestClientOfAllTime(socket: Socket) : RemoteClient(socket){
     var currentGameData:GameDataContainer?=null
 
     override fun handleRequest(request: Request?) {

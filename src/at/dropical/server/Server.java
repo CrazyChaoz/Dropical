@@ -6,6 +6,8 @@ package at.dropical.server;
  * */
 
 import at.dropical.server.game.Game;
+import at.dropical.shared.LocalRequestCache;
+import at.dropical.shared.net.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 
@@ -41,7 +43,7 @@ public class Server {
 
 //  Constructor
     private Server() {
-        new AccepterLoop(port);
+        new RemoteAccepterLoop(port);
     }
 
 
@@ -65,4 +67,10 @@ public class Server {
 //  Setter
 
 //  Methods
+
+    public void addLocalClient(LocalRequestCache requestCache) {
+        LocalServerTransmitter localServerTransmitter=new LocalServerTransmitter(requestCache);
+        this.getConnected().add(localServerTransmitter);
+        new LocalAccepterLoop(localServerTransmitter);
+    }
 }

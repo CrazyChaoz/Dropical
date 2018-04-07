@@ -7,11 +7,11 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class AccepterLoop extends Thread{
+public class RemoteAccepterLoop extends Thread{
     private static int port;
 
 
-    public AccepterLoop(int port) {
+    public RemoteAccepterLoop(int port) {
         this.port = port;
 
         //"Ends" Serving when a negative number was received
@@ -26,7 +26,7 @@ public class AccepterLoop extends Thread{
             OutputStream outputStream=clientConnection.getOutputStream()){
 
             //create new open connection on creation of a new open connection
-            new AccepterLoop(port);
+            new RemoteAccepterLoop(port);
 
 
             //<CODE>
@@ -35,7 +35,7 @@ public class AccepterLoop extends Thread{
             Server.instance().getConnected().add(transi);
 
 
-
+            //Error if not in loop
             for(;;){
                 new ServerSideRequestHandler(transi.readRequest(),transi);
             }

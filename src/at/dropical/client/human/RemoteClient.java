@@ -7,13 +7,13 @@ import at.dropical.shared.net.transmitter.Transmitter;
 import java.io.IOException;
 import java.net.Socket;
 
-public abstract class HumanClient extends Client {
-    public HumanClient(Socket server) throws IOException {
+public abstract class RemoteClient extends Client {
+    public RemoteClient(Socket server) throws IOException {
         super(new GeneralClientSideTransmitter(server));
     }
 
     //when more than one client side transmitters are implemented
-    public HumanClient(Transmitter specialTransmitter) {
+    public RemoteClient(Transmitter specialTransmitter) {
         super(specialTransmitter);
     }
 }

@@ -5,9 +5,10 @@ import at.dropical.shared.net.requests.Request;
 /**
  * The Client "posts" its requests into here
  * The Server constantly polls from here
+ * and vice versa
  */
 
-public class AiRequestCache {
+public class LocalRequestCache {
     private Request toServerCachedRequest;
     private Request toClientCachedRequest;
 

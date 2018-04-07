@@ -4,7 +4,7 @@ import at.dropical.client.ai.ServerInvokedAI;
 import at.dropical.server.game.Game;
 import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.*;
-import at.dropical.shared.net.transmitter.ServerSideAiTransmitter;
+import at.dropical.shared.net.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.util.Map;
@@ -46,7 +46,8 @@ public class ServerSideRequestHandler implements RequestHandler {
             Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
 
             if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
-                ServerSideAiTransmitter transmitter=new ServerSideAiTransmitter(new ServerInvokedAI("Rudi"));
+
+                LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
                 transmitter.setPlayerNumber(game.addAI(transmitter));
                 transmitter.setPlayingGame(game);
             }
