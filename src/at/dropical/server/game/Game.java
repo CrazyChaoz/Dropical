@@ -69,11 +69,6 @@ public class Game {
         return numAI;
     }
 
-    //easy for the AI
-    public GameDataContainer getGameDataContainer() {
-        return gameDataContainer;
-    }
-
     //Method
 
     /**

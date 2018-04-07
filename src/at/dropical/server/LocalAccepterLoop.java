@@ -22,6 +22,7 @@ public class LocalAccepterLoop extends Thread {
 
     @Override
     public void run() {
+        System.out.println("new Ai");
         for (; ; ) {
             new ServerSideRequestHandler(transmitter.readRequest(), transmitter);
         }

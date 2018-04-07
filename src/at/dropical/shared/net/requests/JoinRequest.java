@@ -11,6 +11,7 @@ public class JoinRequest implements Request {
         this.playerName = playerName;
     }
 
+    //for viewers
     public JoinRequest(String gameID) {
         this.gameID = gameID;
         this.isPlayer = false;

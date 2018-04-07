@@ -7,6 +7,7 @@ public abstract class Client implements Runnable {
     private Transmitter transmitter;
 
     public Client(Transmitter transmitter) {
+        this.transmitter=transmitter;
         new ClientSideRequestHandler(this,transmitter);
         new Thread(this).start();
     }

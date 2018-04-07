@@ -1,5 +1,6 @@
 package at.dropical.client.ai
 
+import at.dropical.server.Server
 import at.dropical.shared.LocalRequestCache
 import at.dropical.shared.net.requests.AddAiToGameRequest
 import at.dropical.shared.net.requests.CreateGameRequest
@@ -11,6 +12,7 @@ class ClientInvokedAI: LocalClient(LocalRequestCache()) {
     val name="ClientInvokedAI"
     override fun run() {
         toServer(CreateGameRequest("TestGame"))
+//        Thread.sleep(500)
         toServer(JoinRequest("TestGame",name))
         toServer(AddAiToGameRequest("TestGame"))
 
@@ -23,5 +25,5 @@ class ClientInvokedAI: LocalClient(LocalRequestCache()) {
 }
 
 fun main(vararg args:String){
-
+    ClientInvokedAI()
 }
