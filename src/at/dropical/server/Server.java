@@ -6,17 +6,21 @@ package at.dropical.server;
  * */
 
 import at.dropical.server.game.Game;
+import at.dropical.server.logging.LoggerSetup;
 import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
-
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class Server {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Server.instance();
     }
 
@@ -34,9 +38,19 @@ public class Server {
 
 //  STATICS
 
+public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
+
+static {
+    try {
+        LoggerSetup.setup();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 {
     try {
+        LoggerSetup.setup();
         new RemoteAccepterLoop(new ServerSocket(port));
     } catch (IOException e) {
         e.printStackTrace();
