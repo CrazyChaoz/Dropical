@@ -2,14 +2,6 @@ package at.dropical.server;
 
 
 import at.dropical.shared.net.transmitter.LocalServerTransmitter;
-import at.dropical.shared.net.transmitter.ObjectTransmitter;
-import at.dropical.shared.net.transmitter.Transmitter;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class LocalAccepterLoop extends Thread {
     private LocalServerTransmitter transmitter;

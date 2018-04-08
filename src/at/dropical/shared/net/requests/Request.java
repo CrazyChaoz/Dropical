@@ -1,4 +1,6 @@
 package at.dropical.shared.net.requests;
 
-public interface Request {
+import java.io.Serializable;
+
+public interface Request extends Serializable {
 }

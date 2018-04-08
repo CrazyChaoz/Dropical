@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class GeneralClientSideTransmitter extends Transmitter{
+
     public GeneralClientSideTransmitter(Socket socket) throws IOException {
         super(new ObjectInputStream(socket.getInputStream()), new ObjectOutputStream(socket.getOutputStream()));
     }
@@ -14,7 +15,7 @@ public class GeneralClientSideTransmitter extends Transmitter{
     @Override
     public void writeRequest(Request r) {
         try {
-            ((ObjectOutputStream)super.getOutputStream()).writeObject(r);
+            ((ObjectOutputStream)outputStream).writeObject(r);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,7 +24,7 @@ public class GeneralClientSideTransmitter extends Transmitter{
     @Override
     public Request readRequest() {
         try {
-            return (Request) ((ObjectInputStream)super.getInputStream()).readObject();
+            return (Request) ((ObjectInputStream)inputStream).readObject();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

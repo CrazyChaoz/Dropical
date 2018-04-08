@@ -1,13 +1,13 @@
 package at.dropical.client.human
 
-import at.dropical.shared.net.requests.CreateGameRequest
-import at.dropical.shared.net.requests.GameDataContainer
-import at.dropical.shared.net.requests.ListRequest
-import at.dropical.shared.net.requests.Request
+import at.dropical.server.Server
+import at.dropical.shared.net.requests.*
 import java.net.Socket
+import java.util.*
 
 class BestClientOfAllTime(socket: Socket) : RemoteClient(socket){
     var currentGameData:GameDataContainer?=null
+
 
     override fun handleRequest(request: Request?) {
         when(request){
@@ -17,8 +17,10 @@ class BestClientOfAllTime(socket: Socket) : RemoteClient(socket){
             }
             is ListRequest ->{
                 println("Handle this ListRequest")
+                if(request.gameNames==null)
+                    return
                 for (gameName in request.gameNames) {
-                    println(gameName)
+                    println("Game: $gameName")
                 }
             }
         }
@@ -28,11 +30,23 @@ class BestClientOfAllTime(socket: Socket) : RemoteClient(socket){
 
     override fun run() {
         //Things that Clients do
-        toServer(ListRequest(true))
-        toServer(CreateGameRequest("Super Secret Game"))
+        var i=1
+        while (i!=0){
+            println("What do you want to do ?")
+            i=Scanner(System.`in`).nextInt()
+            when (i) {
+                1 -> toServer(ListRequest(true))
+                2 -> toServer(CreateGameRequest("Super Secret Game"))
+                3 -> toServer(AddAiToGameRequest("Super Secret Game"))
+                4 -> {
+                    print("Write the GameName here: ")
+                    toServer(CreateGameRequest(Scanner(System.`in`).next()))}
+            }
+        }
+
     }
 }
 
 fun main(vararg args: String) {
-    BestClientOfAllTime(Socket("localhost", 2345))
+    BestClientOfAllTime(Socket("localhost", 45000))
 }

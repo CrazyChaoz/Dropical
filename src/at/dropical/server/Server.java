@@ -11,10 +11,14 @@ import at.dropical.shared.net.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.*;
 
 public class Server {
-
+    public static void main(String[] args) {
+        Server.instance();
+    }
 
     //Singleton code
     //NO TOUCHY-TOUCHY
@@ -30,20 +34,28 @@ public class Server {
 
 //  STATICS
 
+
+{
+    try {
+        new RemoteAccepterLoop(new ServerSocket(port));
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
     //spamprotection
     public static final boolean isPureAiGameAllowed=true;
     //human tournaments
     public static final boolean isAiAllowed=true;
 
     //The port 
-    private static final int port=2345;
+    private static final int port=45000;
     
     //
     private static final boolean isTounamentServer=true;
 
 //  Constructor
     private Server() {
-        new RemoteAccepterLoop(port);
     }
 
 

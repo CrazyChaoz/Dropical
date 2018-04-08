@@ -10,23 +10,14 @@ public abstract class Transmitter {
     private Game game;
     private int playerNumber;
 
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    protected InputStream inputStream;
+    protected OutputStream outputStream;
 
 
     public Transmitter(InputStream inputStream, OutputStream outputStream) {
         this.inputStream = inputStream;
         this.outputStream = outputStream;
     }
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
-
 
     public void setPlayingGame(Game game) {
         this.game = game;
