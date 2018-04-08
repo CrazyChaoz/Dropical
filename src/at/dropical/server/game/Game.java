@@ -3,6 +3,7 @@ package at.dropical.server.game;
 import at.dropical.server.Viewer;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
+import at.dropical.server.gamestates.WaitingState;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
 import at.dropical.shared.net.transmitter.LocalServerTransmitter;
@@ -28,7 +29,7 @@ public class Game {
     //Time
     private Object time;    //TODO: Implement time
 
-    private State gameState = new StartingState();
+    private State gameState = new WaitingState();
     private GameDataContainer gameDataContainer = new GameDataContainer();
 
     //how many AI are connected
@@ -82,6 +83,7 @@ public class Game {
         } else if (players[1] == null && games[1] == null) {
             players[1] = new Viewer(transmitter);
             games[1] = new A_Single_Game(playerName);
+            gameState=new StartingState(this);
             return 1;
         }
         return -1;
@@ -99,12 +101,15 @@ public class Game {
         viewers.add(new Viewer(transmitter));
     }
 
+    public void setGameState(State gameState) {
+        this.gameState = gameState;
+    }
+
     public void handleInput(InputDataContainer idc, int playerNumber) {
         gameState.handleInput(this, idc, playerNumber);
     }
 
     public void updateClients() {
-
         gameState.fillGameDataContainer(this, gameDataContainer);
 
         for (Viewer player : players) {

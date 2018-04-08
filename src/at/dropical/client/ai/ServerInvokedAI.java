@@ -35,6 +35,7 @@ public class ServerInvokedAI extends LocalClient {
         //Things that Clients do
         toServer(new ListRequest(true));
         toServer(new CreateGameRequest("Super Secret Game"));
+        toServer(new JoinRequest("TestGame",name));
 
     }
 }

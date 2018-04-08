@@ -15,7 +15,6 @@ class ClientInvokedAI: LocalClient(LocalRequestCache()) {
 //        Thread.sleep(500)
         toServer(JoinRequest("TestGame",name))
         toServer(AddAiToGameRequest("TestGame"))
-
     }
 
     override fun handleRequest(request: Request?) {
