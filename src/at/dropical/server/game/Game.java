@@ -29,7 +29,7 @@ public class Game {
     //Time
     private Object time;    //TODO: Implement time
 
-    private State gameState = new WaitingState();
+    private State gameState = new WaitingState(this);
     private GameDataContainer gameDataContainer = new GameDataContainer();
 
     //how many AI are connected
@@ -106,11 +106,11 @@ public class Game {
     }
 
     public void handleInput(InputDataContainer idc, int playerNumber) {
-        gameState.handleInput(this, idc, playerNumber);
+        gameState.handleInput(idc, playerNumber);
     }
 
     public void updateClients() {
-        gameState.fillGameDataContainer(this, gameDataContainer);
+        gameState.fillGameDataContainer(gameDataContainer);
 
         for (Viewer player : players) {
             player.getTransmitter().writeRequest(gameDataContainer);

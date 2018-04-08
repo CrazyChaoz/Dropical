@@ -5,9 +5,14 @@ import at.dropical.shared.GameState;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
 
-public class PausedState implements State {
+public class PausedState extends State {
+
+    public PausedState(Game game) {
+        super(game);
+    }
+
     @Override
-    public GameDataContainer fillGameDataContainer(Game game, GameDataContainer gameDataContainer) {
+    public GameDataContainer fillGameDataContainer(GameDataContainer gameDataContainer) {
 
         gameDataContainer.getPlayernames()[0]=game.getGames()[0].getName();
         gameDataContainer.getPlayernames()[1]=game.getGames()[1].getName();
@@ -20,7 +25,7 @@ public class PausedState implements State {
     }
 
     @Override
-    public void handleInput(Game game, InputDataContainer inputDataContainer, int playerNumber) {
+    public void handleInput(InputDataContainer inputDataContainer, int playerNumber) {
 
     }
 }

@@ -5,10 +5,14 @@ import at.dropical.shared.GameState;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
 
-public class RunningState implements State {
+public class RunningState extends State {
+
+    public RunningState(Game game) {
+        super(game);
+    }
 
     @Override
-    public GameDataContainer fillGameDataContainer(Game game, GameDataContainer gameDataContainer) {
+    public GameDataContainer fillGameDataContainer(GameDataContainer gameDataContainer) {
 
         //static, ez
         gameDataContainer.getArenas()[0]=game.getGames()[0].getVisualArena();
@@ -28,7 +32,7 @@ public class RunningState implements State {
     }
 
     @Override
-    public void handleInput(Game game, InputDataContainer inputDataContainer,int playerNumber) {
+    public void handleInput(InputDataContainer inputDataContainer,int playerNumber) {
         //TODO: handle input, duh
     }
 }

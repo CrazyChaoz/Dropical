@@ -5,31 +5,30 @@ import at.dropical.shared.GameState;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
 
-public class StartingState extends Thread implements State {
+public class StartingState extends State implements Runnable {
     private int time;
-    private Game game;
 
     public StartingState(Game game) {
+        super(game);
         time=5;
-        this.game=game;
-        this.start();
+        new Thread(this).start();
     }
 
     public StartingState(Game game,int time) {
+        super(game);
         this.time=time;
-        this.game=game;
-        this.start();
+        new Thread(this).start();
     }
 
     @Override
-    public GameDataContainer fillGameDataContainer(Game game, GameDataContainer gameDataContainer) {
+    public GameDataContainer fillGameDataContainer(GameDataContainer gameDataContainer) {
         gameDataContainer.setState(GameState.GAME_STARTING);
         gameDataContainer.setTime(time);
         return gameDataContainer;
     }
 
     @Override
-    public void handleInput(Game game, InputDataContainer inputDataContainer, int playerNumber) {
+    public void handleInput(InputDataContainer inputDataContainer, int playerNumber) {
 
     }
 
@@ -39,7 +38,7 @@ public class StartingState extends Thread implements State {
             for (; time <= 0; time--)
                 Thread.sleep(1000);
 
-            game.setGameState(new RunningState());
+            game.setGameState(new RunningState(game));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
