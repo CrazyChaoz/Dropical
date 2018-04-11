@@ -3,6 +3,8 @@ package at.dropical.client;
 import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.transmitter.Transmitter;
 
+import java.io.IOException;
+
 public class ClientSideRequestHandler implements RequestHandler {
 
     private Client client;
@@ -19,7 +21,11 @@ public class ClientSideRequestHandler implements RequestHandler {
     @Override
     public void run() {
         for (; ; ) {
-            client.handleRequest(transmitter.readRequest());
+            try {
+                client.handleRequest(transmitter.readRequest());
+            } catch (IOException e) {
+                break;
+            }
         }
     }
 }

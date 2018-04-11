@@ -3,6 +3,7 @@ package at.dropical.shared.net.transmitter;
 import at.dropical.server.game.Game;
 import at.dropical.shared.net.requests.Request;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -36,5 +37,5 @@ public abstract class Transmitter {
     }
 
     public abstract void writeRequest(Request r);
-    public abstract Request readRequest();
+    public abstract Request readRequest() throws IOException;
 }

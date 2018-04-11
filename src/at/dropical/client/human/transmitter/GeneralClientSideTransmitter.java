@@ -22,12 +22,10 @@ public class GeneralClientSideTransmitter extends Transmitter{
     }
 
     @Override
-    public Request readRequest() {
+    public Request readRequest() throws IOException {
         try {
-            return (Request) ((ObjectInputStream)inputStream).readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+            return (Request) ((ObjectInputStream) inputStream).readObject();
+        }catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;

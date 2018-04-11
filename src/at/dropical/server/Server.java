@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {
@@ -41,13 +42,6 @@ public class Server {
 public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 
-static {
-    try {
-        LoggerSetup.setup();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
 {
     try {
         LoggerSetup.setup();

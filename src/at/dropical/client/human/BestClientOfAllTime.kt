@@ -1,6 +1,5 @@
 package at.dropical.client.human
 
-import at.dropical.server.Server
 import at.dropical.shared.net.requests.*
 import java.net.Socket
 import java.util.*

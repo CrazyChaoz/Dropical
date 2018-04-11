@@ -18,7 +18,7 @@ public class RemoteAccepterLoop extends Thread{
 
         //"Ends" Serving when a negative number was received
         this.start();
-        Server.LOGGER.log(Level.INFO,"new RemoteClientAccepter started");
+//        Server.LOGGER.log(Level.INFO,"new RemoteClientAccepter started");
     }
 
     @Override

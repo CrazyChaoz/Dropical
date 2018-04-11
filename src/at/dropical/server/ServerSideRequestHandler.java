@@ -10,13 +10,22 @@ import at.dropical.shared.net.transmitter.Transmitter;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static at.dropical.server.Server.LOGGER;
+
 public class ServerSideRequestHandler implements RequestHandler {
     private Request request;
     private Transmitter transmitter;
 
     public ServerSideRequestHandler(Request request, Transmitter transmitter) {
 
-        Server.LOGGER.log(Level.INFO,"new Request to Handle");
+
+        LOGGER.log(Level.FINE,"Debug - Fine");
+        LOGGER.log(Level.INFO,"Debug - Info");
+        LOGGER.log(Level.WARNING,"Debug - Warning");
+        LOGGER.log(Level.SEVERE,"Debug - SEVERE");
+
+
+        LOGGER.log(Level.INFO,"new Request to Handle");
         this.request = request;
         this.transmitter = transmitter;
         new Thread(this).start();
@@ -25,11 +34,11 @@ public class ServerSideRequestHandler implements RequestHandler {
     @Override
     public void run() {
         if (request instanceof CreateGameRequest) {
-            Server.LOGGER.log(Level.INFO,"Request to Handle is a CreateGameRequest");
+            LOGGER.log(Level.INFO,"Request to Handle is a CreateGameRequest");
 //            if(Server.instance().getGame(((CreateGameRequest) request).getGameName())==null)
                 Server.instance().getAllGames().put(((CreateGameRequest) request).getGameName(),new Game());
         }else if (request instanceof ListRequest) {
-            Server.LOGGER.log(Level.INFO,"Request to Handle is a ListRequest");
+            LOGGER.log(Level.INFO,"Request to Handle is a ListRequest");
             if (((ListRequest) request).isGameListRequest()) {
                 for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
                     ((ListRequest) request).addName(stringGameEntry.getKey());
@@ -39,7 +48,7 @@ public class ServerSideRequestHandler implements RequestHandler {
             }
             transmitter.writeRequest(request);
         } else if (request instanceof JoinRequest) {
-            Server.LOGGER.log(Level.INFO,"Request to Handle is a JoinRequest");
+            LOGGER.log(Level.INFO,"Request to Handle is a JoinRequest");
 
             //when user is too fast & game is not yet created
             while (Server.instance().getGame(((JoinRequest) request).getGameID())==null);
@@ -55,7 +64,7 @@ public class ServerSideRequestHandler implements RequestHandler {
             } else
                 game.addViewer(transmitter);
         } else if (request instanceof AddAiToGameRequest) {
-            Server.LOGGER.log(Level.INFO,"Request to Handle is a AddAiToGameRequest");
+            LOGGER.log(Level.INFO,"Request to Handle is a AddAiToGameRequest");
 
             while (Server.instance().getGame(((AddAiToGameRequest) request).getGameID())==null);
             Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
@@ -70,7 +79,7 @@ public class ServerSideRequestHandler implements RequestHandler {
             }
 
         } else if (request instanceof InputDataContainer) {
-            Server.LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
+            LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
             if(transmitter.getPlayingGame()!=null){
                 transmitter.getPlayingGame().handleInput((InputDataContainer) request,transmitter.getPlayerNumber());
             }

@@ -32,7 +32,7 @@ public class LoggerSetup {
         logger.addHandler(fileTxt);
 
         // create an HTML formatter
-        formatterHTML = new HtmlFormatter();
+        formatterHTML = new HtmlLogFormatter();
         fileHTML.setFormatter(formatterHTML);
         logger.addHandler(fileHTML);
     }
