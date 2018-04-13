@@ -34,56 +34,75 @@ public class ServerSideRequestHandler implements RequestHandler {
     @Override
     public void run() {
         if (request instanceof CreateGameRequest) {
-            LOGGER.log(Level.INFO,"Request to Handle is a CreateGameRequest");
-//            if(Server.instance().getGame(((CreateGameRequest) request).getGameName())==null)
-                Server.instance().getAllGames().put(((CreateGameRequest) request).getGameName(),new Game());
+           handleCreateGameRequest((CreateGameRequest) request);
         }else if (request instanceof ListRequest) {
-            LOGGER.log(Level.INFO,"Request to Handle is a ListRequest");
-            ListDataContainer listDataContainer=new ListDataContainer();
-            if (((ListRequest) request).isGameListRequest()) {
-                for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
-                    listDataContainer.addName(stringGameEntry.getKey());
-                }
-            } else {
-                //TODO: Transmit Server list
-            }
-            transmitter.writeRequest((Request) listDataContainer);
+            handleListRequest((ListRequest) request);
         } else if (request instanceof JoinRequest) {
-            LOGGER.log(Level.INFO,"Request to Handle is a JoinRequest");
+            handleJoinRequest((JoinRequest) request);
+        } else if (request instanceof AddAiToGameRequest) {
+            handleAddAiToGameRequest((AddAiToGameRequest) request);
+        } else if (request instanceof InputDataContainer) {
+            handleInputDataContainer((InputDataContainer) request);
+        }
+    }
 
-            //when user is too fast & game is not yet created
-            while (Server.instance().getGame(((JoinRequest) request).getGameID())==null);
-            Game game = Server.instance().getGame(((JoinRequest) request).getGameID());
+    public void handleCreateGameRequest(CreateGameRequest request){
+        LOGGER.log(Level.INFO,"Request to Handle is a CreateGameRequest");
+        Server.instance().getAllGames().put(request.getGameName(),new Game());
+    }
+
+    public void handleListRequest(ListRequest request){
+        LOGGER.log(Level.INFO,"Request to Handle is a ListRequest");
+        ListDataContainer listDataContainer=new ListDataContainer();
+        if (request.isGameListRequest()) {
+            for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
+                listDataContainer.addName(stringGameEntry.getKey());
+            }
+        } else {
+            //TODO: Transmit Server list
+        }
+        transmitter.writeRequest(listDataContainer);
+    }
+
+    public void handleJoinRequest(JoinRequest request){
+
+        LOGGER.log(Level.INFO,"Request to Handle is a JoinRequest");
+
+        //when user is too fast & game is not yet created
+        while (Server.instance().getGame(request.getGameID())==null);
+        Game game = Server.instance().getGame(request.getGameID());
 
 //            if(game==null)
 //                throw new RuntimeException("Game does not exist. Fuck Off.");       //polite msg for the moment, create new game instantely ?
 
-            if (((JoinRequest) request).isPlayer()) {
-                int playerNumber=game.addPlayer(((JoinRequest) request).getPlayerName(), transmitter);  //TODO: send message to client ?
-                transmitter.setPlayingGame(game);
-                transmitter.setPlayerNumber(playerNumber);
-            } else
-                game.addViewer(transmitter);
-        } else if (request instanceof AddAiToGameRequest) {
-            LOGGER.log(Level.INFO,"Request to Handle is a AddAiToGameRequest");
+        if (request.isPlayer()) {
+            int playerNumber=game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
+            transmitter.setPlayingGame(game);
+            transmitter.setPlayerNumber(playerNumber);
+        } else
+            game.addViewer(transmitter);
+    }
 
-            while (Server.instance().getGame(((AddAiToGameRequest) request).getGameID())==null);
-            Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
+    public void handleAddAiToGameRequest(AddAiToGameRequest request){
+        LOGGER.log(Level.INFO,"Request to Handle is a AddAiToGameRequest");
 
-            if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
+        while (Server.instance().getGame(((AddAiToGameRequest) request).getGameID())==null);
+        Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
+
+        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
 
 
-                LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
+            LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
 
-                transmitter.setPlayerNumber(game.addAI(transmitter));
-                transmitter.setPlayingGame(game);
-            }
+            transmitter.setPlayerNumber(game.addAI(transmitter));
+            transmitter.setPlayingGame(game);
+        }
+    }
 
-        } else if (request instanceof InputDataContainer) {
-            LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
-            if(transmitter.getPlayingGame()!=null){
-                transmitter.getPlayingGame().handleInput((InputDataContainer) request,transmitter.getPlayerNumber());
-            }
+    public void handleInputDataContainer(InputDataContainer request){
+        LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
+        if(transmitter.getPlayingGame()!=null){
+            transmitter.getPlayingGame().handleInput(request,transmitter.getPlayerNumber());
         }
     }
 }

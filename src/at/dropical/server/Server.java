@@ -67,7 +67,6 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 //  Declarations
     private Map<String,Game> games=new HashMap<>();
-    private List<Transmitter> connected=new ArrayList<>();
 
 
 //  Getter
@@ -79,16 +78,12 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         return games.get(gameID);
     }
 
-    public List<Transmitter> getConnected() {
-        return connected;
-    }
 //  Setter
 
 //  Methods
 
     public void addLocalClient(LocalRequestCache requestCache) {
         LocalServerTransmitter localServerTransmitter=new LocalServerTransmitter(requestCache);
-        this.getConnected().add(localServerTransmitter);
         new LocalAccepterLoop(localServerTransmitter);
     }
 }

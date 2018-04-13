@@ -32,7 +32,7 @@ public class RemoteAccepterLoop extends Thread{
 
             //add new connection to Server
             ObjectTransmitter transi=new ObjectTransmitter(inputStream,outputStream);
-            Server.instance().getConnected().add(transi);
+
 
             //Error if not in loop
             for(;;){
