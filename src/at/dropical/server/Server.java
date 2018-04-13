@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         Server.instance();
     }
 
@@ -42,15 +42,6 @@ public class Server {
 public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 
-{
-    try {
-        LoggerSetup.setup();
-        new RemoteAccepterLoop(new ServerSocket(port));
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-}
-
     //spamprotection
     public static final boolean isPureAiGameAllowed=true;
     //human tournaments
@@ -63,7 +54,14 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private static final boolean isTounamentServer=true;
 
 //  Constructor
+
     private Server() {
+        try {
+            LoggerSetup.setup();
+            new RemoteAccepterLoop(new ServerSocket(port));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
