@@ -1,6 +1,5 @@
 package at.dropical.server.game;
 
-import at.dropical.server.Viewer;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.server.gamestates.WaitingState;
@@ -15,13 +14,13 @@ import java.util.List;
 public class Game {
 
     //Zuseher
-    private List<Viewer> viewers = new ArrayList();
+    private List<Transmitter> viewers = new ArrayList();
 
     //Players
-    private Viewer[] players;
+    private List<Transmitter> players = new ArrayList<>();
 
     //Games
-    private A_Single_Game[] games;
+    private List<A_Single_Game> games = new ArrayList<>();
 
     //Level
     private int level = 0;
@@ -41,9 +40,6 @@ public class Game {
 
     //Classic
     public Game() {
-        int playercount = 2;
-        games = new A_Single_Game[playercount];
-        players = new Viewer[playercount];
     }
 
     //Variable Players
@@ -58,7 +54,7 @@ public class Game {
      **/
 
     //Getter
-    public A_Single_Game[] getGames() {
+    public List<A_Single_Game> getGames() {
         return games;
     }
 
@@ -76,13 +72,13 @@ public class Game {
      * @return -1 if no players can be added
      */
     public int addPlayer(String playerName, Transmitter transmitter) {
-        if (players[0] == null && games[0] == null) {
-            players[0] = new Viewer(transmitter);
-            games[0] = new A_Single_Game(playerName);
+        if (players.get(0) == null && games.get(0) == null) {
+            players.add(transmitter);
+            games.add(new A_Single_Game(playerName));
             return 0;
-        } else if (players[1] == null && games[1] == null) {
-            players[1] = new Viewer(transmitter);
-            games[1] = new A_Single_Game(playerName);
+        } else if (players.get(1) == null && games.get(1) == null) {
+            players.add(transmitter);
+            games.add(new A_Single_Game(playerName));
             gameState=new StartingState(this);
             return 1;
         }
@@ -98,7 +94,7 @@ public class Game {
     }
 
     public void addViewer(Transmitter transmitter) {
-        viewers.add(new Viewer(transmitter));
+        viewers.add(transmitter);
     }
 
     public void setGameState(State gameState) {
@@ -112,11 +108,11 @@ public class Game {
     public void updateClients() {
         gameState.fillGameDataContainer(gameDataContainer);
 
-        for (Viewer player : players) {
-            player.getTransmitter().writeRequest(gameDataContainer);
+        for (Transmitter player : players) {
+            player.writeRequest(gameDataContainer);
         }
-        for (Viewer viewer : viewers) {
-            viewer.getTransmitter().writeRequest(gameDataContainer);
+        for (Transmitter viewer : viewers) {
+            viewer.writeRequest(gameDataContainer);
         }
     }
 

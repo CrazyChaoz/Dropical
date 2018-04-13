@@ -14,8 +14,8 @@ public class PausedState extends State {
     @Override
     public GameDataContainer fillGameDataContainer(GameDataContainer gameDataContainer) {
 
-        gameDataContainer.getPlayernames()[0]=game.getGames()[0].getName();
-        gameDataContainer.getPlayernames()[1]=game.getGames()[1].getName();
+        gameDataContainer.getPlayernames()[0]=game.getGames().get(0).getName();
+        gameDataContainer.getPlayernames()[1]=game.getGames().get(1).getName();
 
         gameDataContainer.setState(GameState.GAME_PAUSE);
 

@@ -22,9 +22,9 @@ public class ServerInvokedAI extends LocalClient {
             System.out.println("Handle this GameDataContainer");
             currentGameDataContainer= (GameDataContainer) r;
         }
-        else if (r instanceof ListRequest){
+        else if (r instanceof ListDataContainer){
             System.out.println("Handle this ListRequest");
-            for (String gameName : ((ListRequest) r).getGameNames()) {
+            for (String gameName : ((ListDataContainer) r).getGameNames()) {
                 System.out.println(gameName);
             }
         }

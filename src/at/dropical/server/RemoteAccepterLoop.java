@@ -1,24 +1,24 @@
 package at.dropical.server;
 
 
-import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.ObjectTransmitter;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
 
 public class RemoteAccepterLoop extends Thread{
-    private ServerSocket serverSocket;
+    private static ServerSocket serverSocket;
 
 
     public RemoteAccepterLoop(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
 
-        //"Ends" Serving when a negative number was received
-        this.start();
-//        Server.LOGGER.log(Level.INFO,"new RemoteClientAccepter started");
+        //"Ends" Serving when a "null" Socket was received
+        if(serverSocket!=null)
+            this.start();
     }
 
     @Override

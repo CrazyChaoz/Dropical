@@ -2,7 +2,7 @@ package at.dropical.server;
 
 /**
  * The Top Level Class
- * Callable with Server.exe();
+ * Callable with Server.instance();
  * */
 
 import at.dropical.server.game.Game;

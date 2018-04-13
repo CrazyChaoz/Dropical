@@ -19,13 +19,13 @@ public class ServerSideRequestHandler implements RequestHandler {
     public ServerSideRequestHandler(Request request, Transmitter transmitter) {
 
 
-        LOGGER.log(Level.FINE,"Debug - Fine");
-        LOGGER.log(Level.INFO,"Debug - Info");
-        LOGGER.log(Level.WARNING,"Debug - Warning");
-        LOGGER.log(Level.SEVERE,"Debug - SEVERE");
+//        LOGGER.log(Level.FINE,"Debug - Fine");
+//        LOGGER.log(Level.INFO,"Debug - Info");
+//        LOGGER.log(Level.WARNING,"Debug - Warning");
+//        LOGGER.log(Level.SEVERE,"Debug - SEVERE");
 
 
-        LOGGER.log(Level.INFO,"new Request to Handle");
+        LOGGER.log(Level.INFO,"New Request to Handle");
         this.request = request;
         this.transmitter = transmitter;
         new Thread(this).start();
@@ -39,14 +39,15 @@ public class ServerSideRequestHandler implements RequestHandler {
                 Server.instance().getAllGames().put(((CreateGameRequest) request).getGameName(),new Game());
         }else if (request instanceof ListRequest) {
             LOGGER.log(Level.INFO,"Request to Handle is a ListRequest");
+            ListDataContainer listDataContainer=new ListDataContainer();
             if (((ListRequest) request).isGameListRequest()) {
                 for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
-                    ((ListRequest) request).addName(stringGameEntry.getKey());
+                    listDataContainer.addName(stringGameEntry.getKey());
                 }
             } else {
                 //TODO: Transmit Server list
             }
-            transmitter.writeRequest(request);
+            transmitter.writeRequest((Request) listDataContainer);
         } else if (request instanceof JoinRequest) {
             LOGGER.log(Level.INFO,"Request to Handle is a JoinRequest");
 

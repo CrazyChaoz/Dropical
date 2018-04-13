@@ -14,7 +14,7 @@ class BestClientOfAllTime(socket: Socket) : RemoteClient(socket){
                 println("Handle this GameDataContainer")
                 currentGameData=request
             }
-            is ListRequest ->{
+            is ListDataContainer ->{
                 println("Handle this ListRequest")
                 if(request.gameNames==null)
                     return
