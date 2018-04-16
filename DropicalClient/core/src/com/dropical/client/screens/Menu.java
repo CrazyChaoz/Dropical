@@ -6,14 +6,21 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
+import com.pezcraft.dropical.gui.DropicalButton;
 
 public class Menu implements Screen {
     private DropicalCam cam;
 
     private Sprite background;
     private BitmapFont bitmapFont;
+
+    //DropicalButton
+    private DropicalButton button;
 
     private DropicalMain game;
     public Menu(DropicalMain game) {
@@ -34,6 +41,9 @@ public class Menu implements Screen {
 
         //Kamera
         cam = new DropicalCam(1280, 720);
+
+        //DropicalButton
+        button = new DropicalButton(bitmapFont);
     }
 
     @Override
@@ -54,6 +64,10 @@ public class Menu implements Screen {
 
         //Eingabeerklärung zeichnen
         bitmapFont.draw(game.getBatch(), "[1] Singleplayer (Steuerung: WASD + SPACE)\n[2] Multiplayer (Steuerung: Pfeiltasten + ENTER)\n[P] Pause im Spiel", 0, 360, 1280, 1, false);
+
+        //DropicalButton
+        button.act();
+        button.draw();
 
         game.getBatch().end();
     }
