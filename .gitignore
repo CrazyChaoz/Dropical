@@ -1,5 +1,6 @@
-## Java
+lib/
 
+## Java
 *.class
 *.war
 *.ear
