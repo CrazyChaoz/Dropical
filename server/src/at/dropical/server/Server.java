@@ -9,15 +9,11 @@ import at.dropical.server.game.Game;
 import at.dropical.server.logging.LoggerSetup;
 import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.transmitter.LocalServerTransmitter;
-import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {

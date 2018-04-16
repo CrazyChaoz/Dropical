@@ -1,11 +1,11 @@
 package at.dropical.server;
 
-import at.dropical.client.ai.ServerInvokedAI;
 import at.dropical.server.game.Game;
 import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.*;
 import at.dropical.shared.net.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
+import at.dropical.client.ai.ServerInvokedAI;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -86,8 +86,8 @@ public class ServerSideRequestHandler implements RequestHandler {
     public void handleAddAiToGameRequest(AddAiToGameRequest request){
         LOGGER.log(Level.INFO,"Request to Handle is a AddAiToGameRequest");
 
-        while (Server.instance().getGame(((AddAiToGameRequest) request).getGameID())==null);
-        Game game = Server.instance().getGame(((AddAiToGameRequest) request).getGameID());
+        while (Server.instance().getGame(request.getGameID())==null);
+        Game game = Server.instance().getGame(request.getGameID());
 
         if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
 
