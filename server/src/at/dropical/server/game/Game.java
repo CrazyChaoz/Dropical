@@ -3,11 +3,13 @@ package at.dropical.server.game;
 import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
+import at.dropical.server.transmitter.ServerTransmitter;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
-import at.dropical.shared.net.transmitter.LocalServerTransmitter;
+import at.dropical.server.transmitter.LocalServerTransmitter;
 import at.dropical.shared.net.transmitter.Transmitter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +87,7 @@ public class Game {
         return -1;
     }
 
-    public int addAI(LocalServerTransmitter transmitter) {
+    public int addAI(ServerTransmitter transmitter) {
         int retval = addPlayer("Zufallsname: Rüdiger", transmitter);
         if (retval != -1) {
             numAI++;
@@ -105,7 +107,7 @@ public class Game {
         gameState.handleInput(idc, playerNumber);
     }
 
-    public void updateClients() {
+    public void updateClients() throws IOException {
         gameState.fillGameDataContainer(gameDataContainer);
 
         for (Transmitter player : players) {

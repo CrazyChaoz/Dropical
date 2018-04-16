@@ -1,4 +1,4 @@
-package at.dropical.shared.net.transmitter;
+package at.dropical.server.transmitter;
 
 import at.dropical.server.Server;
 import at.dropical.shared.net.requests.Request;
@@ -10,10 +10,11 @@ import java.util.logging.Level;
 //Currently just a ObjectStreamTransmitter
 //Future: JSON or completely bytewise
 
-public class ObjectTransmitter extends Transmitter {
+public class ObjectTransmitter extends ServerTransmitter{
+    private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
     public ObjectTransmitter(InputStream inputStream, OutputStream outputStream) throws IOException {
-        super(inputStream, outputStream);
 
         //Die reihenfolge zählt ......
         this.outputStream=new ObjectOutputStream(outputStream);
@@ -23,7 +24,7 @@ public class ObjectTransmitter extends Transmitter {
     @Override
     public void writeRequest(Request r) {
         try {
-            ((ObjectOutputStream) outputStream).writeObject(r);
+            outputStream.writeObject(r);
         } catch (IOException e) {
             Server.LOGGER.log(Level.SEVERE,"IOException on writing Request");
             System.err.println("Couldn't send Request " + r.toString());
@@ -33,7 +34,7 @@ public class ObjectTransmitter extends Transmitter {
     @Override
     public Request readRequest() {
         try {
-            return (Request) ((ObjectInputStream) inputStream).readObject();
+            return (Request) inputStream.readObject();
         } catch (IOException e) {
             Server.LOGGER.log(Level.SEVERE,"IOException on reading Request");
         } catch (ClassNotFoundException e) {

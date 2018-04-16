@@ -1,7 +1,7 @@
 package at.dropical.server;
 
 
-import at.dropical.shared.net.transmitter.ObjectTransmitter;
+import at.dropical.server.transmitter.ObjectTransmitter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +32,6 @@ public class RemoteAccepterLoop extends Thread{
 
             //add new connection to Server
             ObjectTransmitter transi=new ObjectTransmitter(inputStream,outputStream);
-
 
             //Error if not in loop
             for(;;){

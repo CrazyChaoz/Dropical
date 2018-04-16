@@ -8,7 +8,7 @@ package at.dropical.server;
 import at.dropical.server.game.Game;
 import at.dropical.server.logging.LoggerSetup;
 import at.dropical.shared.LocalRequestCache;
-import at.dropical.shared.net.transmitter.LocalServerTransmitter;
+import at.dropical.server.transmitter.LocalServerTransmitter;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -79,7 +79,6 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 //  Methods
 
     public void addLocalClient(LocalRequestCache requestCache) {
-        LocalServerTransmitter localServerTransmitter=new LocalServerTransmitter(requestCache);
-        new LocalAccepterLoop(localServerTransmitter);
+        new LocalAccepterLoop(new LocalServerTransmitter(requestCache));
     }
 }
