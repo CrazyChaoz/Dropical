@@ -3,22 +3,17 @@ package at.dropical.shared.net.requests;
 import at.dropical.shared.GameState;
 
 
-public class GameDataContainer implements Request{
-    private GameState state;
+public class GameDataContainer extends Container{
     private String[] playernames=new String[2];
     private int[][][] arenas=new int[2][20][10];
     private int[][][] nextTrock=new int[2][4][4];
     private int level;
     private int time;
 
-
-    public GameState getState() {
-        return state;
+    public GameDataContainer(GameState currentState) {
+        super(currentState);
     }
 
-    public void setState(GameState state) {
-        this.state = state;
-    }
 
     public String[] getPlayernames() {
         return playernames;

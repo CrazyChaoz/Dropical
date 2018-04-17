@@ -1,52 +1,119 @@
 package at.dropical.server.game;
 
-import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.WaitingState;
+import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
+import at.dropical.server.transmitter.ServerTransmitter;
 import at.dropical.shared.net.requests.GameDataContainer;
+import at.dropical.shared.net.requests.HandleInputRequest;
 import at.dropical.shared.net.transmitter.Transmitter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This is a "play round" with 1, 2 or many players.
- *
- * It manages the Connections (transmitters, viewers) and
- * the {@link OnePlayer}s.
- */
 public class Game {
 
-    int maxPlayers = 2;
+    //Zuseher
+    private List<Transmitter> viewers = new ArrayList();
 
     //Players
-    private List<Transmitter> playerTransmitters = new ArrayList<>();
+    private List<Transmitter> players = new ArrayList<>();
 
     //Games
-    private List<OnePlayer> players = new ArrayList<>();
+    private List<A_Single_Game> games = new ArrayList<>();
 
+    //Level
     private int level = 0;
-    //TODO Time
+
+    //Time
+    private Object time;    //TODO: Implement time
 
     private State gameState = new WaitingState(this);
+    private GameDataContainer gameDataContainer = new GameDataContainer();
 
-    public void addPlayer(String playerName, Transmitter transmitter) {
-        if (players.size()<maxPlayers) {
-            playerTransmitters.add(transmitter);
-            players.add(new OnePlayer(playerName));
-        } //TODO throw Exception when max players reached
+    //how many AI are connected
+    private int numAI = 0;
 
-        if (players.size()==maxPlayers)
-            gameState=new StartingState(this);
+    /**
+     * <Constructors>
+     **/
+
+    //Classic
+    public Game() {
     }
 
-    /** Calls all the transmitters to send the Responses. */
-    public void updateClients() {
-        for(OnePlayer player : players) {
-            gameState.fillGameDataContainer();
-            player.getPlayerTransmitter().writeRequest(
+    //Variable Players
+    /*
+    public Game(int playercount) {
+        games = new A_Single_Game[playercount];
+        players = new Viewer[playercount];
+    }*/
 
-            );
+    /**
+     * <!Constructors>
+     **/
+
+    //Getter
+    public List<A_Single_Game> getGames() {
+        return games;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getNumAI() {
+        return numAI;
+    }
+
+    //Method
+
+    /**
+     * @return -1 if no players can be added
+     */
+    public int addPlayer(String playerName, Transmitter transmitter) {
+        if (players.get(0) == null && games.get(0) == null) {
+            players.add(transmitter);
+            games.add(new A_Single_Game(playerName));
+            return 0;
+        } else if (players.get(1) == null && games.get(1) == null) {
+            players.add(transmitter);
+            games.add(new A_Single_Game(playerName));
+            gameState=new StartingState(this);
+            return 1;
+        }
+        return -1;
+    }
+
+    public int addAI(ServerTransmitter transmitter) {
+        int retval = addPlayer("Zufallsname: Rüdiger", transmitter);
+        if (retval != -1) {
+            numAI++;
+        }
+        return retval;
+    }
+
+    public void addViewer(Transmitter transmitter) {
+        viewers.add(transmitter);
+    }
+
+    public void setGameState(State gameState) {
+        this.gameState = gameState;
+    }
+
+    public void handleInput(HandleInputRequest idc, int playerNumber) {
+        gameState.handleInput(idc, playerNumber);
+    }
+
+    public void updateClients() throws IOException {
+        gameState.fillGameDataContainer(gameDataContainer);
+
+        for (Transmitter player : players) {
+            player.writeRequest(gameDataContainer);
+        }
+        for (Transmitter viewer : viewers) {
+            viewer.writeRequest(gameDataContainer);
         }
     }
 

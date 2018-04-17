@@ -3,7 +3,7 @@ package at.dropical.server.gamestates;
 import at.dropical.server.game.Game;
 import at.dropical.shared.GameState;
 import at.dropical.shared.net.requests.GameDataContainer;
-import at.dropical.shared.net.requests.InputDataContainer;
+import at.dropical.shared.net.requests.HandleInputRequest;
 
 public class StartingState extends State implements Runnable {
     private int time;
@@ -28,7 +28,7 @@ public class StartingState extends State implements Runnable {
     }
 
     @Override
-    public void handleInput(InputDataContainer inputDataContainer, int playerNumber) {
+    public void handleInput(HandleInputRequest handleInputRequest, int playerNumber) {
 
     }
 
