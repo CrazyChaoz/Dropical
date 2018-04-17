@@ -73,4 +73,16 @@ public class Proxy extends Thread {
     public GameDataContainer getGameDataContainer() {
         return gameDataContainer;
     }
+
+    public GameOverContainer getGameOverContainer() {
+        return gameOverContainer;
+    }
+
+    public GameState getCurrentState() {
+        return currentState;
+    }
+
+    public ListDataContainer getListDataContainer() {
+        return listDataContainer;
+    }
 }

@@ -24,7 +24,7 @@ public class RunningState extends State {
         gameDataContainer.getPlayernames()[0]=game.getGames().get(0).getName();
         gameDataContainer.getPlayernames()[1]=game.getGames().get(1).getName();
 
-        gameDataContainer.setState(GameState.GAME_RUNNING);
+//        gameDataContainer.setState(GameState.GAME_RUNNING);
 
         gameDataContainer.setLevel(game.getLevel());
 
