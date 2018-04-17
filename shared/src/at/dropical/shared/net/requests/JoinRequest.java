@@ -5,6 +5,7 @@ public class JoinRequest implements Request {
     private boolean isPlayer;
     private String playerName;
 
+    //for players
     public JoinRequest(String gameID, String playerName) {
         this.gameID = gameID;
         this.isPlayer = true;

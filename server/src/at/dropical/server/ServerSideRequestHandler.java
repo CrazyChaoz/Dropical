@@ -4,8 +4,6 @@ import at.dropical.server.game.Game;
 import at.dropical.server.transmitter.ServerTransmitter;
 import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.*;
-import at.dropical.server.transmitter.LocalServerTransmitter;
-import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.io.IOException;
 import java.util.Map;
@@ -42,8 +40,8 @@ public class ServerSideRequestHandler implements RequestHandler {
             handleJoinRequest((JoinRequest) request);
         } else if (request instanceof AddAiToGameRequest) {
             handleAddAiToGameRequest((AddAiToGameRequest) request);
-        } else if (request instanceof InputDataContainer) {
-            handleInputDataContainer((InputDataContainer) request);
+        } else if (request instanceof HandleInputRequest) {
+            handleInputDataContainer((HandleInputRequest) request);
         }
     }
 
@@ -107,8 +105,8 @@ public class ServerSideRequestHandler implements RequestHandler {
         }
     }
 
-    public void handleInputDataContainer(InputDataContainer request){
-        LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
+    public void handleInputDataContainer(HandleInputRequest request){
+        LOGGER.log(Level.INFO,"Request to Handle is a HandleInputRequest");
         if(transmitter.getCurrGame()!=null){
             transmitter.getCurrGame().handleInput(request,transmitter.getPlayerNum());
         }

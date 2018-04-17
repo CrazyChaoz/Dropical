@@ -5,8 +5,7 @@ import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.server.transmitter.ServerTransmitter;
 import at.dropical.shared.net.requests.GameDataContainer;
-import at.dropical.shared.net.requests.InputDataContainer;
-import at.dropical.server.transmitter.LocalServerTransmitter;
+import at.dropical.shared.net.requests.HandleInputRequest;
 import at.dropical.shared.net.transmitter.Transmitter;
 
 import java.io.IOException;
@@ -103,7 +102,7 @@ public class Game {
         this.gameState = gameState;
     }
 
-    public void handleInput(InputDataContainer idc, int playerNumber) {
+    public void handleInput(HandleInputRequest idc, int playerNumber) {
         gameState.handleInput(idc, playerNumber);
     }
 
