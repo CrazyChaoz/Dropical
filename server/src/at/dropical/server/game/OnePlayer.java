@@ -11,11 +11,7 @@ import at.dropical.server.gamefield.Tetromino;
  * Some methods throw a GameOverException when
  * a game over occurs.
  */
-public class A_Single_Game extends Thread {
-
-    //TODO Should this be here or in Game?
-    // Haupt-Transmitter für client
-    // Liste für Viewer
+public class OnePlayer extends Thread {
 
     private static int STARTVAL_X = TetrisArena.width/2 -Tetromino.size/2;
     private static int STARTVAL_Y = -1;
@@ -29,13 +25,13 @@ public class A_Single_Game extends Thread {
     private int currTetrX = STARTVAL_X;
     private int currTetrY = STARTVAL_Y;
 
-    public A_Single_Game(String playername) {
-        this.playername=playername;
+    public OnePlayer(String playername) {
+        this.playername = playername;
     }
 
     //FUNCTIONALITY
 
-    /** Auto-lowering the Tetromino a block.
+    /** Lowering the Tetromino a block.
      * If that is not possible, placeTetromino(). */
     private void moveDownwardsOrPlace() throws GameOverException {
         if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true)) {
@@ -68,12 +64,12 @@ public class A_Single_Game extends Thread {
     /** If it is allowed, decrement currTetrY */
     public void moveDown() throws GameOverException {
         if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
-            currTetrY--;
+            currTetrY++;
     }
     /** go down as long as possible and place the Tetromino */
     public void dropTetromino() throws GameOverException {
         while (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
-            currTetrY--;
+            currTetrY++;
         placeTetromino();
     }
 
@@ -106,23 +102,18 @@ public class A_Single_Game extends Thread {
     public Tetromino getTetromino() {
         return tetromino;
     }
-
     public int[][] getNextTetromino() {
         return nextTetromino.toArray();
     }
-
     public int getCurrTetrX() {
         return currTetrX;
     }
-
     public int getCurrTetrY() {
         return currTetrY;
     }
-
     public int[][] getVisualArena() {
         return arena.toArray();
     }
-
     public int getPoints() {
         return points;
     }

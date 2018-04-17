@@ -1,17 +1,13 @@
 package at.dropical.server.gamestates;
 
 import at.dropical.server.game.Game;
+import at.dropical.server.game.OnePlayer;
 import at.dropical.shared.net.requests.GameDataContainer;
 import at.dropical.shared.net.requests.InputDataContainer;
 
-public abstract class State{
-    protected Game game;
+public interface State {
 
-    public State(Game game) {
-        this.game = game;
-    }
-
-    public abstract GameDataContainer fillGameDataContainer(GameDataContainer gameDataContainer);
-    public abstract void handleInput(InputDataContainer inputDataContainer,int playerNumber);
+    void fillGameDataContainer(OnePlayer player, GameDataContainer gameDataContainer);
+    void handleInput(OnePlayer player, InputDataContainer inputDataContainer);
 }
 

@@ -2,7 +2,6 @@ package at.dropical.server.gamefield;
 // Created by julian on 17.11.17.
 
 import at.dropical.server.game.GameOverException;
-import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.Random;
 
