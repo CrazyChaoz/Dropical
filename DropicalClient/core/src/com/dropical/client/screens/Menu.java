@@ -43,7 +43,7 @@ public class Menu implements Screen {
         cam = new DropicalCam(1280, 720);
 
         //DropicalButton
-        button = new DropicalButton(bitmapFont);
+        button = new DropicalButton("Singleplayer", bitmapFont, "GUI/buttons/singleplayer_up.png", "GUI/buttons/singleplayer_down.png", "GUI/buttons/singleplayer_down.png", "GUI/buttons/singleplayer_down.png", "GUI/buttons/singleplayer_disabled.png", 88, 12);
     }
 
     @Override
