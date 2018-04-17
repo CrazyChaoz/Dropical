@@ -3,108 +3,127 @@ package at.dropical.server.game;
 import at.dropical.server.gamefield.TetrisArena;
 import at.dropical.server.gamefield.Tetromino;
 
-//TODO: Besseren namen geben
+/**
+ * This class manages one TetrisArena, one
+ * current tetromino and one nextTetromino.
+ * And information about the player.
+ *
+ * Some methods throw a GameOverException when
+ * a game over occurs.
+ */
 public class A_Single_Game extends Thread {
 
-    //FIXME: use correct values
-    public static int STARTVAL_X = -1;
-    public static int STARTVAL_Y = -1;
+    //TODO Should this be here or in Game?
+    // Haupt-Transmitter für client
+    // Liste für Viewer
+
+    private static int STARTVAL_X = TetrisArena.width/2 -Tetromino.size/2;
+    private static int STARTVAL_Y = -1;
 
     private String playername;
-    private TetrisArena arena=new TetrisArena();
-    private Tetromino currTrock = Tetromino.createRandom();
-    private Tetromino nextTrock = Tetromino.createRandom();
-    private int currTrockX = STARTVAL_X;
-    private int currTrockY = STARTVAL_Y;
+    private int points = 0;
 
-
-    private int punkte = 0;
-
+    private TetrisArena arena = new TetrisArena(playername);
+    private Tetromino tetromino = Tetromino.createRandom();
+    private Tetromino nextTetromino = Tetromino.createRandom();
+    private int currTetrX = STARTVAL_X;
+    private int currTetrY = STARTVAL_Y;
 
     public A_Single_Game(String playername) {
         this.playername=playername;
     }
 
+    //FUNCTIONALITY
+
+    /** Auto-lowering the Tetromino a block.
+     * If that is not possible, placeTetromino(). */
+    private void moveDownwardsOrPlace() throws GameOverException {
+        if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true)) {
+            currTetrY++;
+        } else
+            placeTetromino();
+    }
+
+    /** Places the current one and makes a new Tetromino.
+     * @throws GameOverException If the placing fails. */
+    private void placeTetromino() throws GameOverException {
+        arena.placeTetromino(tetromino, currTetrY, currTetrX);
+        newNextTetromino();
+    }
+
+    /** The nextTetromino gets placed at the top of the arena.
+     * If the place is obscured, gameOver is set. */
+    private void newNextTetromino() throws GameOverException {
+        tetromino = nextTetromino;
+        // TODO give the different players the same RNG
+        nextTetromino = Tetromino.createRandom();
+        currTetrY = STARTVAL_Y;
+        currTetrX = STARTVAL_X;
+
+        if(! arena.checkTetromino(tetromino, currTetrY, currTetrX, true))
+            throw new GameOverException(playername);
+    }
+
+
+    /** If it is allowed, decrement currTetrY */
+    public void moveDown() throws GameOverException {
+        if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
+            currTetrY--;
+    }
+    /** go down as long as possible and place the Tetromino */
+    public void dropTetromino() throws GameOverException {
+        while (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
+            currTetrY--;
+        placeTetromino();
+    }
+
+    public void moveLeft() {
+        if (arena.checkTetromino(tetromino, currTetrY, currTetrX - 1, true))
+            currTetrX -= 1;
+    }
+    public void moveRight() {
+        if (arena.checkTetromino(tetromino, currTetrY, currTetrX + 1, true))
+            currTetrX += 1;
+
+    }
+
+    public void rotateLeft() {
+        if (!arena.checkTetromino(tetromino.rotate(), currTetrY, currTetrX, true))
+            tetromino.rotateBack();
+    }
+    public void rotateRight() {
+        if (!arena.checkTetromino(tetromino.rotateBack(), currTetrY, currTetrX, true))
+            tetromino.rotate();
+    }
+
+
+    /** Getters & Setters **/
+
     public String getPlayername() {
         return playername;
     }
 
-    public int[][] getNextTrock() {
-        return nextTrock.toArray();
+    public Tetromino getTetromino() {
+        return tetromino;
     }
 
-    public int getCurrTrockX() {
-        return currTrockX;
+    public int[][] getNextTetromino() {
+        return nextTetromino.toArray();
     }
 
-    public int getCurrTrockY() {
-        return currTrockY;
+    public int getCurrTetrX() {
+        return currTetrX;
+    }
+
+    public int getCurrTetrY() {
+        return currTetrY;
     }
 
     public int[][] getVisualArena() {
         return arena.toArray();
     }
 
-    public int getPunkte() {
-        return punkte;
-    }
-
-    //FUNCTIONALITY
-
-    public boolean moveTrockDown() throws SpecialGameOverException {
-        boolean retval = false;
-        try {
-            retval = arena.placeTetromino(currTrock, currTrockY - 1, currTrockX);
-        } catch (GenericGameOverException e) {
-            throw new SpecialGameOverException(playername);
-        }
-
-        if (retval == false)
-            newTrock();
-        else
-            currTrockY -= 1;
-
-        int delLines = arena.clearLines();
-        punkte += delLines * delLines;
-
-
-        return retval;
-    }
-
-    public void moveTrockLeft() throws GenericGameOverException {
-        if (arena.placeTetromino(currTrock, currTrockY, currTrockX - 1))
-            currTrockX -= 1;
-    }
-
-    public void moveTrockRight() throws GenericGameOverException {
-        if (arena.placeTetromino(currTrock, currTrockY, currTrockX + 1))
-            currTrockX += 1;
-
-    }
-
-    public void rotateLeft() throws GenericGameOverException {
-        if (!arena.placeTetromino(currTrock.rotate(), currTrockY, currTrockX))
-            currTrock.rotateBack();
-    }
-
-    public void rotateRight() throws GenericGameOverException {
-        if (!arena.placeTetromino(currTrock.rotateBack(), currTrockY, currTrockX))
-            currTrock.rotate();
-    }
-
-    public void dropTrock() throws SpecialGameOverException {
-        while (moveTrockDown()) ;
-    }
-
-    public void placeGhostTrock() throws GenericGameOverException {
-        arena.placeGhost(currTrock, currTrockY, currTrockX);
-
-    }
-
-    public void newTrock() {
-        currTrock = nextTrock;
-        nextTrock = Tetromino.createRandom();
-        currTrockX = STARTVAL_X;
-        currTrockY = STARTVAL_Y;
+    public int getPoints() {
+        return points;
     }
 }

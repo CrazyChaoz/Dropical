@@ -3,6 +3,11 @@ package at.dropical.server.logging;
 import java.io.IOException;
 import java.util.logging.*;
 
+/**
+ * fixme How do I use this Logger ?
+ * TODO Replace "System.err.println" with the logger.
+ *
+ */
 public class LoggerSetup {
     static private FileHandler fileTxt;
     static private SimpleFormatter formatterTxt;

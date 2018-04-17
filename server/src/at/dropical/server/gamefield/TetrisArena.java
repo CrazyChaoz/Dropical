@@ -1,7 +1,8 @@
 package at.dropical.server.gamefield;
 // Created by julian on 17.11.17.
 
-import at.dropical.server.game.GenericGameOverException;
+import at.dropical.server.game.GameOverException;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.Random;
 
@@ -38,40 +39,17 @@ public class TetrisArena {
      *  Therefore, (0|0) is top left. */
     private int[][] arena;
 
+    /** Used to make the GameOverException */
+    private final String player;
+
     /** Creates an empty arena. */
-    public TetrisArena() {
+    public TetrisArena(String player) {
         arena = new int[TetrisArena.internalHeight][TetrisArena.internalWidth];
-    }
-
-    /** Constructor for testing.
-     * @param isActual lets you choose if the given arena has the internal
-     * size or the actual size. */
-    TetrisArena(int[][] arena, boolean isActual) throws IllegalArgumentException {
-        if(isActual) {
-            fromArray(arena);
-        } else {
-            // Internal Array
-            if(arena.length != internalHeight || arena[0].length != internalWidth)
-                throw new IllegalArgumentException("Wrong Dimensions: " + arena.length + "*" + arena[0].length);
-
-            this.arena = arena;
-        }
-    }
-
-    /** Converts an actual arena to the internal arena. */
-    private void fromArray(int[][] newArena) throws IllegalArgumentException {
-        if(newArena.length != height || newArena[0].length != width)
-            throw new IllegalArgumentException("Wrong Dimensions: "+ newArena.length +"*"+ newArena[0].length);
-
-        this.arena = new int[TetrisArena.internalHeight][TetrisArena.internalWidth];
-        for(int h = 0; h < height; h++) {
-            // IntelliJ suggest that function. Is the overhead even worth it?
-            System.arraycopy(newArena[h], 0, this.arena[h + marginTop], marginLeftRight, width);
-        }
+        this.player = player;
     }
 
     /** Return a 2D Array with the normal dimensions
-     * (height*width), that is sent to the at.dropical.client.*/
+     * (height*width), that is sent to the client.*/
     public int[][] toArray() {
         int[][] actualArena = new int[height][width];
 
@@ -93,12 +71,11 @@ public class TetrisArena {
      * @param overTopAllowed should this return true when tetromino is out top?
      * @return false if it's out of bounds or if there are already
      * blocks at those positions. */
-    public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) throws GenericGameOverException {
+    public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) {
         int[][] tetrominoArr = tetromino.toArray();
 
         for(int i = 0; i < Tetromino.size; i++) {
             for(int j = 0; j < Tetromino.size; j++) {
-
                 // Only care if there is a block
                 if(tetrominoArr[i][j] >= 1) {
 
@@ -106,13 +83,12 @@ public class TetrisArena {
                     if(arena[marginTop + h + i][marginLeftRight + w + j] >= 1
                             || w+j < 0    // Out left
                             || w+j >= width // Out right
-                            || h+i >= height) // Out bottom
-                        return false; //Stop if one block fails.
+                            || h+i >= height // Out bottom
+                            || !overTopAllowed && (h+i <0))
+                            /* Out top is sometimes allowed because the tetromino
+                             * has to start falling down from over the top.*/
 
-                    /* Out top is sometimes allowed because the tetromino
-                     * has to start falling down from over the top.*/
-                    if(!overTopAllowed && (h+i <0))
-                        throw new GenericGameOverException();
+                        return false; //Stop if one block fails.
                 }
             }
         }
@@ -122,22 +98,24 @@ public class TetrisArena {
 
     /** First checks, if the place is not obscured and if not,
      * write it into the arena.
-     * @return result of checkTetromino.
-     * If it returns false, the tetromino is in a invalid
-     * position. -> Game Over! */
-    public boolean placeTetromino(Tetromino tetromino, int h, int w) throws GenericGameOverException {
+     * @throws GameOverException If the tetromino is in a
+     * invalid position. -> Game Over!
+     * But this is actually a programming error! */
+    public void placeTetromino(Tetromino tetromino, int h, int w) throws GameOverException {
         // Can it be placed here?
-        boolean canBePlaced = checkTetromino(tetromino, h, w, false);
-        if(canBePlaced) {
-            // Place it.
-            int[][] tetrominoArr = tetromino.toArray();
-            for(int i = 0; i < Tetromino.size; i++) {
-                for(int j = 0; j < Tetromino.size; j++) {
-                    arena[marginTop + h + i][marginLeftRight + w + j] += tetrominoArr[i][j];
-                }
+        if(!checkTetromino(tetromino, h, w, false)) {
+            System.err.println("The Tetronimo is in an invalid Position. This should never happen." +
+                    "Bad luck for Player "+ player); // See addLines()
+            throw new GameOverException(player);
+        }
+
+        // Place it.
+        int[][] tetrominoArr = tetromino.toArray();
+        for(int i = 0; i < Tetromino.size; i++) {
+            for(int j = 0; j < Tetromino.size; j++) {
+                arena[marginTop + h + i][marginLeftRight + w + j] += tetrominoArr[i][j];
             }
         }
-        return canBePlaced;
     }
 
     /** Checks if lines are full (every block in a horizontal
@@ -209,7 +187,7 @@ public class TetrisArena {
      *
      * fixme The current Tetroino must go up too,
      * otherwise it can lead to a wrong game over. */
-    public boolean addLines(int lineCount) {
+    public boolean addLines(int lineCount) throws GameOverException {
         boolean overTop = false;
         Random rand = new Random();
 
@@ -229,18 +207,9 @@ public class TetrisArena {
 
 
 
-    public void placeGhost(Tetromino tetromino, int h, int w) throws GenericGameOverException {
+    public void placeGhost(Tetromino tetromino, int h, int w)  { //TODO
         // Can it be placed here?
 
-        while(checkTetromino(tetromino, --h, w, false)) {
-            // Place it.
-            int[][] tetrominoArr = tetromino.toArray();
-            for(int i = 0; i < Tetromino.size; i++) {
-                for(int j = 0; j < Tetromino.size; j++) {
-                    arena[marginTop + h + i][marginLeftRight + w + j] += tetrominoArr[i][j]!=0?666:0;
-                }
-            }
-        }
     }
 
 

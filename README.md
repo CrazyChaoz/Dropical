@@ -13,15 +13,7 @@
 <br>
 
 # **Folderstructure**
-> ### <code>Client</code>
->Everything that looks like a client to the server
->
->> ##### <code>AI</code>
->> The primary AI Folder
->
->> ##### <code>Human</code>
->> Part of the Game that lies solely on Client Side
->
+
 > ### <code>Server</code>
 > Everything that is solely on the Server
 >
@@ -39,5 +31,3 @@
 
 <br>
 
-> ### <code>Other</code>
->> Sources that are not used within our Project
