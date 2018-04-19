@@ -95,14 +95,14 @@ public class ServerSideRequestHandler implements RequestHandler {
         while (Server.instance().getGame(request.getGameID())==null);
         Game game = Server.instance().getGame(request.getGameID());
 
-        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
-
-
-            //TODO: LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
-
-            transmitter.setPlayerNum(game.addAI(transmitter));
-            transmitter.setCurrGame(game);
-        }
+//        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
+//
+//
+//            //TODO: LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
+//
+//            transmitter.setPlayerNum(game.addAI(transmitter));
+//            transmitter.setCurrGame(game);
+//        }
     }
 
     public void handleInputDataContainer(HandleInputRequest request){

@@ -1,10 +1,8 @@
 package at.dropical.server.game;
 
-import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
-import at.dropical.server.transmitter.ServerTransmitter;
-import at.dropical.shared.net.requests.GameDataContainer;
+import at.dropical.server.gamestates.WaitingState;
 import at.dropical.shared.net.requests.HandleInputRequest;
 import at.dropical.shared.net.transmitter.Transmitter;
 
@@ -14,14 +12,11 @@ import java.util.List;
 
 public class Game {
 
-    //Zuseher
-    private List<Transmitter> viewers = new ArrayList();
-
-    //Players
-    private List<Transmitter> players = new ArrayList<>();
+    //Zuseher & Spieler
+    private List<Transmitter> observer = new ArrayList();
 
     //Games
-    private List<A_Single_Game> games = new ArrayList<>();
+    private List<OnePlayer> games = new ArrayList<>();
 
     //Level
     private int level = 0;
@@ -29,11 +24,11 @@ public class Game {
     //Time
     private Object time;    //TODO: Implement time
 
+    //Current State the Game is in
     private State gameState = new WaitingState(this);
-    private GameDataContainer gameDataContainer = new GameDataContainer();
 
-    //how many AI are connected
-    private int numAI = 0;
+    //Maximal number of Players
+    private int maxPlayers=2;
 
     /**
      * <Constructors>
@@ -55,7 +50,7 @@ public class Game {
      **/
 
     //Getter
-    public List<A_Single_Game> getGames() {
+    public List<OnePlayer> getGames() {
         return games;
     }
 
@@ -63,39 +58,34 @@ public class Game {
         return level;
     }
 
-    public int getNumAI() {
-        return numAI;
-    }
+//    public int getNumAI() {
+//        return numAI;
+//    }
 
     //Method
 
-    /**
-     * @return -1 if no players can be added
-     */
-    public int addPlayer(String playerName, Transmitter transmitter) {
-        if (players.get(0) == null && games.get(0) == null) {
-            players.add(transmitter);
-            games.add(new A_Single_Game(playerName));
-            return 0;
-        } else if (players.get(1) == null && games.get(1) == null) {
-            players.add(transmitter);
-            games.add(new A_Single_Game(playerName));
-            gameState=new StartingState(this);
-            return 1;
+
+    public void addPlayer(String playerName, Transmitter transmitter) {
+        if(games.size()<maxPlayers){
+            games.add(new OnePlayer(playerName));
+            observer.add(transmitter);
         }
-        return -1;
+
+        if(games.size()==maxPlayers)
+            gameState=new StartingState(this);
+
     }
 
-    public int addAI(ServerTransmitter transmitter) {
-        int retval = addPlayer("Zufallsname: Rüdiger", transmitter);
-        if (retval != -1) {
-            numAI++;
-        }
-        return retval;
-    }
+//    public int addAI(ServerTransmitter transmitter) {
+//        int retval = addPlayer("Zufallsname: Rüdiger", transmitter);
+//        if (retval != -1) {
+//            numAI++;
+//        }
+//        return retval;
+//    }
 
     public void addViewer(Transmitter transmitter) {
-        viewers.add(transmitter);
+        observer.add(transmitter);
     }
 
     public void setGameState(State gameState) {
@@ -103,18 +93,18 @@ public class Game {
     }
 
     public void handleInput(HandleInputRequest idc, int playerNumber) {
-        gameState.handleInput(idc, playerNumber);
+//        gameState.handleInput(idc, playerNumber);
     }
 
     public void updateClients() throws IOException {
-        gameState.fillGameDataContainer(gameDataContainer);
-
-        for (Transmitter player : players) {
-            player.writeRequest(gameDataContainer);
-        }
-        for (Transmitter viewer : viewers) {
-            viewer.writeRequest(gameDataContainer);
-        }
+//        gameState.fillGameDataContainer(gameDataContainer);
+//
+//        for (Transmitter player : players) {
+//            player.writeRequest(gameDataContainer);
+//        }
+//        for (Transmitter viewer : viewers) {
+//            viewer.writeRequest(gameDataContainer);
+//        }
     }
 
 }

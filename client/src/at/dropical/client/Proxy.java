@@ -47,22 +47,32 @@ public class Proxy extends Thread {
                 if(request.getCurrentState()!=null)
                     currentState=request.getCurrentState();
 
-
                 if (request instanceof GameDataContainer)
                     gameDataContainer = (GameDataContainer) request;
                 else if(request instanceof CountDownContainer)
                     countDownContainer = (CountDownContainer) request;
-                else if(request instanceof ListDataContainer)
+                else if(request instanceof ListDataContainer) {
                     listDataContainer = (ListDataContainer) request;
+
+                    if(listDataContainer.getGameNames()!=null)
+                        for (String s : listDataContainer.getGameNames())
+                            System.out.println("Game: "+s);
+
+                }
                 else if(request instanceof GameOverContainer)
                     gameOverContainer = (GameOverContainer) request;
-
-
-
 
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void transmitToServer(Request r){
+        try {
+            transmitter.writeRequest(r);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
