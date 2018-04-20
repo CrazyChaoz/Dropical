@@ -85,6 +85,8 @@ public class Menu implements Screen {
         stage.addActor(multiplayerLocalButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
+
+        singleplayerButton.setDownTexture("GUI/background.png", 52, 61);
     }
 
     @Override
