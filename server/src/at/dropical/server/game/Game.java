@@ -20,7 +20,7 @@ public class Game {
     private List<Transmitter> players = new ArrayList<>();
 
     //Games
-    private List<A_Single_Game> games = new ArrayList<>();
+    private List<Player> games = new ArrayList<>();
 
     //Level
     private int level = 0;
@@ -45,7 +45,7 @@ public class Game {
     //Variable Players
     /*
     public Game(int playercount) {
-        games = new A_Single_Game[playercount];
+        games = new Player[playercount];
         players = new Viewer[playercount];
     }*/
 
@@ -54,7 +54,7 @@ public class Game {
      **/
 
     //Getter
-    public List<A_Single_Game> getGames() {
+    public List<Player> getGames() {
         return games;
     }
 
@@ -74,11 +74,11 @@ public class Game {
     public int addPlayer(String playerName, Transmitter transmitter) {
         if (players.get(0) == null && games.get(0) == null) {
             players.add(transmitter);
-            games.add(new A_Single_Game(playerName));
+            games.add(new Player(playerName));
             return 0;
         } else if (players.get(1) == null && games.get(1) == null) {
             players.add(transmitter);
-            games.add(new A_Single_Game(playerName));
+            games.add(new Player(playerName));
             gameState=new StartingState(this);
             return 1;
         }

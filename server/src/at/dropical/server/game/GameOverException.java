@@ -1,9 +1,9 @@
 package at.dropical.server.game;
 
-public class SpecialGameOverException extends Exception {
+public class GameOverException extends Exception {
     private String looserName;
 
-    public SpecialGameOverException(String looserName) {
+    public GameOverException(String looserName) {
         this.looserName = looserName;
     }
 

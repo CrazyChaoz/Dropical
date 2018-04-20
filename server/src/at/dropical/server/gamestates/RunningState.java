@@ -18,8 +18,8 @@ public class RunningState extends State {
         gameDataContainer.getArenas()[0]=game.getGames().get(0).getVisualArena();
         gameDataContainer.getArenas()[1]=game.getGames().get(1).getVisualArena();
 
-        gameDataContainer.getNextTrock()[0]=game.getGames().get(0).getNextTrock();
-        gameDataContainer.getNextTrock()[1]=game.getGames().get(1).getNextTrock();
+        gameDataContainer.getNextTrock()[0]=game.getGames().get(0).getNextTetromino();
+        gameDataContainer.getNextTrock()[1]=game.getGames().get(1).getNextTetromino();
 
         gameDataContainer.getPlayernames()[0]=game.getGames().get(0).getName();
         gameDataContainer.getPlayernames()[1]=game.getGames().get(1).getName();
