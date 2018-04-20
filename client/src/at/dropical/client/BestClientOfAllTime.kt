@@ -6,10 +6,10 @@ import java.util.*
 
 class BestClientOfAllTime(socket: Socket){
     var currentGameData: GameDataContainer?=null
-    val proxy=Proxy
+    val proxy=Proxy()
 
 
-    override fun handleRequest(request: Request?) {
+    fun handleRequest(request: Request?) {
         when(request){
             is GameDataContainer ->{
                 println("Handle this GameDataContainer")
@@ -28,19 +28,19 @@ class BestClientOfAllTime(socket: Socket){
 
 
 
-    override fun run() {
+    fun run() {
         //Things that Clients do
         var i=1
         while (i!=0){
             println("What do you want to do ?")
             i=Scanner(System.`in`).nextInt()
             when (i) {
-                1 -> toServer(ListRequest(true))
-                2 -> toServer(CreateGameRequest("Super Secret Game"))
-                3 -> toServer(AddAiToGameRequest("Super Secret Game"))
+                1 -> proxy.transmitToServer(ListRequest(true))
+                2 -> proxy.transmitToServer(CreateGameRequest("Super Secret Game"))
+                3 -> proxy.transmitToServer(AddAiToGameRequest("Super Secret Game"))
                 4 -> {
                     print("Write the GameName here: ")
-                    toServer(CreateGameRequest(Scanner(System.`in`).next()))}
+                    proxy.transmitToServer(CreateGameRequest(Scanner(System.`in`).next()))}
             }
         }
 

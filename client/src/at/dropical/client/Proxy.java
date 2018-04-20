@@ -1,94 +1,95 @@
 package at.dropical.client;
 
+import at.dropical.client.remote.RemoteTransmitter;
 import at.dropical.shared.GameState;
+import at.dropical.shared.net.requests.*;
+import at.dropical.shared.net.transmitter.Transmitter;
 
-public class Proxy {
-    public class Proxy extends Thread {
-        private GameState currentState=GameState.GAME_LOADING;
+import java.io.IOException;
+import java.net.Socket;
 
-        private GameDataContainer gameDataContainer = null;
-        private CountDownContainer countDownContainer = null;
-        private ListDataContainer listDataContainer = null;
-        private GameOverContainer gameOverContainer = null;
 
-        private Transmitter transmitter;
+public class Proxy extends Thread {
+    private GameState currentState = GameState.GAME_LOADING;
 
-        /**
-         * local
-         * W.I.P
-         */
-        public Proxy() {
+    private GameDataContainer gameDataContainer = null;
+    private CountDownContainer countDownContainer = null;
+    private ListDataContainer listDataContainer = null;
+    private GameOverContainer gameOverContainer = null;
+
+    private Transmitter transmitter;
+
+    /**
+     * local
+     * W.I.P
+     */
+    public Proxy() {
 //        this.transmitter = transmitter;
-            this.start();
-        }
+        this.start();
+    }
 
-        /**
-         * remote
-         *
-         * @param socket
-         * @throws IOException
-         */
-        public Proxy(Socket socket) throws IOException {
-            transmitter = new RemoteTransmitter(socket);
-            this.start();
-        }
+    /**
+     * remote
+     *
+     * @param socket
+     * @throws IOException
+     */
+    public Proxy(Socket socket) throws IOException {
+        transmitter = new RemoteTransmitter(socket);
+        this.start();
+    }
 
-        @Override
-        public void run() {
-            for (; ; ) {
-                try {
-                    Container request = (Container) transmitter.readRequest();
-
-                    if(request.getCurrentState()!=null)
-                        currentState=request.getCurrentState();
-
-                    if (request instanceof GameDataContainer)
-                        gameDataContainer = (GameDataContainer) request;
-                    else if(request instanceof CountDownContainer)
-                        countDownContainer = (CountDownContainer) request;
-                    else if(request instanceof ListDataContainer) {
-                        listDataContainer = (ListDataContainer) request;
-
-                        if(listDataContainer.getGameNames()!=null)
-                            for (String s : listDataContainer.getGameNames())
-                                System.out.println("Game: "+s);
-
-                    }
-                    else if(request instanceof GameOverContainer)
-                        gameOverContainer = (GameOverContainer) request;
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public void transmitToServer(Request r){
+    @Override
+    public void run() {
+        for (; ; ) {
             try {
-                transmitter.writeRequest(r);
-            } catch (IOException e) {
+                Container request = (Container) transmitter.readRequest();
+
+                if (request.getCurrentState() != null)
+                    currentState = request.getCurrentState();
+
+                if (request instanceof GameDataContainer)
+                    gameDataContainer = (GameDataContainer) request;
+                else if (request instanceof CountDownContainer)
+                    countDownContainer = (CountDownContainer) request;
+                else if (request instanceof ListDataContainer) {
+                    listDataContainer = (ListDataContainer) request;
+
+                    if (listDataContainer.getGameNames() != null)
+                        for (String s : listDataContainer.getGameNames())
+                            System.out.println("Game: " + s);
+
+                } else if (request instanceof GameOverContainer)
+                    gameOverContainer = (GameOverContainer) request;
+
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
+    }
 
-        public CountDownContainer getCountDownContainer() {
-            return countDownContainer;
-        }
+    public void transmitToServer(Request r) {
+        transmitter.writeRequest(r);
+    }
 
-        public GameDataContainer getGameDataContainer() {
-            return gameDataContainer;
-        }
+    public CountDownContainer getCountDownContainer() {
+        return countDownContainer;
+    }
 
-        public GameOverContainer getGameOverContainer() {
-            return gameOverContainer;
-        }
+    public GameDataContainer getGameDataContainer() {
+        return gameDataContainer;
+    }
 
-        public GameState getCurrentState() {
-            return currentState;
-        }
+    public GameOverContainer getGameOverContainer() {
+        return gameOverContainer;
+    }
 
-        public ListDataContainer getListDataContainer() {
-            return listDataContainer;
-        }
+    public GameState getCurrentState() {
+        return currentState;
+    }
+
+    public ListDataContainer getListDataContainer() {
+        return listDataContainer;
     }
 }
+
