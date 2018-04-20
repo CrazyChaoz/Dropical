@@ -11,21 +11,17 @@ public class RunningState extends State {
         super(game);
     }
 
+    /** Writes the arena, tetromino, ... of all games into
+     * one container. */
     @Override
     public GameDataContainer fillGameDataContainer(GameDataContainer gameDataContainer) {
 
-        //static, ez
-        gameDataContainer.getArenas()[0]=game.getGames().get(0).getVisualArena();
-        gameDataContainer.getArenas()[1]=game.getGames().get(1).getVisualArena();
-
-        gameDataContainer.getNextTrock()[0]=game.getGames().get(0).getNextTetromino();
-        gameDataContainer.getNextTrock()[1]=game.getGames().get(1).getNextTetromino();
-
-        gameDataContainer.getPlayernames()[0]=game.getGames().get(0).getName();
-        gameDataContainer.getPlayernames()[1]=game.getGames().get(1).getName();
-
+        for(int i = 0; i < game.getGames().size(); i++) {
+            gameDataContainer.getArenas()[i] = game.getGames().get(i).getVisualArena();
+            gameDataContainer.getNextTrock()[i] = game.getGames().get(i).getNextTetromino();
+            gameDataContainer.getPlayernames()[i] = game.getGames().get(i).getName();
+        }
         gameDataContainer.setState(GameState.GAME_RUNNING);
-
         gameDataContainer.setLevel(game.getLevel());
 
         return gameDataContainer;
