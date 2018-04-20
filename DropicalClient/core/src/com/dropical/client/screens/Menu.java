@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
 import com.pezcraft.dropical.gui.DropicalButton;
@@ -75,6 +73,8 @@ public class Menu implements Screen {
         stage.addActor(multiplayerLocalButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
+
+        singleplayerButton.setDownTexture("GUI/background.png", 52, 61);
     }
 
     @Override
