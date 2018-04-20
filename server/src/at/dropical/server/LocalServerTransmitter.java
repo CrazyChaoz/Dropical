@@ -1,13 +1,14 @@
-package at.dropical.server.transmitter;
+package at.dropical.server;
 
 import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.requests.Request;
 
 
-public class LocalServerTransmitter extends ServerTransmitter {
+public class LocalServerTransmitter extends ServerSideTransmitter {
     private LocalRequestCache requestCache;
 
     public LocalServerTransmitter(LocalRequestCache requestCache) {
+        super(null, null);
         this.requestCache = requestCache;
     }
 
