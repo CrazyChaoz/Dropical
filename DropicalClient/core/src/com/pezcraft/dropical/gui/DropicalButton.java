@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -85,7 +86,7 @@ public class DropicalButton {
 
         button.setStyle(style);
     }
-    public void setCheckedTexture(String internalPath, int srcWidth, int srcHeight) {
+    public void setCheckedexture(String internalPath, int srcWidth, int srcHeight) {
         spriteChecked = new Sprite(new Texture(internalPath), srcWidth, srcHeight);
         spriteChecked.setSize(buttonWidth, buttonHeight);
         skin.add("checked", spriteChecked);
