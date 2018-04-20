@@ -28,12 +28,10 @@ public class Proxy extends Thread {
     }
 
     /**
-     * remote
-     *
-     * @param socket
-     * @throws IOException
+
+     @param socket
      */
-    public Proxy(Socket socket) throws IOException {
+    public Proxy(Socket socket) {
         transmitter = new RemoteTransmitter(socket);
         this.start();
     }
@@ -46,7 +44,6 @@ public class Proxy extends Thread {
 
                 if (request.getCurrentState() != null)
                     currentState = request.getCurrentState();
-
                 if (request instanceof GameDataContainer)
                     gameDataContainer = (GameDataContainer) request;
                 else if (request instanceof CountDownContainer)
@@ -63,6 +60,7 @@ public class Proxy extends Thread {
 
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                break;
             }
         }
     }

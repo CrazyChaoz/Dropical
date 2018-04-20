@@ -5,28 +5,7 @@ import java.net.Socket
 import java.util.*
 
 class BestClientOfAllTime(socket: Socket):Thread(){
-    var currentGameData: GameDataContainer?=null
     val proxy=Proxy(socket)
-
-
-    fun handleRequest(request: Request?) {
-        when(request){
-            is GameDataContainer ->{
-                println("Handle this GameDataContainer")
-                currentGameData=request
-            }
-            is ListDataContainer ->{
-                println("Handle this ListRequest")
-                if(request.gameNames==null)
-                    return
-                for (gameName in request.gameNames) {
-                    println("Game: $gameName")
-                }
-            }
-        }
-    }
-
-
 
     override fun run() {
         //Things that Clients do
@@ -41,6 +20,7 @@ class BestClientOfAllTime(socket: Socket):Thread(){
                 4 -> {
                     print("Write the GameName here: ")
                     proxy.transmitToServer(CreateGameRequest(Scanner(System.`in`).next()))}
+                5 -> proxy.transmitToServer(JoinRequest("Super Secret Game"))
             }
         }
 
