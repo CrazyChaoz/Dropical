@@ -1,6 +1,5 @@
 package at.dropical.client;
 
-import at.dropical.client.remote.RemoteTransmitter;
 import at.dropical.shared.GameState;
 import at.dropical.shared.net.requests.*;
 import at.dropical.shared.net.transmitter.Transmitter;

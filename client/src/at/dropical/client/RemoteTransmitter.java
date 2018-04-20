@@ -8,12 +8,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ClientSideTransmitter implements Transmitter {
+public class RemoteTransmitter implements Transmitter {
 
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 
-    public ClientSideTransmitter(Socket socket){
+    public RemoteTransmitter(Socket socket){
         try {
             inputStream=new ObjectInputStream(socket.getInputStream());
             outputStream=new ObjectOutputStream(socket.getOutputStream());

@@ -12,4 +12,8 @@ public abstract class Container implements Request {
     public GameState getCurrentState() {
         return currentState;
     }
+
+    public void setCurrentState(GameState currentState) {
+        this.currentState = currentState;
+    }
 }

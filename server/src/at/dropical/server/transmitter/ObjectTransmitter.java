@@ -1,5 +1,6 @@
-package at.dropical.shared.net.transmitter;
+package at.dropical.server.transmitter;
 
+import at.dropical.server.ServerSideTransmitter;
 import at.dropical.shared.net.requests.Request;
 
 import java.io.*;
@@ -7,12 +8,13 @@ import java.io.*;
 //Currently just a ObjectStreamTransmitter
 //Future: JSON or completely bytewise
 
-public class ObjectTransmitter implements Transmitter {
+public class ObjectTransmitter extends ServerSideTransmitter {
 
     private ObjectOutputStream outputStream;
     private ObjectInputStream inputStream;
 
     public ObjectTransmitter(InputStream inputStream, OutputStream outputStream) throws IOException {
+        super();
         //Die reihenfolge zählt ......
         this.outputStream=new ObjectOutputStream(outputStream);
         this.inputStream=new ObjectInputStream(inputStream);

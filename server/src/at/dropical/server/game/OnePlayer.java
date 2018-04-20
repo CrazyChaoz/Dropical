@@ -31,14 +31,7 @@ public class OnePlayer extends Thread {
 
     //FUNCTIONALITY
 
-    /** Lowering the Tetromino a block.
-     * If that is not possible, placeTetromino(). */
-    private void moveDownwardsOrPlace() throws GameOverException {
-        if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true)) {
-            currTetrY++;
-        } else
-            placeTetromino();
-    }
+
 
     /** Places the current one and makes a new Tetromino.
      * @throws GameOverException If the placing fails. */
@@ -61,10 +54,13 @@ public class OnePlayer extends Thread {
     }
 
 
-    /** If it is allowed, decrement currTetrY */
+    /** Lowering the Tetromino a block.
+     * If that is not possible, placeTetromino(). */
     public void moveDown() throws GameOverException {
-        if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
+        if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true)) {
             currTetrY++;
+        } else
+            placeTetromino();
     }
     /** go down as long as possible and place the Tetromino */
     public void dropTetromino() throws GameOverException {
@@ -98,12 +94,11 @@ public class OnePlayer extends Thread {
     public String getPlayername() {
         return playername;
     }
-
-    public Tetromino getTetromino() {
+    public Tetromino getCurrTetromino() {
         return tetromino;
     }
-    public int[][] getNextTetromino() {
-        return nextTetromino.toArray();
+    public Tetromino getNextTetromino() {
+        return nextTetromino;
     }
     public int getCurrTetrX() {
         return currTetrX;
@@ -111,7 +106,7 @@ public class OnePlayer extends Thread {
     public int getCurrTetrY() {
         return currTetrY;
     }
-    public int[][] getVisualArena() {
+    public int[][] getArena() {
         return arena.toArray();
     }
     public int getPoints() {

@@ -8,7 +8,6 @@ public class LocalServerTransmitter extends ServerSideTransmitter {
     private LocalRequestCache requestCache;
 
     public LocalServerTransmitter(LocalRequestCache requestCache) {
-        super(null, null);
         this.requestCache = requestCache;
     }
 

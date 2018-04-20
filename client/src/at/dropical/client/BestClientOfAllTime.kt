@@ -4,9 +4,9 @@ import at.dropical.shared.net.requests.*
 import java.net.Socket
 import java.util.*
 
-class BestClientOfAllTime(socket: Socket){
+class BestClientOfAllTime(socket: Socket):Thread(){
     var currentGameData: GameDataContainer?=null
-    val proxy=Proxy()
+    val proxy=Proxy(socket)
 
 
     fun handleRequest(request: Request?) {
@@ -28,7 +28,7 @@ class BestClientOfAllTime(socket: Socket){
 
 
 
-    fun run() {
+    override fun run() {
         //Things that Clients do
         var i=1
         while (i!=0){
@@ -48,5 +48,5 @@ class BestClientOfAllTime(socket: Socket){
 }
 
 fun main(vararg args: String) {
-    BestClientOfAllTime(Socket("localhost", 45000))
+    BestClientOfAllTime(Socket("localhost", 45000)).start()
 }

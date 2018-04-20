@@ -4,8 +4,6 @@ import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.requests.Request;
 import at.dropical.shared.net.transmitter.Transmitter;
 
-import java.io.IOException;
-
 public class LocalTransmitter implements Transmitter {
 
     private LocalRequestCache cache;

@@ -38,8 +38,8 @@ public class ServerSideRequestHandler implements RequestHandler {
             handleJoinRequest((JoinRequest) request);
         } else if (request instanceof AddAiToGameRequest) {
             handleAddAiToGameRequest((AddAiToGameRequest) request);
-        } else if (request instanceof InputDataContainer) {
-            handleInputDataContainer((InputDataContainer) request);
+        } else if (request instanceof HandleInputRequest) {
+            handleInputDataContainer((HandleInputRequest) request);
         }
     }
 
@@ -73,9 +73,8 @@ public class ServerSideRequestHandler implements RequestHandler {
 //                throw new RuntimeException("Game does not exist. Fuck Off.");       //polite msg for the moment, create new game instantely ?
 
         if (request.isPlayer()) {
-            int playerNumber=game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
+            game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
             transmitter.setPlayingGame(game);
-            transmitter.setPlayerNumber(playerNumber);
         } else
             game.addViewer(transmitter);
     }
@@ -86,20 +85,20 @@ public class ServerSideRequestHandler implements RequestHandler {
         while (Server.instance().getGame(request.getGameID())==null);
         Game game = Server.instance().getGame(request.getGameID());
 
-        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
-
-
+//        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
+//
+//
 //            LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
-
+//
 //            transmitter.setPlayerNumber(game.addAI(transmitter));
 //            transmitter.setPlayingGame(game);
-        }
+//        }
     }
 
-    public void handleInputDataContainer(InputDataContainer request){
+    public void handleInputDataContainer(HandleInputRequest request){
         LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
         if(transmitter.getPlayingGame()!=null){
-            transmitter.getPlayingGame().handleInput(request,transmitter.getPlayerNumber());
+            transmitter.getPlayingGame().handleInput(request);
         }
     }
 }
