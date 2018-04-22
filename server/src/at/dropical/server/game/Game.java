@@ -1,16 +1,16 @@
 package at.dropical.server.game;
 
-import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.server.gamestates.WaitingState;
+import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class Game extends Thread {
 
     //Zuseher
     private List<ServerSideTransmitter> viewers = new ArrayList();
@@ -21,43 +21,29 @@ public class Game {
     //Games
     private List<OnePlayer> games = new ArrayList<>();
 
-    //Level
-    private int level = 0;
 
-    //Time
-    private Object time;    //TODO: Implement time
-
-    private State currentGameState = new WaitingState(this);
+    private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
 
     //maximum number of players
     private int maxPlayers = 0;
 
-    /**
-     * <Constructors>
-     **/
 
     //Classic
     public Game() {
     }
-
     //Variable Players
-
     public Game(int playercount) {
         this.maxPlayers=playercount;
     }
 
-    /**
-     * <!Constructors>
-     **/
+
+
 
     //Getter
     public List<OnePlayer> getGames() {
         return games;
     }
 
-    public int getLevel() {
-        return level;
-    }
 
     //Method
 
@@ -78,7 +64,7 @@ public class Game {
         viewers.add(transmitter);
     }
 
-    public void setCurrentGameState(State currentGameState) {
+    public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
         this.currentGameState = currentGameState;
     }
 
@@ -91,10 +77,16 @@ public class Game {
         }
     }
 
+    public void doTick()throws GameOverException{
+        for (OnePlayer game : games) {
+            game.moveDown();
+        }
+
+        updateClients();
+    }
 
     public void updateClients() {
         Container container= currentGameState.getContainer();
-
 
         for (ServerSideTransmitter player : players) {
             player.writeRequest(container);
@@ -104,4 +96,10 @@ public class Game {
         }
     }
 
+    @Override
+    public void run() {
+        while (!isInterrupted()){
+
+        }
+    }
 }

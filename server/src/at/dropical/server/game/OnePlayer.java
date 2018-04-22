@@ -7,19 +7,27 @@ import at.dropical.server.gamefield.Tetromino;
  * This class manages one TetrisArena, one
  * current tetromino and one nextTetromino.
  * And information about the player.
- *
+ * <p>
  * Some methods throw a GameOverException when
  * a game over occurs.
  */
 public class OnePlayer extends Thread {
 
-    private static int STARTVAL_X = TetrisArena.width/2 -Tetromino.size/2;
+    private static int STARTVAL_X = TetrisArena.width / 2 - Tetromino.size / 2;
     private static int STARTVAL_Y = -1;
 
-    private String playername;
-    private int points = 0;
 
-    private TetrisArena arena = new TetrisArena(playername);
+    //    Level
+    private int level = 0;
+
+    //    Score
+    private int score = 0;
+
+    //    Playername
+    private String playername;
+
+
+    private TetrisArena arena;
     private Tetromino tetromino = Tetromino.createRandom();
     private Tetromino nextTetromino = Tetromino.createRandom();
     private int currTetrX = STARTVAL_X;
@@ -27,21 +35,26 @@ public class OnePlayer extends Thread {
 
     public OnePlayer(String playername) {
         this.playername = playername;
+        arena = new TetrisArena(playername);
     }
 
     //FUNCTIONALITY
 
 
-
-    /** Places the current one and makes a new Tetromino.
-     * @throws GameOverException If the placing fails. */
+    /**
+     * Places the current one and makes a new Tetromino.
+     *
+     * @throws GameOverException If the placing fails.
+     */
     private void placeTetromino() throws GameOverException {
         arena.placeTetromino(tetromino, currTetrY, currTetrX);
         newNextTetromino();
     }
 
-    /** The nextTetromino gets placed at the top of the arena.
-     * If the place is obscured, gameOver is set. */
+    /**
+     * The nextTetromino gets placed at the top of the arena.
+     * If the place is obscured, gameOver is set.
+     */
     private void newNextTetromino() throws GameOverException {
         tetromino = nextTetromino;
         // TODO give the different players the same RNG
@@ -49,20 +62,25 @@ public class OnePlayer extends Thread {
         currTetrY = STARTVAL_Y;
         currTetrX = STARTVAL_X;
 
-        if(! arena.checkTetromino(tetromino, currTetrY, currTetrX, true))
+        if (!arena.checkTetromino(tetromino, currTetrY, currTetrX, true))
             throw new GameOverException(playername);
     }
 
 
-    /** Lowering the Tetromino a block.
-     * If that is not possible, placeTetromino(). */
+    /**
+     * Lowering the Tetromino a block.
+     * If that is not possible, placeTetromino().
+     */
     public void moveDown() throws GameOverException {
         if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true)) {
             currTetrY++;
         } else
             placeTetromino();
     }
-    /** go down as long as possible and place the Tetromino */
+
+    /**
+     * go down as long as possible and place the Tetromino
+     */
     public void dropTetromino() throws GameOverException {
         while (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
             currTetrY++;
@@ -73,6 +91,7 @@ public class OnePlayer extends Thread {
         if (arena.checkTetromino(tetromino, currTetrY, currTetrX - 1, true))
             currTetrX -= 1;
     }
+
     public void moveRight() {
         if (arena.checkTetromino(tetromino, currTetrY, currTetrX + 1, true))
             currTetrX += 1;
@@ -83,33 +102,46 @@ public class OnePlayer extends Thread {
         if (!arena.checkTetromino(tetromino.rotate(), currTetrY, currTetrX, true))
             tetromino.rotateBack();
     }
+
     public void rotateRight() {
         if (!arena.checkTetromino(tetromino.rotateBack(), currTetrY, currTetrX, true))
             tetromino.rotate();
     }
 
 
-    /** Getters & Setters **/
+    /**
+     * Getters & Setters
+     **/
 
     public String getPlayername() {
         return playername;
     }
+
     public Tetromino getCurrTetromino() {
         return tetromino;
     }
+
     public Tetromino getNextTetromino() {
         return nextTetromino;
     }
+
     public int getCurrTetrX() {
         return currTetrX;
     }
+
     public int getCurrTetrY() {
         return currTetrY;
     }
+
     public int[][] getArena() {
         return arena.toArray();
     }
-    public int getPoints() {
-        return points;
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }
