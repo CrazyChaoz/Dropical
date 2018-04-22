@@ -1,11 +1,9 @@
 package at.dropical.server;
 
 import at.dropical.server.game.Game;
-import at.dropical.server.transmitter.ServerTransmitter;
 import at.dropical.shared.net.handler.RequestHandler;
 import at.dropical.shared.net.requests.*;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -13,9 +11,9 @@ import static at.dropical.server.Server.LOGGER;
 
 public class ServerSideRequestHandler implements RequestHandler {
     private Request request;
-    private ServerTransmitter transmitter;
+    private ServerSideTransmitter transmitter;
 
-    public ServerSideRequestHandler(Request request, ServerTransmitter transmitter) {
+    public ServerSideRequestHandler(Request request, ServerSideTransmitter transmitter) {
 
 
 //        LOGGER.log(Level.FINE,"Debug - Fine");
@@ -60,16 +58,9 @@ public class ServerSideRequestHandler implements RequestHandler {
         } else {
             //TODO: Transmit Server list
         }
-        try {
-            transmitter.writeRequest(listDataContainer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        transmitter.writeRequest(listDataContainer);
     }
 
-    /**
-     * @param request
-     */
     public void handleJoinRequest(JoinRequest request){
 
         LOGGER.log(Level.INFO,"Request to Handle is a JoinRequest");
@@ -82,9 +73,8 @@ public class ServerSideRequestHandler implements RequestHandler {
 //                throw new RuntimeException("Game does not exist. Fuck Off.");       //polite msg for the moment, create new game instantely ?
 
         if (request.isPlayer()) {
-            int playerNumber=game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
-            transmitter.setCurrGame(game);
-            transmitter.setPlayerNum(playerNumber);
+            game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
+            transmitter.setPlayingGame(game);
         } else
             game.addViewer(transmitter);
     }
@@ -95,20 +85,20 @@ public class ServerSideRequestHandler implements RequestHandler {
         while (Server.instance().getGame(request.getGameID())==null);
         Game game = Server.instance().getGame(request.getGameID());
 
-        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
-
-
-            //TODO: LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
-
-            transmitter.setPlayerNum(game.addAI(transmitter));
-            transmitter.setCurrGame(game);
-        }
+//        if ((Server.isAiAllowed && game.getNumAI() == 0)||Server.isPureAiGameAllowed){               //FIXME: curr AI count < max player count
+//
+//
+//            LocalServerTransmitter transmitter=new LocalServerTransmitter(new ServerInvokedAI("Rudi").getRequestCache());
+//
+//            transmitter.setPlayerNumber(game.addAI(transmitter));
+//            transmitter.setPlayingGame(game);
+//        }
     }
 
     public void handleInputDataContainer(HandleInputRequest request){
-        LOGGER.log(Level.INFO,"Request to Handle is a HandleInputRequest");
-        if(transmitter.getCurrGame()!=null){
-            transmitter.getCurrGame().handleInput(request,transmitter.getPlayerNum());
+        LOGGER.log(Level.INFO,"Request to Handle is a InputDataContainer");
+        if(transmitter.getPlayingGame()!=null){
+            transmitter.getPlayingGame().handleInput(request);
         }
     }
 }

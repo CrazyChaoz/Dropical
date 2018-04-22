@@ -2,44 +2,77 @@ package at.dropical.shared.net.requests;
 
 import at.dropical.shared.GameState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameDataContainer extends Container{
-    private String[] playernames=new String[2];
-    private int[][][] arenas=new int[2][20][10];
-    private int[][][] nextTrock=new int[2][4][4];
+    private List<String> playernames=new ArrayList<>();
+    private List<int[][]> arenas=new ArrayList<>();
+    private List<int[][]> currTrocks=new ArrayList<>();
+    private List<int[][]> nextTrocks =new ArrayList<>();
+    private List<Integer> currTrockX=new ArrayList<>();
+    private List<Integer> currTrockY =new ArrayList<>();
+
     private int level;
-    private int time;
 
     public GameDataContainer(GameState currentState) {
         super(currentState);
     }
 
+    public List<int[][]> getCurrTrocks() {
+        return currTrocks;
+    }
 
-    public String[] getPlayernames() {
+    public List<Integer> getCurrTrockX() {
+        return currTrockX;
+    }
+
+    public List<Integer> getCurrTrockY() {
+        return currTrockY;
+    }
+
+    public List<String> getPlayernames() {
         return playernames;
     }
 
-    public int[][][] getArenas() {
+    public List<int[][]> getArenas() {
         return arenas;
     }
 
-    public int[][][] getNextTrock() {
-        return nextTrock;
+    public List<int[][]> getNextTrocks() {
+        return nextTrocks;
     }
 
     public int getLevel() {
         return level;
     }
 
+
     public void setLevel(int level) {
         this.level = level;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+
+    public void addArena(int[][] arena) {
+        this.arenas.add(arena);
+    }
+    public void addNextTrock(int[][] nextTrock) {
+        this.nextTrocks.add(nextTrock);
+    }
+    public void addCurrTrock(int[][] currentTrock){
+        this.currTrocks.add(currentTrock);
+    }
+    public void addCurrTrockX(Integer X){
+        this.currTrockX.add(X);
+    }
+    public void addCurrTrockY(Integer Y){
+        this.currTrockX.add(Y);
+    }
+    public void addPlayerName(String playerName){
+        this.playernames.add(playerName);
     }
 
-    public int getTime() {
-        return time;
-    }
+
+
 }

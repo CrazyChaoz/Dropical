@@ -1,7 +1,5 @@
 package at.dropical.shared.net.requests;
 
-import at.dropical.shared.GameState;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package at.dropical.server;
 
 
-import at.dropical.server.transmitter.LocalServerTransmitter;
-
 public class LocalAccepterLoop extends Thread {
     private LocalServerTransmitter transmitter;
 

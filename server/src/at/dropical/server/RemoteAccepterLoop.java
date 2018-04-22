@@ -35,9 +35,12 @@ public class RemoteAccepterLoop extends Thread{
 
             //Error if not in loop
             for(;;){
+                System.out.println("asdf");
                 new ServerSideRequestHandler(transi.readRequest(),transi);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
