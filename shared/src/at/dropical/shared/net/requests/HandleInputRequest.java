@@ -1,6 +1,7 @@
 package at.dropical.shared.net.requests;
 
 import at.dropical.shared.PlayerAction;
+import at.dropical.shared.net.abstracts.Request;
 
 public class HandleInputRequest implements Request {
     private PlayerAction input;

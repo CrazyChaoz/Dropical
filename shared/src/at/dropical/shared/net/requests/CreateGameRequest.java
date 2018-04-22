@@ -1,6 +1,8 @@
 package at.dropical.shared.net.requests;
 
-public class CreateGameRequest implements Request{
+import at.dropical.shared.net.abstracts.Request;
+
+public class CreateGameRequest implements Request {
     private String gameName;
 
     public CreateGameRequest(String gameName) {

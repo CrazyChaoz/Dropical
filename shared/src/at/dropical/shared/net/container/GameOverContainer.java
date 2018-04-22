@@ -1,6 +1,7 @@
-package at.dropical.shared.net.requests;
+package at.dropical.shared.net.container;
 
 import at.dropical.shared.GameState;
+import at.dropical.shared.net.abstracts.Container;
 
 public class GameOverContainer extends Container {
     private String[] playernames;

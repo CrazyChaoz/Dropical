@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
 
 public class RemoteAccepterLoop extends Thread{
     private static ServerSocket serverSocket;
@@ -35,7 +36,7 @@ public class RemoteAccepterLoop extends Thread{
 
             //Error if not in loop
             for(;;){
-                System.out.println("asdf");
+                Server.LOGGER.log(Level.INFO,"Request Received");
                 new ServerSideRequestHandler(transi.readRequest(),transi);
             }
         } catch (IOException e) {

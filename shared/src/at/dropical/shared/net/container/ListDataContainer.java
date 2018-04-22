@@ -1,4 +1,6 @@
-package at.dropical.shared.net.requests;
+package at.dropical.shared.net.container;
+
+import at.dropical.shared.net.abstracts.Container;
 
 import java.util.ArrayList;
 import java.util.List;
