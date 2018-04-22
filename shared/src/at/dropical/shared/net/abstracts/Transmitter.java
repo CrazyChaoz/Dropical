@@ -1,6 +1,6 @@
-package at.dropical.shared.net.transmitter;
+package at.dropical.shared.net.abstracts;
 
-import at.dropical.shared.net.requests.Request;
+import at.dropical.shared.net.abstracts.Request;
 
 import java.io.IOException;
 

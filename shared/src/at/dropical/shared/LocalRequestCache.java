@@ -1,6 +1,6 @@
 package at.dropical.shared;
 
-import at.dropical.shared.net.requests.Request;
+import at.dropical.shared.net.abstracts.Request;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

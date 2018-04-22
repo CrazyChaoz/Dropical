@@ -3,8 +3,8 @@ package at.dropical.server.gamestates;
 import at.dropical.server.game.Game;
 import at.dropical.server.game.OnePlayer;
 import at.dropical.shared.GameState;
-import at.dropical.shared.net.requests.Container;
-import at.dropical.shared.net.requests.GameDataContainer;
+import at.dropical.shared.net.abstracts.Container;
+import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 public class PausedState extends State {

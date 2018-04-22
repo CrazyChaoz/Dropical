@@ -1,12 +1,7 @@
-package at.dropical.server;
+package at.dropical.server.transmitter;
 
 import at.dropical.server.game.Game;
-import at.dropical.shared.net.requests.Request;
-import at.dropical.shared.net.transmitter.Transmitter;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import at.dropical.shared.net.abstracts.Transmitter;
 
 public abstract class ServerSideTransmitter implements Transmitter {
     private Game game;

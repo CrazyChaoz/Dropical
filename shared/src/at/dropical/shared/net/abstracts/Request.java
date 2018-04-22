@@ -1,4 +1,4 @@
-package at.dropical.shared.net.requests;
+package at.dropical.shared.net.abstracts;
 
 import java.io.Serializable;
 

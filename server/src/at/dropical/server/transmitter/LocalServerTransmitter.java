@@ -1,7 +1,7 @@
-package at.dropical.server;
+package at.dropical.server.transmitter;
 
 import at.dropical.shared.LocalRequestCache;
-import at.dropical.shared.net.requests.Request;
+import at.dropical.shared.net.abstracts.Request;
 
 
 public class LocalServerTransmitter extends ServerSideTransmitter {

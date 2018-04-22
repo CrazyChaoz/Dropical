@@ -1,10 +1,10 @@
 package at.dropical.server.game;
 
-import at.dropical.server.ServerSideTransmitter;
+import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.server.gamestates.WaitingState;
-import at.dropical.shared.net.requests.Container;
+import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.ArrayList;
@@ -90,6 +90,7 @@ public class Game {
             }
         }
     }
+
 
     public void updateClients() {
         Container container= currentGameState.getContainer();

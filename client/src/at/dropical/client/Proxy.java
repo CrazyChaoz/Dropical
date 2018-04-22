@@ -1,8 +1,13 @@
 package at.dropical.client;
 
 import at.dropical.shared.GameState;
-import at.dropical.shared.net.requests.*;
-import at.dropical.shared.net.transmitter.Transmitter;
+import at.dropical.shared.net.abstracts.Container;
+import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.container.CountDownContainer;
+import at.dropical.shared.net.container.GameDataContainer;
+import at.dropical.shared.net.container.GameOverContainer;
+import at.dropical.shared.net.container.ListDataContainer;
+import at.dropical.shared.net.abstracts.Transmitter;
 
 import java.io.IOException;
 import java.net.Socket;

@@ -1,5 +1,7 @@
 package at.dropical.shared.net.requests;
 
+import at.dropical.shared.net.abstracts.Request;
+
 public class JoinRequest implements Request {
     private String gameID;
     private boolean isPlayer;
