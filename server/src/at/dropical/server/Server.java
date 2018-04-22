@@ -7,6 +7,7 @@ package at.dropical.server;
 
 import at.dropical.server.game.Game;
 import at.dropical.server.logging.LoggerSetup;
+import at.dropical.server.transmitter.LocalServerTransmitter;
 import at.dropical.shared.LocalRequestCache;
 
 import java.io.IOException;

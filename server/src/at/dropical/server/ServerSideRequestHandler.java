@@ -1,7 +1,10 @@
 package at.dropical.server;
 
 import at.dropical.server.game.Game;
-import at.dropical.shared.net.handler.RequestHandler;
+import at.dropical.server.transmitter.ServerSideTransmitter;
+import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.RequestHandler;
+import at.dropical.shared.net.container.ListDataContainer;
 import at.dropical.shared.net.requests.*;
 
 import java.util.Map;

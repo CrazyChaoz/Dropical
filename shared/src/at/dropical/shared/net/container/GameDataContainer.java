@@ -1,12 +1,13 @@
-package at.dropical.shared.net.requests;
+package at.dropical.shared.net.container;
 
 import at.dropical.shared.GameState;
+import at.dropical.shared.net.abstracts.Container;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class GameDataContainer extends Container{
+public class GameDataContainer extends Container {
     private List<String> playernames=new ArrayList<>();
     private List<int[][]> arenas=new ArrayList<>();
     private List<int[][]> currTrocks=new ArrayList<>();

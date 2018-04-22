@@ -1,7 +1,6 @@
 package at.dropical.server.transmitter;
 
-import at.dropical.server.ServerSideTransmitter;
-import at.dropical.shared.net.requests.Request;
+import at.dropical.shared.net.abstracts.Request;
 
 import java.io.*;
 

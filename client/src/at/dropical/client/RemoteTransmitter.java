@@ -1,7 +1,7 @@
 package at.dropical.client;
 
-import at.dropical.shared.net.requests.Request;
-import at.dropical.shared.net.transmitter.Transmitter;
+import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.Transmitter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

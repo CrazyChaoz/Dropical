@@ -5,8 +5,8 @@ import at.dropical.server.game.GameOverException;
 import at.dropical.server.game.OnePlayer;
 import at.dropical.shared.GameState;
 import at.dropical.shared.PlayerAction;
-import at.dropical.shared.net.requests.Container;
-import at.dropical.shared.net.requests.GameDataContainer;
+import at.dropical.shared.net.abstracts.Container;
+import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 /** The RunningState fills the GameDataContainer with

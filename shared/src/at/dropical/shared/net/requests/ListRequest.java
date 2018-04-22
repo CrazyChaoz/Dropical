@@ -1,6 +1,8 @@
 package at.dropical.shared.net.requests;
 
-public class ListRequest implements Request{
+import at.dropical.shared.net.abstracts.Request;
+
+public class ListRequest implements Request {
     private boolean isGameListRequest;
 
     public ListRequest(boolean isGameListRequest) {
