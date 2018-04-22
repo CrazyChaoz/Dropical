@@ -1,20 +1,16 @@
 package at.dropical.server.game;
 
-import at.dropical.server.Server;
+import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.server.gamestates.WaitingState;
-import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 
-public class Game extends Thread{
+public class Game {
 
     //Zuseher
     private List<ServerSideTransmitter> viewers = new ArrayList();
@@ -23,31 +19,45 @@ public class Game extends Thread{
     private List<ServerSideTransmitter> players = new ArrayList<>();
 
     //Games
-    private Map<String,OnePlayer> games = new HashMap<>();
+    private List<OnePlayer> games = new ArrayList<>();
 
+    //Level
+    private int level = 0;
 
-    private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
+    //Time
+    private Object time;    //TODO: Implement time
+
+    private State currentGameState = new WaitingState(this);
 
     //maximum number of players
-    private int maxPlayers;
+    private int maxPlayers = 0;
 
+    /**
+     * <Constructors>
+     **/
 
     //Classic
     public Game() {
-        maxPlayers=2;
     }
+
     //Variable Players
+
     public Game(int playercount) {
         this.maxPlayers=playercount;
     }
 
+    /**
+     * <!Constructors>
+     **/
 
     //Getter
-
-    public Map<String, OnePlayer> getGames() {
+    public List<OnePlayer> getGames() {
         return games;
     }
 
+    public int getLevel() {
+        return level;
+    }
 
     //Method
 
@@ -55,10 +65,9 @@ public class Game extends Thread{
      * @return -1 if no players can be added
      */
     public void addPlayer(String playerName, ServerSideTransmitter transmitter) {
-        if (maxPlayers>games.size()) {
-            Server.LOGGER.log(Level.INFO,"Player "+playerName+" added");
+        if (maxPlayers<games.size()) {
             players.add(transmitter);
-            games.put(playerName,new OnePlayer(playerName));
+            games.add(new OnePlayer(playerName));
         }
 
         if (games.size()==maxPlayers)
@@ -69,22 +78,23 @@ public class Game extends Thread{
         viewers.add(transmitter);
     }
 
-    public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
-        Server.LOGGER.log(Level.INFO,"State changed to "+currentGameState.getClass());
+    public void setCurrentGameState(State currentGameState) {
         this.currentGameState = currentGameState;
     }
 
     public void handleInput(HandleInputRequest handleInputRequest){
-        for (Map.Entry<String,OnePlayer> game : games.entrySet()) {
-            if(game.getValue().getPlayername().equals(handleInputRequest.getPlayername())) {
-                currentGameState.handleInput(game.getValue(),handleInputRequest);
+        for (OnePlayer game : games) {
+            if(game.getPlayername().equals(handleInputRequest.getPlayername())) {
+                currentGameState.handleInput(game,handleInputRequest);
                 return;
             }
         }
     }
 
+
     public void updateClients() {
         Container container= currentGameState.getContainer();
+
 
         for (ServerSideTransmitter player : players) {
             player.writeRequest(container);
@@ -94,26 +104,4 @@ public class Game extends Thread{
         }
     }
 
-    @Override
-    public void run() {
-        boolean doUpdate;
-        while (!isInterrupted()) {
-            doUpdate=false;
-
-            for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
-                try {
-                    if (game.getValue().update()) {
-                        doUpdate = true;
-                    }
-                } catch (GameOverException e) {
-                    Server.LOGGER.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
-                }
-            }
-            if(doUpdate)
-                updateClients();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {}
-        }
-    }
 }
