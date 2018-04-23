@@ -16,6 +16,7 @@ public class WaitingState extends State {
 
     @Override
     public Container getContainer() {return null;}
+
     @Override
     public void handleInput(OnePlayer player, HandleInputRequest inputDataContainer) {}
 

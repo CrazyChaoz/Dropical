@@ -12,10 +12,9 @@ public class GameDataContainer extends Container {
     private List<int[][]> arenas=new ArrayList<>();
     private List<int[][]> currTrocks=new ArrayList<>();
     private List<int[][]> nextTrocks =new ArrayList<>();
-    private List<Integer> currTrockX=new ArrayList<>();
-    private List<Integer> currTrockY =new ArrayList<>();
-
-    private int level;
+    private List<Integer> currTrockXs =new ArrayList<>();
+    private List<Integer> currTrockYs =new ArrayList<>();
+    private List<Integer> levels =new ArrayList<>();
 
     public GameDataContainer(GameState currentState) {
         super(currentState);
@@ -24,36 +23,24 @@ public class GameDataContainer extends Container {
     public List<int[][]> getCurrTrocks() {
         return currTrocks;
     }
-
-    public List<Integer> getCurrTrockX() {
-        return currTrockX;
+    public List<Integer> getCurrTrockXs() {
+        return currTrockXs;
     }
-
-    public List<Integer> getCurrTrockY() {
-        return currTrockY;
+    public List<Integer> getCurrTrockYs() {
+        return currTrockYs;
     }
-
     public List<String> getPlayernames() {
         return playernames;
     }
-
     public List<int[][]> getArenas() {
         return arenas;
     }
-
     public List<int[][]> getNextTrocks() {
         return nextTrocks;
     }
-
-    public int getLevel() {
-        return level;
+    public List<Integer> getLevels() {
+        return levels;
     }
-
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
 
     public void addArena(int[][] arena) {
         this.arenas.add(arena);
@@ -65,15 +52,15 @@ public class GameDataContainer extends Container {
         this.currTrocks.add(currentTrock);
     }
     public void addCurrTrockX(Integer X){
-        this.currTrockX.add(X);
+        this.currTrockXs.add(X);
     }
     public void addCurrTrockY(Integer Y){
-        this.currTrockX.add(Y);
+        this.currTrockXs.add(Y);
     }
     public void addPlayerName(String playerName){
         this.playernames.add(playerName);
     }
-
-
-
+    public void addLevel(Integer level){
+        this.levels.add(level);
+    }
 }
