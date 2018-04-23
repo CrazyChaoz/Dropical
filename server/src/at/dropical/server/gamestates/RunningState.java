@@ -9,8 +9,6 @@ import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
-import java.util.Map;
-
 /** The RunningState fills the GameDataContainer with
  * the arena and tetromino from one player.
  *
@@ -20,23 +18,25 @@ public class RunningState extends State {
     public RunningState(Game game) {
         super(game);
 
-        game.start();
+        for (OnePlayer onePlayer : game.getGames()) {
+            onePlayer.start();
+        }
     }
 
 
     /** Set all the values in the gameDataContainer. */
     @Override
     public Container getContainer() {
-        GameDataContainer container=new GameDataContainer(GameState.RUNNING);
+        GameDataContainer container=new GameDataContainer(GameState.GAME_RUNNING);
 
-        for (Map.Entry<String,OnePlayer> onePlayer : game.getGames().entrySet()) {
-            container.addLevel(onePlayer.getValue().getLevel());
-            container.addPlayerName(onePlayer.getValue().getPlayername());
-            container.addArena(onePlayer.getValue().getArena());
-            container.addCurrTrock(onePlayer.getValue().getCurrTetromino().toArray());
-            container.addNextTrock(onePlayer.getValue().getNextTetromino().toArray());
-            container.addCurrTrockX(onePlayer.getValue().getCurrTetrX());
-            container.addCurrTrockY(onePlayer.getValue().getCurrTetrY());
+        for (OnePlayer onePlayer : game.getGames()) {
+            container.addLevel(onePlayer.getLevel());
+            container.addPlayerName(onePlayer.getPlayername());
+            container.addArena(onePlayer.getArena());
+            container.addCurrTrock(onePlayer.getCurrTetromino().toArray());
+            container.addNextTrock(onePlayer.getNextTetromino().toArray());
+            container.addCurrTrockX(onePlayer.getCurrTetrX());
+            container.addCurrTrockY(onePlayer.getCurrTetrY());
         }
         return container;
     }

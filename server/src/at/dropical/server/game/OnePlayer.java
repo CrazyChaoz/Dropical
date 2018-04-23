@@ -144,4 +144,18 @@ public class OnePlayer extends Thread {
     public int getLevel() {
         return level;
     }
+
+
+
+    @Override
+    public void run() {
+        while (!isInterrupted()){
+
+            moveDown();
+            try {
+                Thread.sleep((40-level*level)*10);
+            } catch (InterruptedException e) {}
+        }
+    }
+
 }
