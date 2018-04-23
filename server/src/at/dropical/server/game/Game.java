@@ -10,7 +10,7 @@ import at.dropical.shared.net.requests.HandleInputRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game extends Thread {
+public class Game {
 
     //Zuseher
     private List<ServerSideTransmitter> viewers = new ArrayList();
@@ -77,14 +77,6 @@ public class Game extends Thread {
         }
     }
 
-    public void doTick()throws GameOverException{
-        for (OnePlayer game : games) {
-            game.moveDown();
-        }
-
-        updateClients();
-    }
-
     public void updateClients() {
         Container container= currentGameState.getContainer();
 
@@ -93,13 +85,6 @@ public class Game extends Thread {
         }
         for (ServerSideTransmitter viewer : viewers) {
             viewer.writeRequest(container);
-        }
-    }
-
-    @Override
-    public void run() {
-        while (!isInterrupted()){
-
         }
     }
 }
