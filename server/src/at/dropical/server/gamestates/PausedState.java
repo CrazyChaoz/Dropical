@@ -11,14 +11,18 @@ public class PausedState extends State {
 
     public PausedState(Game game) {
         super(game);
+
+        for (OnePlayer onePlayer : game.getGames()) {
+            onePlayer.interrupt();
+        }
     }
 
     @Override
     public Container getContainer() {
         GameDataContainer gameDataContainer=new GameDataContainer(GameState.GAME_PAUSE);
-        gameDataContainer.setLevel(game.getLevel());
 
         for (OnePlayer onePlayer : game.getGames()) {
+            gameDataContainer.addLevel(onePlayer.getLevel());
             gameDataContainer.addPlayerName(onePlayer.getPlayername());
             gameDataContainer.addArena(null);
             gameDataContainer.addCurrTrock(null);
