@@ -17,6 +17,10 @@ public class RunningState extends State {
 
     public RunningState(Game game) {
         super(game);
+
+        for (OnePlayer onePlayer : game.getGames()) {
+            onePlayer.start();
+        }
     }
 
 
@@ -24,9 +28,9 @@ public class RunningState extends State {
     @Override
     public Container getContainer() {
         GameDataContainer container=new GameDataContainer(GameState.GAME_RUNNING);
-        container.setLevel(game.getLevel());
 
         for (OnePlayer onePlayer : game.getGames()) {
+            container.addLevel(onePlayer.getLevel());
             container.addPlayerName(onePlayer.getPlayername());
             container.addArena(onePlayer.getArena());
             container.addCurrTrock(onePlayer.getCurrTetromino().toArray());
@@ -52,16 +56,14 @@ public class RunningState extends State {
                     player.moveRight();
                     break;
                 case UP:
-                    player.rotateLeft();
+                    player.rotateRight();
                     break;
-
                 case DOWN:
                     player.moveDown();
                     break;
                 case DROP:
                     player.dropTetromino();
                     break;
-
                 case START:
                     break; //TODO
                 case PAUSE:
