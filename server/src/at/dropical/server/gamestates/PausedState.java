@@ -7,23 +7,23 @@ import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
+import java.util.Map;
+
 public class PausedState extends State {
 
     public PausedState(Game game) {
         super(game);
 
-        for (OnePlayer onePlayer : game.getGames()) {
-            onePlayer.interrupt();
-        }
+        game.interrupt();
     }
 
     @Override
     public Container getContainer() {
-        GameDataContainer gameDataContainer=new GameDataContainer(GameState.GAME_PAUSE);
+        GameDataContainer gameDataContainer=new GameDataContainer(GameState.PAUSE);
 
-        for (OnePlayer onePlayer : game.getGames()) {
-            gameDataContainer.addLevel(onePlayer.getLevel());
-            gameDataContainer.addPlayerName(onePlayer.getPlayername());
+        for (Map.Entry<String,OnePlayer> onePlayer : game.getGames().entrySet()) {
+            gameDataContainer.addLevel(onePlayer.getValue().getLevel());
+            gameDataContainer.addPlayerName(onePlayer.getKey());
             gameDataContainer.addArena(null);
             gameDataContainer.addCurrTrock(null);
             gameDataContainer.addNextTrock(null);

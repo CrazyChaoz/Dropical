@@ -11,7 +11,7 @@ import at.dropical.server.gamefield.Tetromino;
  * Some methods throw a GameOverException when
  * a game over occurs.
  */
-public class OnePlayer extends Thread {
+public class OnePlayer {
 
     private static int STARTVAL_X = TetrisArena.width / 2 - Tetromino.size / 2;
     private static int STARTVAL_Y = -1;
@@ -25,6 +25,9 @@ public class OnePlayer extends Thread {
 
     //    Playername
     private String playername;
+
+    //
+    private int ticks=0;
 
 
     private TetrisArena arena;
@@ -146,16 +149,14 @@ public class OnePlayer extends Thread {
     }
 
 
-
-    @Override
-    public void run() {
-        while (!isInterrupted()){
-
+    public boolean update() throws GameOverException {
+        ticks++;
+        if(ticks/((40-level*level*level)*10)==1){
             moveDown();
-            try {
-                Thread.sleep((40-level*level)*10);
-            } catch (InterruptedException e) {}
+            ticks=0;
+            return true;
         }
+        return false;
     }
 
 }
