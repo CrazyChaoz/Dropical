@@ -14,7 +14,7 @@ import java.net.Socket;
 
 
 public class Proxy extends Thread {
-    private GameState currentState = GameState.GAME_LOADING;
+    private GameState currentState = GameState.LOADING;
 
     private GameDataContainer gameDataContainer = null;
     private CountDownContainer countDownContainer = null;
