@@ -4,29 +4,23 @@ import at.dropical.shared.net.abstracts.Request;
 
 public class JoinRequest implements Request {
     private String gameID;
-    private boolean isPlayer;
     private String playerName;
 
     //for players
     public JoinRequest(String gameID, String playerName) {
         this.gameID = gameID;
-        this.isPlayer = true;
         this.playerName = playerName;
     }
 
-    //for viewers
-    public JoinRequest(String gameID) {
-        this.gameID = gameID;
-        this.isPlayer = false;
-        this.playerName = null;
+    //join a random game
+    //for tounament
+    public JoinRequest(String playerName) {
+        this.gameID = null;
+        this.playerName = playerName;
     }
 
     public String getGameID() {
         return gameID;
-    }
-
-    public boolean isPlayer() {
-        return isPlayer;
     }
 
     public String getPlayerName() {

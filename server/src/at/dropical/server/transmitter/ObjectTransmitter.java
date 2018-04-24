@@ -1,8 +1,10 @@
 package at.dropical.server.transmitter;
 
+import at.dropical.server.Server;
 import at.dropical.shared.net.abstracts.Request;
 
 import java.io.*;
+import java.util.logging.Level;
 
 //Currently just a ObjectStreamTransmitter
 //Future: JSON or completely bytewise
@@ -29,7 +31,7 @@ public class ObjectTransmitter extends ServerSideTransmitter {
         try {
             outputStream.writeObject(r);
         } catch (IOException e) {
-//            Server.LOGGER.log(Level.SEVERE,"IOException on writing Request");
+            Server.LOGGER.log(Level.SEVERE,"Couldn't send Request " + r.getClass());
             System.err.println("Couldn't send Request " + r.toString());
         }
     }

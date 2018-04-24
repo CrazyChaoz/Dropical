@@ -41,6 +41,7 @@ object BestClientOfAllTime {
             println("[4]: list connected players to your game")
             println("[5]: start a game")
             println("[6]: send input to the server")
+            println("[7]: autoQueue")
             i = scanner.nextInt()
             when (i) {
                 1 -> proxy.transmitToServer(ListGamesRequest())
@@ -61,6 +62,7 @@ object BestClientOfAllTime {
                     println("What Input Key do you want to send?")
                     proxy.transmitToServer(HandleInputRequest(playername, input))
                 }
+                7 -> proxy.transmitToServer(JoinRequest(playername))
             }
         }
     }
