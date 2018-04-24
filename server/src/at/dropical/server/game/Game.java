@@ -1,5 +1,6 @@
 package at.dropical.server.game;
 
+import at.dropical.server.Server;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.State;
 import at.dropical.server.gamestates.WaitingState;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class Game extends Thread{
 
@@ -27,18 +29,17 @@ public class Game extends Thread{
     private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
 
     //maximum number of players
-    private int maxPlayers = 0;
+    private int maxPlayers;
 
 
     //Classic
     public Game() {
+        maxPlayers=2;
     }
     //Variable Players
     public Game(int playercount) {
         this.maxPlayers=playercount;
     }
-
-
 
 
     //Getter
@@ -54,7 +55,8 @@ public class Game extends Thread{
      * @return -1 if no players can be added
      */
     public void addPlayer(String playerName, ServerSideTransmitter transmitter) {
-        if (maxPlayers<games.size()) {
+        if (maxPlayers>games.size()) {
+            Server.LOGGER.log(Level.INFO,"Player "+playerName+" added");
             players.add(transmitter);
             games.put(playerName,new OnePlayer(playerName));
         }
@@ -68,6 +70,7 @@ public class Game extends Thread{
     }
 
     public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
+        Server.LOGGER.log(Level.INFO,"State changed to "+currentGameState.getClass());
         this.currentGameState = currentGameState;
     }
 
@@ -103,7 +106,7 @@ public class Game extends Thread{
                         doUpdate = true;
                     }
                 } catch (GameOverException e) {
-                    System.out.println("Player "+e.getLooserName()+" lost his game.");
+                    Server.LOGGER.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
                 }
             }
             if(doUpdate)
