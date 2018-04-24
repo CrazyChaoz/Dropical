@@ -17,9 +17,6 @@ public class Proxy extends Thread {
     private GameState currentState = GameState.LOADING;
 
     private GameDataContainer gameDataContainer = null;
-    private CountDownContainer countDownContainer = null;
-    private ListDataContainer listDataContainer = null;
-    private GameOverContainer gameOverContainer = null;
 
     private Transmitter transmitter;
 
@@ -33,8 +30,7 @@ public class Proxy extends Thread {
     }
 
     /**
-
-     @param socket
+     * @param socket
      */
     public Proxy(Socket socket) {
         transmitter = new RemoteTransmitter(socket);
@@ -45,24 +41,35 @@ public class Proxy extends Thread {
     public void run() {
         for (; ; ) {
             try {
-                Container request = (Container) transmitter.readRequest();
+                Container container = (Container) transmitter.readRequest();
 
-                if (request.getCurrentState() != null)
-                    currentState = request.getCurrentState();
-                if (request instanceof GameDataContainer)
-                    gameDataContainer = (GameDataContainer) request;
-                else if (request instanceof CountDownContainer)
-                    countDownContainer = (CountDownContainer) request;
-                else if (request instanceof ListDataContainer) {
-                    listDataContainer = (ListDataContainer) request;
+                if (container.getCurrentState() != null) {
+                    currentState = container.getCurrentState();
 
-                    if (listDataContainer.getGameNames() != null)
-                        for (String s : listDataContainer.getGameNames())
-                            System.out.println("Game: " + s);
+                    switch (container.getCurrentState()) {
+                        case LOBBY:
+                            for (String s : ((ListDataContainer) container).getGameNames())
+                                System.out.println("Spieler: " + s);
+                            break;
+                        case GAME_LIST:
+                            for (String s : ((ListDataContainer) container).getGameNames())
+                                System.out.println("Game: " + s);
+                            break;
+                        case PAUSE:
+                        case RUNNING:
+                            gameDataContainer = (GameDataContainer) container;
+                            break;
+                        case STARTING:
+                            System.out.println("Time until Start: " + ((CountDownContainer) container).getSeconds());
+                            break;
+                        case GAME_OVER:
+                        case GAME_WON:
+                        case GAME_LOST:
+                            System.out.println("Game is Over");
+                            break;
 
-                } else if (request instanceof GameOverContainer)
-                    gameOverContainer = (GameOverContainer) request;
-
+                    }
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 break;
@@ -74,24 +81,13 @@ public class Proxy extends Thread {
         transmitter.writeRequest(r);
     }
 
-    public CountDownContainer getCountDownContainer() {
-        return countDownContainer;
-    }
-
     public GameDataContainer getGameDataContainer() {
         return gameDataContainer;
-    }
-
-    public GameOverContainer getGameOverContainer() {
-        return gameOverContainer;
     }
 
     public GameState getCurrentState() {
         return currentState;
     }
 
-    public ListDataContainer getListDataContainer() {
-        return listDataContainer;
-    }
 }
 
