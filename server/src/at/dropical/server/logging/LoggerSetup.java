@@ -1,5 +1,6 @@
 package at.dropical.server.logging;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
@@ -28,6 +29,8 @@ public class LoggerSetup {
         }
 
         logger.setLevel(Level.INFO);
+        // Make folder if it doesn't exist.
+        new File("log").mkdir();
         fileTxt = new FileHandler("log/Logging.txt");
         fileHTML = new FileHandler("log/Logging.html");
 
