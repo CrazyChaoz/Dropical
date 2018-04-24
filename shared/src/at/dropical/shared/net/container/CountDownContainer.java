@@ -10,7 +10,7 @@ public class CountDownContainer extends Container {
     private int seconds;
 
     public CountDownContainer(int seconds) {
-        super(GameState.GAME_STARTING);
+        super(GameState.STARTING);
         this.seconds = seconds;
     }
 

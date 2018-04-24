@@ -6,6 +6,8 @@ import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
+import java.util.Map;
+
 public class StartingState extends State implements Runnable {
     private int time;
     private Game game;
@@ -38,8 +40,8 @@ public class StartingState extends State implements Runnable {
     @Override
     public Container getContainer() {
         CountDownContainer container=new CountDownContainer(time);
-        for (OnePlayer onePlayer : game.getGames()) {
-            container.addPlayerName(onePlayer.getPlayername());
+        for (Map.Entry<String,OnePlayer> onePlayer : game.getGames().entrySet()) {
+            container.addPlayerName(onePlayer.getValue().getPlayername());
         }
         return container;
     }
