@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
 
     var i = 1
     while (i != 0) {
-        println("What do you want to do?")
+        println("\n\n\nWhat do you want to do?")
         println("[1]: list currently open games")
         println("[2]: create new game")
         println("[3]: join a game")
