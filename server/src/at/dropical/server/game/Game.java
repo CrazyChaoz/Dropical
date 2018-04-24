@@ -93,8 +93,9 @@ public class Game extends Thread{
 
     @Override
     public void run() {
+        boolean doUpdate;
         while (!isInterrupted()) {
-            boolean doUpdate = false;
+            doUpdate=false;
 
             for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
                 try {
@@ -102,11 +103,14 @@ public class Game extends Thread{
                         doUpdate = true;
                     }
                 } catch (GameOverException e) {
-                    e.getLooserName();
+                    System.out.println("Player "+e.getLooserName()+" lost his game.");
                 }
-
-
             }
+            if(doUpdate)
+                updateClients();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {}
         }
     }
 }
