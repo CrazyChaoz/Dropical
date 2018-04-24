@@ -58,6 +58,7 @@ public class Proxy extends Thread {
                         case PAUSE:
                         case RUNNING:
                             gameDataContainer = (GameDataContainer) container;
+                            System.out.println("GameDataContainer recieved");
                             break;
                         case STARTING:
                             System.out.println("Time until Start: " + ((CountDownContainer) container).getSeconds());
