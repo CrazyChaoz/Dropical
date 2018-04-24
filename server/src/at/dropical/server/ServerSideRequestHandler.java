@@ -1,6 +1,7 @@
 package at.dropical.server;
 
 import at.dropical.server.game.Game;
+import at.dropical.server.gamestates.RunningState;
 import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.shared.GameState;
 import at.dropical.shared.net.abstracts.Request;
@@ -42,8 +43,10 @@ public class ServerSideRequestHandler implements RequestHandler {
             handleJoinRequest((JoinRequest) request);
         } else if (request instanceof AddAiToGameRequest) {
             handleAddAiToGameRequest((AddAiToGameRequest) request);
-        } else if (request instanceof HandleInputRequest) {
+        }else if (request instanceof HandleInputRequest) {
             handleInputDataContainer((HandleInputRequest) request);
+        }else if (request instanceof StartGameRequest) {
+            handleStartGameRequest((StartGameRequest) request);
         }
     }
 
@@ -104,5 +107,10 @@ public class ServerSideRequestHandler implements RequestHandler {
         if(transmitter.getPlayingGame()!=null){
             transmitter.getPlayingGame().handleInput(request);
         }
+    }
+
+    public void handleStartGameRequest(StartGameRequest startGameRequest){
+        Game g=Server.instance().getGame(startGameRequest.getGameID());
+        g.setCurrentGameState(new RunningState(g));
     }
 }
