@@ -3,6 +3,7 @@ package at.dropical.server;
 import at.dropical.server.game.Game;
 import at.dropical.server.game.OnePlayer;
 import at.dropical.server.gamestates.RunningState;
+import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.shared.GameState;
 import at.dropical.shared.net.abstracts.Request;
@@ -48,7 +49,7 @@ public class ServerSideRequestHandler implements RequestHandler {
             handleInputDataContainer((HandleInputRequest) request);
         } else if (request instanceof StartGameRequest) {
             handleStartGameRequest((StartGameRequest) request);
-        }else if(request instanceof ListPlayersRequest){
+        } else if (request instanceof ListPlayersRequest) {
             handleListPlayersRequest();
         }
     }
@@ -72,18 +73,32 @@ public class ServerSideRequestHandler implements RequestHandler {
 
         LOGGER.log(Level.INFO, "Request to Handle is a JoinRequest");
 
+        //assign to a random game
+        if (request.getGameID() == null) {
+            if (Server.instance().getAllGames().size() > 0)
+                for (Map.Entry<String, Game> games : Server.instance().getAllGames().entrySet()) {
+                    if (games.getValue().getCurrentGameState() instanceof WaitingState) {
+                        handleJoinRequest(new JoinRequest(games.getKey(), request.getPlayerName()));
+                        return;
+                    }
+                }
+            //if all else fails
+            //create game yourself and join that game
+            String gamename = "autoGen_"+request.getPlayerName() + "_game";
+            handleCreateGameRequest(new CreateGameRequest(gamename));
+            handleJoinRequest(new JoinRequest(gamename, request.getPlayerName()));
+        }
+
         //when user is too fast & game is not yet created
-        while (Server.instance().getGame(request.getGameID()) == null);
+        while (Server.instance().getGame(request.getGameID()) == null) ;
         Game game = Server.instance().getGame(request.getGameID());
 
 //            if(game==null)
-//                throw new RuntimeException("Game does not exist. Fuck Off.");       //polite msg for the moment, create new game instantely ?
+//                throw new RuntimeException("Game does not exist. Fuck Off.");       //polite msg for the moment,TODO: create new game instantely ?
 
-        if (request.isPlayer()) {
-            game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
-            transmitter.setPlayingGame(game);
-        } else
-            game.addViewer(transmitter);
+        game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
+        transmitter.setPlayingGame(game);
+
     }
 
     public void handleAddAiToGameRequest(AddAiToGameRequest request) {
@@ -115,7 +130,7 @@ public class ServerSideRequestHandler implements RequestHandler {
         g.setCurrentGameState(new RunningState(g));
     }
 
-    public void handleListPlayersRequest(){
+    public void handleListPlayersRequest() {
         LOGGER.log(Level.INFO, "Request to Handle is a ListPlayersRequest");
         if (transmitter.getPlayingGame() != null) {
             ListDataContainer listDataContainer = new ListDataContainer(GameState.LOBBY);

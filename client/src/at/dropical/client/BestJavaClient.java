@@ -27,6 +27,7 @@ public class BestJavaClient {
             System.out.println("[4]: list connected players to your game");
             System.out.println("[5]: start a game");
             System.out.println("[6]: send input to the server");
+            System.out.println("[7]: autoQueue");
             i=scanner.nextInt();
             switch (i){
                 case 1:
@@ -50,6 +51,9 @@ public class BestJavaClient {
                 case 6:
                     System.out.println("What Input Key do you want to send?");
                     proxy.transmitToServer(new HandleInputRequest(playername,getInput()));
+                    break;
+                case 7:
+                    proxy.transmitToServer(new JoinRequest(playername));
                     break;
             }
         }

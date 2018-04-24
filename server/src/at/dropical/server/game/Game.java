@@ -48,6 +48,9 @@ public class Game extends Thread{
         return games;
     }
 
+    public at.dropical.server.gamestates.State getCurrentGameState() {
+        return currentGameState;
+    }
 
     //Method
 
