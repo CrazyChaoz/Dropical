@@ -7,12 +7,9 @@ public class HandleInputRequest implements Request {
     private PlayerAction input;
     private String playername;
 
-    public HandleInputRequest(String playername) {
+    public HandleInputRequest(String playername,PlayerAction input) {
         this.playername = playername;
-    }
-
-    public void setInput(PlayerAction input) {
-        this.input = input;
+        this.input=input;
     }
 
     public PlayerAction getInput() {
