@@ -20,16 +20,17 @@ public class BestJavaClient {
 
         int i=1;
         while (i!=0){
-            System.out.println("What do you want to do?");
+            System.out.println("So, "+playername+", what do you want to do?");
             System.out.println("[1]: list currently open games");
             System.out.println("[2]: create new game");
             System.out.println("[3]: join a game");
-            System.out.println("[4]: start a game");
-            System.out.println("[5]: send input to the server");
+            System.out.println("[4]: list connected players to your game");
+            System.out.println("[5]: start a game");
+            System.out.println("[6]: send input to the server");
             i=scanner.nextInt();
             switch (i){
                 case 1:
-                    proxy.transmitToServer(new ListRequest(true));
+                    proxy.transmitToServer(new ListGamesRequest());
                     break;
                 case 2:
                     System.out.println("What should this game be called?");
@@ -40,10 +41,13 @@ public class BestJavaClient {
                     proxy.transmitToServer(new JoinRequest(scanner.next(),playername));
                     break;
                 case 4:
+                    proxy.transmitToServer(new ListPlayersRequest());
+                    break;
+                case 5:
                     System.out.println("Which game do you want to start?");
                     proxy.transmitToServer(new StartGameRequest(scanner.next()));
                     break;
-                case 5:
+                case 6:
                     System.out.println("What Input Key do you want to send?");
                     proxy.transmitToServer(new HandleInputRequest(playername,getInput()));
                     break;
