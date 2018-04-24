@@ -111,6 +111,7 @@ public class ServerSideRequestHandler implements RequestHandler {
     }
 
     public void handleStartGameRequest(StartGameRequest startGameRequest){
+        LOGGER.log(Level.INFO,"Request to Handle is a StartGameRequest");
         Game g=Server.instance().getGame(startGameRequest.getGameID());
         g.setCurrentGameState(new RunningState(g));
     }
