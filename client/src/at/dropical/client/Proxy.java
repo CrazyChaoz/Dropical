@@ -42,25 +42,22 @@ public class Proxy extends Thread {
         for (; ; ) {
             try {
                 Container container = (Container) transmitter.readRequest();
+
                 if (container.getCurrentState() != null) {
                     currentState = container.getCurrentState();
+
                     switch (container.getCurrentState()) {
                         case LOBBY:
-                            System.out.println("#########");
                             for (String s : ((ListDataContainer) container).getGameNames())
                                 System.out.println("Spieler: " + s);
-                            System.out.println("#########");
                             break;
                         case GAME_LIST:
-                            System.out.println("#########");
                             for (String s : ((ListDataContainer) container).getGameNames())
                                 System.out.println("Game: " + s);
-                            System.out.println("#########");
                             break;
                         case PAUSE:
                         case RUNNING:
                             gameDataContainer = (GameDataContainer) container;
-                            System.out.println("GameDataContainer recieved");
                             break;
                         case STARTING:
                             System.out.println("Time until Start: " + ((CountDownContainer) container).getSeconds());

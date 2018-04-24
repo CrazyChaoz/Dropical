@@ -151,9 +151,9 @@ public class OnePlayer {
 
     public boolean update() throws GameOverException {
         ticks++;
-        if(ticks/((40-level*level*level)*10)==1){
-            moveDown();
+        if(ticks/((50-level*level*level))==1){
             ticks=0;
+            moveDown();
             return true;
         }
         return false;
