@@ -8,15 +8,13 @@ import java.util.List;
 
 public class ListDataContainer extends Container {
 
-    private List<String> listNames=null;
+    private List<String> listNames=new ArrayList<>();
 
     public ListDataContainer(GameState currentState) {
         super(currentState);
     }
 
     public void addName(String name){
-        if(listNames==null)
-            listNames=new ArrayList<>();
         listNames.add(name);
     }
     public List<String> getGameNames() {
