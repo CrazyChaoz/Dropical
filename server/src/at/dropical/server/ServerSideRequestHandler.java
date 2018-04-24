@@ -2,6 +2,7 @@ package at.dropical.server;
 
 import at.dropical.server.game.Game;
 import at.dropical.server.transmitter.ServerSideTransmitter;
+import at.dropical.shared.GameState;
 import at.dropical.shared.net.abstracts.Request;
 import at.dropical.shared.net.abstracts.RequestHandler;
 import at.dropical.shared.net.container.ListDataContainer;
@@ -53,7 +54,7 @@ public class ServerSideRequestHandler implements RequestHandler {
 
     public void handleListRequest(ListRequest request){
         LOGGER.log(Level.INFO,"Request to Handle is a ListRequest");
-        ListDataContainer listDataContainer=new ListDataContainer();
+        ListDataContainer listDataContainer=new ListDataContainer(GameState.GAME_LIST);
         if (request.isGameListRequest()) {
             for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
                 listDataContainer.addName(stringGameEntry.getKey());

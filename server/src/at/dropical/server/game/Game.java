@@ -8,9 +8,11 @@ import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Game {
+public class Game extends Thread{
 
     //Zuseher
     private List<ServerSideTransmitter> viewers = new ArrayList();
@@ -19,7 +21,7 @@ public class Game {
     private List<ServerSideTransmitter> players = new ArrayList<>();
 
     //Games
-    private List<OnePlayer> games = new ArrayList<>();
+    private Map<String,OnePlayer> games = new HashMap<>();
 
 
     private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
@@ -40,7 +42,8 @@ public class Game {
 
 
     //Getter
-    public List<OnePlayer> getGames() {
+
+    public Map<String, OnePlayer> getGames() {
         return games;
     }
 
@@ -53,7 +56,7 @@ public class Game {
     public void addPlayer(String playerName, ServerSideTransmitter transmitter) {
         if (maxPlayers<games.size()) {
             players.add(transmitter);
-            games.add(new OnePlayer(playerName));
+            games.put(playerName,new OnePlayer(playerName));
         }
 
         if (games.size()==maxPlayers)
@@ -69,9 +72,9 @@ public class Game {
     }
 
     public void handleInput(HandleInputRequest handleInputRequest){
-        for (OnePlayer game : games) {
-            if(game.getPlayername().equals(handleInputRequest.getPlayername())) {
-                currentGameState.handleInput(game,handleInputRequest);
+        for (Map.Entry<String,OnePlayer> game : games.entrySet()) {
+            if(game.getValue().getPlayername().equals(handleInputRequest.getPlayername())) {
+                currentGameState.handleInput(game.getValue(),handleInputRequest);
                 return;
             }
         }
@@ -85,6 +88,25 @@ public class Game {
         }
         for (ServerSideTransmitter viewer : viewers) {
             viewer.writeRequest(container);
+        }
+    }
+
+    @Override
+    public void run() {
+        while (!isInterrupted()) {
+            boolean doUpdate = false;
+
+            for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
+                try {
+                    if (game.getValue().update()) {
+                        doUpdate = true;
+                    }
+                } catch (GameOverException e) {
+                    e.getLooserName();
+                }
+
+
+            }
         }
     }
 }
