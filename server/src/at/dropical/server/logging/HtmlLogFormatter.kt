@@ -13,7 +13,6 @@ class HtmlLogFormatter : Formatter() {
         val buf = StringBuffer(1000)
         buf.append("<tr>\n")
 
-        // colorize any levels >= WARNING in red
 
         when(rec.level.intValue()){
             Level.SEVERE.intValue()->buf.append("\t<td style=\"color:red\">")
@@ -41,7 +40,7 @@ class HtmlLogFormatter : Formatter() {
     }
 
     private fun calcDate(millisecs: Long): String {
-        val date_format = SimpleDateFormat("MMM dd,yyyy HH:mm")
+        val date_format = SimpleDateFormat("MMM dd,yyyy HH:mm:ss")
         val resultdate = Date(millisecs)
         return date_format.format(resultdate)
     }

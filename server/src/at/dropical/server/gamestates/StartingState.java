@@ -15,7 +15,7 @@ public class StartingState extends State implements Runnable {
     public StartingState(Game game) {
         super(game);
         this.game=game;
-        time=5;
+        time=15;
         new Thread(this).start();
     }
 
@@ -29,7 +29,7 @@ public class StartingState extends State implements Runnable {
     @Override
     public void run() {
         try {
-            for (; time <= 0; time--)
+            for (; time >= 0; time--)
                 Thread.sleep(1000);
             game.setCurrentGameState(new RunningState(game));
         } catch (InterruptedException e) {
