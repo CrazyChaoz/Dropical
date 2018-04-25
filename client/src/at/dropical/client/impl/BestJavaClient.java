@@ -1,5 +1,6 @@
-package at.dropical.client;
+package at.dropical.client.impl;
 
+import at.dropical.client.Proxy;
 import at.dropical.shared.PlayerAction;
 import at.dropical.shared.net.requests.*;
 
@@ -28,6 +29,7 @@ public class BestJavaClient {
             System.out.println("[5]: start a game");
             System.out.println("[6]: send input to the server");
             System.out.println("[7]: autoQueue");
+            System.out.println("[8]: create a game with a specific number of players");
             i=scanner.nextInt();
             switch (i){
                 case 1:
@@ -55,12 +57,18 @@ public class BestJavaClient {
                 case 7:
                     proxy.transmitToServer(new JoinRequest(playername));
                     break;
+                case 8:
+                    System.out.println("What should this game be called?");
+                    String gameName=scanner.next();
+                    System.out.println("How many players should be able to play this game?");
+                    int playerCount=scanner.nextInt();
+                    proxy.transmitToServer(new CreateGameRequest(gameName,playerCount));
+                    break;
             }
         }
     }
     private static PlayerAction getInput(){
-        PlayerAction retval=null;
-        while (retval==null){
+        for (;;){
             switch (scanner.next()){
                 case "w":
                     return PlayerAction.UP;
@@ -75,6 +83,5 @@ public class BestJavaClient {
 
             }
         }
-        return retval;
     }
 }
