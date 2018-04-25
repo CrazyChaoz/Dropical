@@ -21,14 +21,6 @@ public class ServerSideRequestHandler implements RequestHandler {
     private ServerSideTransmitter transmitter;
 
     public ServerSideRequestHandler(Request request, ServerSideTransmitter transmitter) {
-
-
-//        LOGGER.log(Level.FINE,"Debug - Fine");
-//        LOGGER.log(Level.INFO,"Debug - Info");
-//        LOGGER.log(Level.WARNING,"Debug - Warning");
-//        LOGGER.log(Level.SEVERE,"Debug - SEVERE");
-
-
         LOGGER.log(Level.INFO, "New Request to Handle");
         this.request = request;
         this.transmitter = transmitter;
@@ -54,13 +46,13 @@ public class ServerSideRequestHandler implements RequestHandler {
         }
     }
 
-    public void handleCreateGameRequest(CreateGameRequest request) {
+    private void handleCreateGameRequest(CreateGameRequest request) {
         LOGGER.log(Level.INFO, "Request to Handle is a CreateGameRequest");
-        Server.instance().getAllGames().put(request.getGameName(), new Game());
+        Server.instance().getAllGames().put(request.getGameName(), new Game(request.getMaxPlayers()));
     }
 
-    public void handleListGamesRequest() {
-        LOGGER.log(Level.INFO, "Request to Handle is a ListRequest");
+    private void handleListGamesRequest() {
+        LOGGER.log(Level.INFO, "Request to Handle is a ListGamesRequest");
         ListDataContainer listDataContainer = new ListDataContainer(GameState.GAME_LIST);
 
         for (Map.Entry<String, Game> stringGameEntry : Server.instance().getAllGames().entrySet()) {
@@ -69,7 +61,7 @@ public class ServerSideRequestHandler implements RequestHandler {
         transmitter.writeRequest(listDataContainer);
     }
 
-    public void handleJoinRequest(JoinRequest request) {
+    private void handleJoinRequest(JoinRequest request) {
 
         LOGGER.log(Level.INFO, "Request to Handle is a JoinRequest");
 
@@ -101,7 +93,7 @@ public class ServerSideRequestHandler implements RequestHandler {
 
     }
 
-    public void handleAddAiToGameRequest(AddAiToGameRequest request) {
+    private void handleAddAiToGameRequest(AddAiToGameRequest request) {
         LOGGER.log(Level.INFO, "Request to Handle is a AddAiToGameRequest");
 
         while (Server.instance().getGame(request.getGameID()) == null) ;
@@ -117,20 +109,20 @@ public class ServerSideRequestHandler implements RequestHandler {
 //        }
     }
 
-    public void handleInputDataContainer(HandleInputRequest request) {
+    private void handleInputDataContainer(HandleInputRequest request) {
         LOGGER.log(Level.INFO, "Request to Handle is a InputDataContainer");
         if (transmitter.getPlayingGame() != null) {
             transmitter.getPlayingGame().handleInput(request);
         }
     }
 
-    public void handleStartGameRequest(StartGameRequest startGameRequest) {
+    private void handleStartGameRequest(StartGameRequest startGameRequest) {
         LOGGER.log(Level.INFO, "Request to Handle is a StartGameRequest");
         Game g = Server.instance().getGame(startGameRequest.getGameID());
         g.setCurrentGameState(new RunningState(g));
     }
 
-    public void handleListPlayersRequest() {
+    private void handleListPlayersRequest() {
         LOGGER.log(Level.INFO, "Request to Handle is a ListPlayersRequest");
         if (transmitter.getPlayingGame() != null) {
             ListDataContainer listDataContainer = new ListDataContainer(GameState.LOBBY);

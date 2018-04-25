@@ -38,7 +38,7 @@ public class OnePlayer {
 
     public OnePlayer(String playername) {
         this.playername = playername;
-        arena = new TetrisArena(playername);
+        this.arena = new TetrisArena(playername);
     }
 
     //FUNCTIONALITY
@@ -151,7 +151,7 @@ public class OnePlayer {
 
     public boolean update() throws GameOverException {
         ticks++;
-        if(ticks%((50-level*level*level))==0){
+        if(ticks%((100-level*level*level))==0){
             ticks=0;
             moveDown();
             return true;
