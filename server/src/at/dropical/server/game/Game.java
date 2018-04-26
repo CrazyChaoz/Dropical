@@ -42,7 +42,7 @@ public class Game extends Thread{
     }
 
 
-    //Getter
+
 
     public Map<String, OnePlayer> getGames() {
         return games;
@@ -52,7 +52,7 @@ public class Game extends Thread{
         return currentGameState;
     }
 
-    //Method
+
 
     /**
      * @return -1 if no players can be added
@@ -62,6 +62,7 @@ public class Game extends Thread{
             Server.LOGGER.log(Level.INFO,"Player "+playerName+" added");
             players.add(transmitter);
             games.put(playerName,new OnePlayer(playerName));
+            updateClients();
         }
 
         if (games.size()==maxPlayers)
@@ -87,7 +88,7 @@ public class Game extends Thread{
     }
 
     public void updateClients() {
-        Container container= currentGameState.getContainer();
+        Container container = currentGameState.getContainer();
 
         for (ServerSideTransmitter player : players) {
             player.writeRequest(container);
