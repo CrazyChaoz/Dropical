@@ -3,10 +3,11 @@ package at.dropical.shared.net.container;
 import at.dropical.shared.GameState;
 import at.dropical.shared.net.abstracts.Container;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CountDownContainer extends Container {
-    private List<String> playernames;
+    private List<String> playernames=new ArrayList<>();
     private int seconds;
 
     public CountDownContainer(int seconds) {
@@ -23,10 +24,5 @@ public class CountDownContainer extends Container {
     }
     public int getSeconds() {
         return seconds;
-    }
-
-    @Override
-    public GameState getCurrentState() {
-        return null;
     }
 }

@@ -1,5 +1,6 @@
 package at.dropical.server.gamestates;
 
+import at.dropical.server.Server;
 import at.dropical.server.game.Game;
 import at.dropical.server.game.OnePlayer;
 import at.dropical.shared.net.abstracts.Container;
@@ -7,6 +8,7 @@ import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 public class StartingState extends State implements Runnable {
     private int time;
@@ -29,8 +31,10 @@ public class StartingState extends State implements Runnable {
     @Override
     public void run() {
         try {
-            for (; time >= 0; time--)
+            for (; time >= 0; time--) {
                 Thread.sleep(1000);
+                game.updateClients();
+            }
             game.setCurrentGameState(new RunningState(game));
         } catch (InterruptedException e) {
             e.printStackTrace();
