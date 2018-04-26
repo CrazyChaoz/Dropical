@@ -1,4 +1,4 @@
-package at.dropical.client;
+package at.dropical.client.transmitter;
 
 import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.abstracts.Request;

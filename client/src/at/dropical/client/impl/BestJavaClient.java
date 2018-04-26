@@ -1,18 +1,21 @@
 package at.dropical.client.impl;
 
-import at.dropical.client.Proxy;
+import at.dropical.client.DropicalHandler;
+import at.dropical.client.DropicalProxy;
 import at.dropical.shared.PlayerAction;
+import at.dropical.shared.net.abstracts.Container;
+import at.dropical.shared.net.container.CountDownContainer;
+import at.dropical.shared.net.container.ListDataContainer;
 import at.dropical.shared.net.requests.*;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
-public class BestJavaClient {
-    private static Scanner scanner=new Scanner(System.in);
+public class BestJavaClient implements DropicalHandler {
+    private Scanner scanner=new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
-        Proxy proxy=new Proxy(new Socket("localhost",45000));
+    public BestJavaClient() throws IOException {
+        DropicalProxy proxy=new DropicalProxy("localhost",45000,this);
         String playername;
 
         System.out.println("Whats your name?");
@@ -33,41 +36,41 @@ public class BestJavaClient {
             i=scanner.nextInt();
             switch (i){
                 case 1:
-                    proxy.transmitToServer(new ListGamesRequest());
+                    proxy.writeToServer(new ListGamesRequest());
                     break;
                 case 2:
                     System.out.println("What should this game be called?");
-                    proxy.transmitToServer(new CreateGameRequest(scanner.next()));
+                    proxy.writeToServer(new CreateGameRequest(scanner.next()));
                     break;
                 case 3:
                     System.out.println("Which game do you want to join?");
-                    proxy.transmitToServer(new JoinRequest(scanner.next(),playername));
+                    proxy.writeToServer(new JoinRequest(scanner.next(),playername));
                     break;
                 case 4:
-                    proxy.transmitToServer(new ListPlayersRequest());
+                    proxy.writeToServer(new ListPlayersRequest());
                     break;
                 case 5:
                     System.out.println("Which game do you want to start?");
-                    proxy.transmitToServer(new StartGameRequest(scanner.next()));
+                    proxy.writeToServer(new StartGameRequest(scanner.next()));
                     break;
                 case 6:
                     System.out.println("What Input Key do you want to send?");
-                    proxy.transmitToServer(new HandleInputRequest(playername,getInput()));
+                    proxy.writeToServer(new HandleInputRequest(playername,getInput()));
                     break;
                 case 7:
-                    proxy.transmitToServer(new JoinRequest(playername));
+                    proxy.writeToServer(new JoinRequest(playername));
                     break;
                 case 8:
                     System.out.println("What should this game be called?");
                     String gameName=scanner.next();
                     System.out.println("How many players should be able to play this game?");
                     int playerCount=scanner.nextInt();
-                    proxy.transmitToServer(new CreateGameRequest(gameName,playerCount));
+                    proxy.writeToServer(new CreateGameRequest(gameName,playerCount));
                     break;
             }
         }
     }
-    private static PlayerAction getInput(){
+    private PlayerAction getInput(){
         for (;;){
             switch (scanner.next()){
                 case "w":
@@ -80,6 +83,39 @@ public class BestJavaClient {
                     return PlayerAction.RIGHT;
                 case " ":
                     return PlayerAction.DROP;
+
+            }
+        }
+    }
+
+    @Override
+    public void handle(Container container) {
+        if (container.getCurrentState() != null) {
+            switch (container.getCurrentState()) {
+                case LOBBY:
+                    System.out.println("#########");
+                    for (String s : ((ListDataContainer) container).getGameNames())
+                        System.out.println("Spieler: " + s);
+                    System.out.println("#########");
+                    break;
+                case GAME_LIST:
+                    System.out.println("#########");
+                    for (String s : ((ListDataContainer) container).getGameNames())
+                        System.out.println("Game: " + s);
+                    System.out.println("#########");
+                    break;
+                case PAUSE:
+                case RUNNING:
+                    System.out.println("GameDataContainer recieved");
+                    break;
+                case STARTING:
+                    System.out.println("Time until Start: " + ((CountDownContainer) container).getSeconds());
+                    break;
+                case GAME_OVER:
+                case GAME_WON:
+                case GAME_LOST:
+                    System.out.println("Game is Over");
+                    break;
 
             }
         }

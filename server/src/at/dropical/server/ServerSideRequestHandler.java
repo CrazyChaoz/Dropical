@@ -29,6 +29,7 @@ public class ServerSideRequestHandler implements RequestHandler {
 
     @Override
     public void run() {
+
         if (request instanceof CreateGameRequest) {
             handleCreateGameRequest((CreateGameRequest) request);
         } else if (request instanceof ListGamesRequest) {
