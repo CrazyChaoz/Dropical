@@ -17,15 +17,15 @@ public final class DropicalProxy implements Runnable {
 
     @NotNull
     private Transmitter transmitter;
-    private DropicalHandler dropicalHandler;
+    private DropicalListener dropicalListener;
 
 
-    public DropicalProxy(String host, int port, DropicalHandler dropicalHandler) throws IOException {
+    public DropicalProxy(String host, int port, DropicalListener dropicalListener) throws IOException {
 //        if(host.equals("localhost")||host.equals("127.0.0.1"))
 //            transmitter=new LocalTransmitter(new LocalRequestCache());
 //        else
         transmitter = new RemoteTransmitter(new Socket(host, port));
-        this.dropicalHandler=dropicalHandler;
+        this.dropicalListener = dropicalListener;
         new Thread(this).start();
     }
 
@@ -41,19 +41,19 @@ public final class DropicalProxy implements Runnable {
 
                 switch (container.getCurrentState()){
                     case STARTING:
-                        dropicalHandler.countDown((CountDownContainer) container);
+                        dropicalListener.countDown((CountDownContainer) container);
                         break;
                     case LOBBY:
-                        dropicalHandler.somebodyJoinedTheLobby((ListDataContainer) container);
+                        dropicalListener.somebodyJoinedTheLobby((ListDataContainer) container);
                         break;
                     case RUNNING:
                     case PAUSE:
-                        dropicalHandler.updateUI((GameDataContainer) container);
+                        dropicalListener.updateUI((GameDataContainer) container);
                         break;
                     case GAME_LOST:
                     case GAME_WON:
                     case GAME_OVER:
-                        dropicalHandler.onGameOver((GameOverContainer) container);
+                        dropicalListener.onGameOver((GameOverContainer) container);
                         break;
                 }
             } catch (IOException e) {
