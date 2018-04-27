@@ -51,12 +51,7 @@ public class Menu implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         singleplayerButton = new DropicalButton("Singleplayer", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 88, 12, 52, 61, 208, 244);
-        multiplayerLocalButton = new DropicalButton("local Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 332, 28, 65, 44, 260, 176);
-        multiplayerOnlineButton = new DropicalButton("Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 688, 28, 65, 44, 260, 176);
-        multiplayerOnlineButton.flipX();
-        tournamentButton = new DropicalButton("Tournaments", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 984, 12, 52, 61, 208, 244);
-        tournamentButton.flipX();
-        singleplayerButton.getButton().addListener(new InputListener(){
+        singleplayerButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new Game(game, 1));
@@ -68,13 +63,28 @@ public class Menu implements Screen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+        multiplayerLocalButton = new DropicalButton("local Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 332, 28, 65, 44, 260, 176);
+        multiplayerLocalButton.getButton().addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new Game(game, 2));
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        multiplayerOnlineButton = new DropicalButton("Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 688, 28, 65, 44, 260, 176);
+        multiplayerOnlineButton.flipX();
+        tournamentButton = new DropicalButton("Tournaments", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 984, 12, 52, 61, 208, 244);
+        tournamentButton.flipX();
 
         stage.addActor(singleplayerButton.getButton());
         stage.addActor(multiplayerLocalButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
-
-        singleplayerButton.setDownTexture("GUI/background.png", 52, 61);
     }
 
     @Override
@@ -101,7 +111,7 @@ public class Menu implements Screen {
 
         game.getBatch().end();
 
-        //DropicalButton
+        //DropicalButtons render
         stage.draw();
     }
 
