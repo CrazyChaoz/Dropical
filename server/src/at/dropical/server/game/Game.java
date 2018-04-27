@@ -2,7 +2,6 @@ package at.dropical.server.game;
 
 import at.dropical.server.Server;
 import at.dropical.server.gamestates.StartingState;
-import at.dropical.server.gamestates.State;
 import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.shared.net.abstracts.Container;
