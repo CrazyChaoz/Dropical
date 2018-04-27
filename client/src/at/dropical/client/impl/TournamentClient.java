@@ -13,6 +13,8 @@ public class TournamentClient {
     public TournamentClient() throws IOException {
         DropicalProxy proxy = new DropicalProxy("localhost", 45000, new BestJavaListener());
 
+
+
         String playername;
 
         System.out.println("Whats your name?");
