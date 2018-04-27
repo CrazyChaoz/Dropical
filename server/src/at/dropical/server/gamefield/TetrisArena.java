@@ -2,6 +2,7 @@ package at.dropical.server.gamefield;
 // Created by julian on 17.11.17.
 
 import at.dropical.server.game.GameOverException;
+import at.dropical.server.game.LinesClearedException;
 
 import java.util.Random;
 
@@ -120,8 +121,9 @@ public class TetrisArena {
     /** Checks if lines are full (every block in a horizontal
      * line != 0) and removes those by moving what's on top
      * downwards.
-     * @return number of lines cleared. */
-    public int clearLines() {
+     * @throws LinesClearedException When more than 0 lines were
+     * cleared. Contains number of lines cleared. */
+    public void clearLines() throws LinesClearedException {
         int count = 0;
         // From top to bottom.
         for(int h = marginTop; h < marginTop+height; h++) {
@@ -137,7 +139,9 @@ public class TetrisArena {
                 count++;
             }
         }
-        return count;
+
+        if(count >0)
+            throw new LinesClearedException(count);
     }
     /** Moves the arena downwards.
      * @param lineToOverride includes marginTop. (=internal arena line) */

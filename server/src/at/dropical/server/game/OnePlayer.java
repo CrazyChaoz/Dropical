@@ -43,15 +43,29 @@ public class OnePlayer {
 
     //FUNCTIONALITY
 
+    /** Goes automatically down after time.
+     * fixme At level 5 the algorithm for going faster breaks. */
+    public boolean update() throws GameOverException, LinesClearedException {
+        ticks++;
+        if(ticks%((100-level*level*level))==0){
+            ticks=0;
+            moveDown();
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Places the current one and makes a new Tetromino.
+     * !! Make sure nothing important is after this function,
+     * !! because it will not be executed if an exception is thrown.
      *
      * @throws GameOverException If the placing fails.
      */
-    private void placeTetromino() throws GameOverException {
+    private void placeTetromino() throws GameOverException, LinesClearedException {
         arena.placeTetromino(tetromino, currTetrY, currTetrX);
         newNextTetromino();
+        arena.clearLines();
     }
 
     /**
@@ -74,7 +88,7 @@ public class OnePlayer {
      * Lowering the Tetromino a block.
      * If that is not possible, placeTetromino().
      */
-    public void moveDown() throws GameOverException {
+    public void moveDown() throws GameOverException, LinesClearedException {
         if (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true)) {
             currTetrY++;
         } else
@@ -84,7 +98,7 @@ public class OnePlayer {
     /**
      * go down as long as possible and place the Tetromino
      */
-    public void dropTetromino() throws GameOverException {
+    public void dropTetromino() throws GameOverException, LinesClearedException {
         while (arena.checkTetromino(tetromino, currTetrY + 1, currTetrX, true))
             currTetrY++;
         placeTetromino();
@@ -146,17 +160,6 @@ public class OnePlayer {
 
     public int getLevel() {
         return level;
-    }
-
-
-    public boolean update() throws GameOverException {
-        ticks++;
-        if(ticks%((100-level*level*level))==0){
-            ticks=0;
-            moveDown();
-            return true;
-        }
-        return false;
     }
 
 }

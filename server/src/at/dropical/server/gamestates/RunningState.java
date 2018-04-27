@@ -1,7 +1,9 @@
 package at.dropical.server.gamestates;
 
+import at.dropical.server.Server;
 import at.dropical.server.game.Game;
 import at.dropical.server.game.GameOverException;
+import at.dropical.server.game.LinesClearedException;
 import at.dropical.server.game.OnePlayer;
 import at.dropical.shared.GameState;
 import at.dropical.shared.PlayerAction;
@@ -10,6 +12,7 @@ import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.Map;
+import java.util.logging.Level;
 
 /** The RunningState fills the GameDataContainer with
  * the arena and tetromino from one player.
@@ -64,17 +67,21 @@ public class RunningState extends State {
                 case DROP:
                     player.dropTetromino();
                     break;
-                case START:
-                    break; //TODO
+                case START: //TODO
+                    break;
                 case PAUSE:
                     game.setCurrentGameState(new PausedState(game));
                     break;
-                case QUIT:
+                case QUIT: //TODO
                     game.setCurrentGameState(new GameOverState(game));
-                    break; //TODO
+                    break;
             }
         }catch (GameOverException goe){
-
+            //TODO Game Over
+            Server.LOGGER.log(Level.INFO,"Game over for player "+ player.getPlayername());
+        } catch(LinesClearedException e) {
+            // TODO Add lines to others
+            Server.LOGGER.log(Level.INFO,e.getLines() +" lines cleared");
         }
     }
 }

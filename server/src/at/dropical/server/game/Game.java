@@ -104,13 +104,15 @@ public class Game extends Thread{
         while (!isInterrupted()) {
             doUpdate=false;
 
-            for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
+            for (Map.Entry<String, OnePlayer> gameEntry : games.entrySet()) {
                 try {
-                    if (game.getValue().update()) {
+                    if (gameEntry.getValue().update()) {
                         doUpdate = true;
                     }
                 } catch (GameOverException e) {
                     Server.LOGGER.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
+                } catch(LinesClearedException e) {
+                    Server.LOGGER.log(Level.INFO,e.getLines() +" lines cleared");
                 }
             }
             if(doUpdate)
