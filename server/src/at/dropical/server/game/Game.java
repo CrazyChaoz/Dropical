@@ -87,14 +87,27 @@ public class Game extends Thread{
         }
     }
 
+    public void reJoin(String playerName, ServerSideTransmitter transmitter){
+        //TODO: somebody implement
+    }
+
     public void updateClients() {
         Container container = currentGameState.getContainer();
 
         for (ServerSideTransmitter player : players) {
-            player.writeRequest(container);
+            if(!player.isDisconnected())
+                player.writeRequest(container);
+            else{
+                players.remove(player);
+                // TODO: players.add(new AI());
+            }
+
         }
         for (ServerSideTransmitter viewer : viewers) {
-            viewer.writeRequest(container);
+            if(!viewer.isDisconnected())
+                viewer.writeRequest(container);
+            else
+                viewers.remove(viewer);
         }
     }
 

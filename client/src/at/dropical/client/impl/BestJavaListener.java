@@ -1,12 +1,12 @@
 package at.dropical.client.impl;
 
-import at.dropical.client.DropicalHandler;
+import at.dropical.client.DropicalListener;
 import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.container.GameOverContainer;
 import at.dropical.shared.net.container.ListDataContainer;
 
-public class BestJavaHandler implements DropicalHandler {
+public class BestJavaListener implements DropicalListener {
     @Override
     public void countDown(CountDownContainer container) {
         System.out.println("Starting");
