@@ -31,8 +31,8 @@ public class ObjectTransmitter extends ServerSideTransmitter {
         try {
             outputStream.writeObject(r);
         } catch (IOException e) {
+
             Server.LOGGER.log(Level.SEVERE,"Couldn't send Request " + r.getClass());
-            System.err.println("Couldn't send Request " + r.toString());
         }
     }
 

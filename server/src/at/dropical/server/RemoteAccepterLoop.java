@@ -40,7 +40,8 @@ public class RemoteAccepterLoop extends Thread{
                 new ServerSideRequestHandler(transi.readRequest(),transi);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Server.LOGGER.log(Level.SEVERE,"IOException, Socket probably disconnected");
+            return;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

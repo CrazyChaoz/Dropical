@@ -1,24 +1,19 @@
 package at.dropical.client.impl;
 
-import at.dropical.client.DropicalHandler;
 import at.dropical.client.DropicalProxy;
-import at.dropical.shared.GameState;
 import at.dropical.shared.PlayerAction;
-import at.dropical.shared.net.abstracts.Container;
-import at.dropical.shared.net.container.CountDownContainer;
-import at.dropical.shared.net.container.GameDataContainer;
-import at.dropical.shared.net.container.GameOverContainer;
-import at.dropical.shared.net.container.ListDataContainer;
 import at.dropical.shared.net.requests.*;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-public class BestJavaClient {
+public class TournamentClient {
     private Scanner scanner = new Scanner(System.in);
 
-    public BestJavaClient() throws IOException {
-        DropicalProxy proxy = new DropicalProxy("localhost", 45000, new BestJavaHandler());
+    public TournamentClient() throws IOException {
+        DropicalProxy proxy = new DropicalProxy("localhost", 45000, new BestJavaListener());
+
+
 
         String playername;
 
@@ -63,7 +58,7 @@ public class BestJavaClient {
     }
 
     public static void main(String[] args) throws IOException {
-        new BestJavaClient();
+        new TournamentClient();
     }
 
 }
