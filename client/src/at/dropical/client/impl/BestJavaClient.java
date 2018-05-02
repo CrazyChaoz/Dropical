@@ -15,7 +15,7 @@ public class BestJavaClient {
         String playername;
 
         System.out.println("Whats your name?");
-        playername=scanner.next();
+        playername=scanner.nextLine();
 
 
         int i=1;
