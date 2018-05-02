@@ -22,6 +22,7 @@ public class BestJavaClient {
         int i=1;
         while (i!=0){
             System.out.println("So, "+playername+", what do you want to do?");
+            System.out.println();
             System.out.println("[1]: list currently open games");
             System.out.println("[2]: create new game");
             System.out.println("[3]: join a game");
