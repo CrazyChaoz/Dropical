@@ -59,6 +59,7 @@ public class TournamentClient {
 
     public static void main(String[] args) throws IOException {
         new TournamentClient();
+
     }
 
 }

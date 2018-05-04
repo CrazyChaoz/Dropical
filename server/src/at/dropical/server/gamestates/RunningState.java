@@ -56,7 +56,7 @@ public class RunningState extends State {
                     player.moveRight();
                     break;
                 case UP:
-                    player.rotateRight();
+                    player.rotateLeft();
                     break;
                 case DOWN:
                     player.moveDown();

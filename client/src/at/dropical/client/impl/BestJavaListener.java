@@ -23,8 +23,8 @@ public class BestJavaListener implements DropicalListener {
         int i = 0;
         for (int[][] arenas : container.getArenas()) {
             System.out.println("### Arena von " + container.getPlayernames().get(i++) + " ###");
-            for (int[] arena : arenas) {
-                for (int cell : arena) {
+            for (int[] rows : arenas) {
+                for (int cell : rows) {
                     System.out.print(cell);
                 }
                 System.out.println();

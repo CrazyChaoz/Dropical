@@ -26,7 +26,7 @@ public final class DropicalProxy implements Runnable {
 //        else
         transmitter = new RemoteTransmitter(new Socket(host, port));
         this.dropicalListener = dropicalListener;
-        new Thread(this).start();
+        new Thread(this,"DropicalProxy").start();
     }
 
     public void writeToServer(Request request) {
@@ -57,7 +57,8 @@ public final class DropicalProxy implements Runnable {
                         break;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("IO Exception, Stream was closed");
+                return;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

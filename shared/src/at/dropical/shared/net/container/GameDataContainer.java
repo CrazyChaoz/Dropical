@@ -55,7 +55,7 @@ public class GameDataContainer extends Container {
         this.currTrockXs.add(X);
     }
     public void addCurrTrockY(Integer Y){
-        this.currTrockXs.add(Y);
+        this.currTrockYs.add(Y);
     }
     public void addPlayerName(String playerName){
         this.playernames.add(playerName);
