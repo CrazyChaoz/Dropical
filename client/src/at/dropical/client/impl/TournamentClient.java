@@ -10,15 +10,14 @@ import java.util.Scanner;
 public class TournamentClient {
     private Scanner scanner = new Scanner(System.in);
 
+
     public TournamentClient() throws IOException {
+        System.out.println("Whats your name?");
+        new TournamentClient(scanner.next());
+    }
+    public TournamentClient(String playername) throws IOException {
         DropicalProxy proxy = new DropicalProxy("localhost", 45000, new BestJavaListener());
 
-
-
-        String playername;
-
-        System.out.println("Whats your name?");
-        playername = scanner.next();
 
 
         int i = 1;

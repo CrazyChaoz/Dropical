@@ -2,15 +2,19 @@ package at.dropical.client.impl;
 
 import at.dropical.client.DropicalListener;
 import at.dropical.client.DropicalProxy;
+import at.dropical.shared.PlayerAction;
 import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.container.GameOverContainer;
 import at.dropical.shared.net.container.ListDataContainer;
+import at.dropical.shared.net.requests.HandleInputRequest;
 import at.dropical.shared.net.requests.JoinRequest;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,21 +27,48 @@ import java.io.IOException;
 public class testUI extends Application implements DropicalListener {
 
     private Stage stage;
+    private Scene scene;
+    private DropicalProxy proxy;
+    private String BESCHTER_PLAYERNAME="Kemps_JFX_GUI";
 
     public static void main(String[] args) {
         launch(args);
     }
 
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         stage = primaryStage;
+        scene=new Scene(new Label("New Game Starting"),32*10*2,32*20);
+        stage.setScene(scene);
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()){
+                case W:
+                    proxy.writeToServer(new HandleInputRequest(BESCHTER_PLAYERNAME,PlayerAction.UP));
+                    break;
+                case A:
+                    proxy.writeToServer(new HandleInputRequest(BESCHTER_PLAYERNAME,PlayerAction.LEFT));
+                    break;
+                case S:
+                    proxy.writeToServer(new HandleInputRequest(BESCHTER_PLAYERNAME,PlayerAction.DOWN));
+                    break;
+                case D:
+                    proxy.writeToServer(new HandleInputRequest(BESCHTER_PLAYERNAME,PlayerAction.RIGHT));
+                    break;
+                case SPACE:
+                    proxy.writeToServer(new HandleInputRequest(BESCHTER_PLAYERNAME,PlayerAction.DROP));
+                    break;
+                case P:
+                    proxy.writeToServer(new HandleInputRequest(BESCHTER_PLAYERNAME,PlayerAction.PAUSE));
+                    break;
+            }
+        });
+        stage.show();
 
+        proxy = new DropicalProxy("localhost", 45000, this);
 
-
-        DropicalProxy proxy = new DropicalProxy("localhost", 45000, this);
-
-        proxy.writeToServer(new JoinRequest("KempsUI"));
+        System.out.println("to server");
+        proxy.writeToServer(new JoinRequest(BESCHTER_PLAYERNAME));
 
     }
 
@@ -49,10 +80,9 @@ public class testUI extends Application implements DropicalListener {
                 root.getChildren().add(new Label("Name: "+s));
             }
             root.getChildren().add(new Label("Time till start: "+container.getSeconds()));
-            Scene scene = new Scene(root,60,60);
 
-            stage.setScene(scene);
-            stage.show();
+            root.setPrefSize(200,100);
+            scene.setRoot(root);
         });
     }
 
@@ -82,11 +112,8 @@ public class testUI extends Application implements DropicalListener {
                         right.add(new Label("" + container.getCurrTrocks().get(1)[y][x]), container.getCurrTrockXs().get(1) + x, container.getCurrTrockYs().get(1) + y);
                 }
             }
-
-            Scene scene = new Scene(root);
-
-            stage.setScene(scene);
-            stage.show();
+            root.setMinSize(32*10*20,32*20);
+            scene.setRoot(root);
         });
     }
 
@@ -97,10 +124,8 @@ public class testUI extends Application implements DropicalListener {
             for (String s : container.getNames()) {
                 root.getChildren().add(new Label("Name: "+s));
             }
-            Scene scene = new Scene(root,60,60);
-
-            stage.setScene(scene);
-            stage.show();
+            root.setPrefSize(200,100);
+            scene.setRoot(root);
         });
     }
 
@@ -114,10 +139,8 @@ public class testUI extends Application implements DropicalListener {
                 else
                     root.getChildren().add(new Label("Looser: "+container.getPlayernames()[i]));
             }
-            Scene scene = new Scene(root,60,60);
-
-            stage.setScene(scene);
-            stage.show();
+            root.setPrefSize(100,100);
+            scene.setRoot(root);
         });
     }
 }
