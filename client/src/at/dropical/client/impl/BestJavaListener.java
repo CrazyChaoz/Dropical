@@ -37,7 +37,7 @@ public class BestJavaListener implements DropicalListener {
     @Override
     public void somebodyJoinedTheLobby(ListDataContainer container) {
         System.out.println("Lobby");
-        for (String s :  container.getGameNames()) {
+        for (String s :  container.getNames()) {
             System.out.println("Players: "+s);
         }
     }

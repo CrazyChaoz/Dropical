@@ -74,7 +74,7 @@ public class RunningState extends State {
                     break; //TODO
             }
         }catch (GameOverException goe){
-
+            game.setCurrentGameState(new GameOverState(game,goe.getLooserName()));
         }
     }
 }

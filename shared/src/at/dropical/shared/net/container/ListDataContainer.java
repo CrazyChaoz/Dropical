@@ -17,7 +17,7 @@ public class ListDataContainer extends Container {
     public void addName(String name){
         listNames.add(name);
     }
-    public List<String> getGameNames() {
+    public List<String> getNames() {
         return listNames;
     }
 

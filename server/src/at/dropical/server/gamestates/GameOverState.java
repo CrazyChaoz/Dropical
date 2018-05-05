@@ -11,6 +11,7 @@ public class GameOverState extends State {
 
     public GameOverState(Game game) {
         super(game);
+        game.interrupt();
     }
 
     public GameOverState(Game game,String looser) {

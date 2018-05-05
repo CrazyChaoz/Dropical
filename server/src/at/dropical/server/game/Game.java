@@ -1,6 +1,7 @@
 package at.dropical.server.game;
 
 import at.dropical.server.Server;
+import at.dropical.server.gamestates.GameOverState;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.transmitter.ServerSideTransmitter;
@@ -122,6 +123,7 @@ public class Game extends Thread{
                         doUpdate = true;
                     }
                 } catch (GameOverException e) {
+                    setCurrentGameState(new GameOverState(this,e.getLooserName()));
                     Server.LOGGER.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
                 }
             }
@@ -131,5 +133,6 @@ public class Game extends Thread{
                 Thread.sleep(10);
             } catch (InterruptedException e) {}
         }
+        updateClients();
     }
 }

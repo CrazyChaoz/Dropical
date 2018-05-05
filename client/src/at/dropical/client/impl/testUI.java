@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -33,6 +34,7 @@ public class testUI extends Application implements DropicalListener {
         stage = primaryStage;
 
 
+
         DropicalProxy proxy = new DropicalProxy("localhost", 45000, this);
 
         proxy.writeToServer(new JoinRequest("KempsUI"));
@@ -41,8 +43,17 @@ public class testUI extends Application implements DropicalListener {
 
     @Override
     public void countDown(CountDownContainer container) {
+        Platform.runLater(()->{
+            VBox root = new VBox();
+            for (String s : container.getPlayernames()) {
+                root.getChildren().add(new Label("Name: "+s));
+            }
+            root.getChildren().add(new Label("Time till start: "+container.getSeconds()));
+            Scene scene = new Scene(root,60,60);
 
-
+            stage.setScene(scene);
+            stage.show();
+        });
     }
 
     @Override
@@ -81,11 +92,32 @@ public class testUI extends Application implements DropicalListener {
 
     @Override
     public void somebodyJoinedTheLobby(ListDataContainer container) {
+        Platform.runLater(()->{
+            VBox root = new VBox();
+            for (String s : container.getNames()) {
+                root.getChildren().add(new Label("Name: "+s));
+            }
+            Scene scene = new Scene(root,60,60);
 
+            stage.setScene(scene);
+            stage.show();
+        });
     }
 
     @Override
     public void onGameOver(GameOverContainer container) {
+        Platform.runLater(()->{
+            VBox root = new VBox();
+            for (int i = 0; i < container.getPlayernames().length; i++) {
+                if(container.getWinnerNumber()==i)
+                    root.getChildren().add(new Label("Winner: "+container.getPlayernames()[i]));
+                else
+                    root.getChildren().add(new Label("Looser: "+container.getPlayernames()[i]));
+            }
+            Scene scene = new Scene(root,60,60);
 
+            stage.setScene(scene);
+            stage.show();
+        });
     }
 }

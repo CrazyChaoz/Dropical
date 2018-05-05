@@ -319,15 +319,118 @@ class Position implements Comparable<Position> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(weight, x, y);
     }
 
     @Override
     public int compareTo(@NotNull Position o) {
-        return o.getWeight() - this.getWeight();
+        return o.getWeight() != this.getWeight()?
+                o.getWeight() - this.getWeight():o.getY()!=this.getY()?
+                o.getY()-this.getY():o.getX()-this.getX();
     }
 }
+
+
+
+
+class ColCalcNoThreaded {
+
+    private int[][] arena;
+    private int[][] currTrock;
+    private int currY;
+
+
+    public ColCalcNoThreaded(int[][] arena, int[][] currTrock, int currY) {
+        this.arena = arena;
+        this.currTrock = currTrock;
+        this.currY = currY;
+
+        for (int currX = 0; currX < 10; currX++) {
+            if (tryCalc(currX)) {
+                Kemps_TestAI.instance.possiblePosition.add(new Position(currTrock, currY, currX, calculateWeight(currX)));
+            }
+        }
+    }
+
+
+    public boolean tryCalc(int currX) {
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                if (currTrock[y][x] != 0) {
+                    if (currX + x >= 10 || currY + y >= 20) {
+                        //this branch has failed
+                        return false;
+                    }
+                    if (arena[currY + y][currX + x] != 0)
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public int calculateWeight(int currX) {
+        int weight = currY;
+
+        weight += calculateSurroundingBlocks(currX);
+//        weight += calculateEmptyBlocksBeneith()/10;
+
+        return weight;
+    }
+
+    public int calculateSurroundingBlocks(int currX) {
+        int weight = 0;
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                if (currTrock[y][x] != 0) {
+                    //lookup every surrounding block
+
+                    if (currX + x - 1 >= 0) {
+                        if (arena[currY + y][currX + x - 1] != 0)       //a block in the arena is to the left
+                            weight += 2;
+                    } else {
+                        weight += 3;                                    //border left
+                    }
+
+                    if (currX + x + 1 < 10) {
+                        if (arena[currY + y][currX + x + 1] != 0)       //a block in the arena is to the right
+                            weight += 2;
+                    } else {
+                        weight += 3;                                    //border right
+                    }
+
+                    if (currY + y - 1 >= 0)
+                        if (arena[currY + y - 1][currX + x] != 0)       //a block in the arena is on top
+                            weight += 30;
+
+
+                    if (currY + y + 1 < 20) {
+                        if (arena[currY + y + 1][currX + x] != 0)       //a block in the arena is underneath
+                            weight += 1;
+                    } else {
+                        weight += 10;                                    //border bottom
+                    }
+
+                }
+            }
+        }
+        return weight;
+    }
+
+    public int calculateEmptyBlocksBeneith() {
+        int weight = 0;
+        for (int y = currY + 4; y < 20; y++) {
+            for (int x = 0; x < 10; x++) {
+                if (arena[y][x] == 0)
+                    weight -= 1;
+            }
+        }
+
+        return weight;
+    }
+}
+
 
 
 //class ColumnCalculator implements Runnable {
@@ -411,101 +514,3 @@ class Position implements Comparable<Position> {
 //        return weight;
 //    }
 //}
-
-class ColCalcNoThreaded {
-
-    private int[][] arena;
-    private int[][] currTrock;
-    private int currY;
-
-
-    public ColCalcNoThreaded(int[][] arena, int[][] currTrock, int currY) {
-        this.arena = arena;
-        this.currTrock = currTrock;
-        this.currY = currY;
-
-        for (int currX = 0; currX < 10; currX++) {
-            if (tryCalc(currX)) {
-                Kemps_TestAI.instance.possiblePosition.add(new Position(currTrock, currY, currX, calculateWeight(currX)));
-            }
-        }
-    }
-
-
-    public boolean tryCalc(int currX) {
-        for (int x = 0; x < 4; x++) {
-            for (int y = 0; y < 4; y++) {
-                if (currTrock[y][x] != 0) {
-                    if (currX + x >= 10 || currY + y >= 20) {
-                        //this branch has failed
-                        return false;
-                    }
-                    if (arena[currY + y][currX + x] != 0)
-                        return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public int calculateWeight(int currX) {
-        int weight = 0;//currY;
-
-        weight += calculateSurroundingBlocks(currX);
-//        weight += calculateEmptyBlocksBeneith();
-
-        return weight;
-    }
-
-    public int calculateSurroundingBlocks(int currX) {
-        int weight = 0;
-
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 4; x++) {
-                if (currTrock[y][x] != 0) {
-                    //lookup every surrounding block
-
-                    if (currX + x - 1 >= 0) {
-                        if (arena[currY + y][currX + x - 1] != 0)       //a block in the arena is to the left
-                            weight += 2;
-                    } else {
-                        weight += 2;                                    //border left
-                    }
-
-                    if (currX + x + 1 < 10) {
-                        if (arena[currY + y][currX + x + 1] != 0)       //a block in the arena is to the right
-                            weight += 2;
-                    } else {
-                        weight += 2;                                    //border right
-                    }
-
-                    if (currY + y - 1 >= 0)
-                        if (arena[currY + y - 1][currX + x] != 0)       //a block in the arena is on top
-                            weight += 30;
-
-
-                    if (currY + y + 1 < 20) {
-                        if (arena[currY + y + 1][currX + x] != 0)       //a block in the arena is underneath
-                            weight += 1;
-                    } else {
-                        weight += 10;                                    //border bottom
-                    }
-
-                }
-            }
-        }
-        return weight;
-    }
-
-    public int calculateEmptyBlocksBeneith() {
-        int weight = 0;
-        for (int y = currY + 4; y < 20; y++) {
-            for (int x = 0; x < 10; x++) {
-                if (arena[y][x] == 0)
-                    weight -= 1;
-            }
-        }
-
-        return weight;
-    }
-}

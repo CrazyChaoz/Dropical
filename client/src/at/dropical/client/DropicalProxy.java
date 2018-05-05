@@ -26,7 +26,7 @@ public final class DropicalProxy implements Runnable {
 //        else
         transmitter = new RemoteTransmitter(new Socket(host, port));
         this.dropicalListener = dropicalListener;
-        new Thread(this,"DropicalProxy").start();
+        new Thread(this, "DropicalProxy").start();
     }
 
     public void writeToServer(Request request) {
@@ -37,25 +37,27 @@ public final class DropicalProxy implements Runnable {
     public void run() {
         for (; ; ) {
             try {
-                Container container=(Container) transmitter.readRequest();
+                Container container = (Container) transmitter.readRequest();
 
-                switch (container.getCurrentState()){
-                    case STARTING:
-                        dropicalListener.countDown((CountDownContainer) container);
-                        break;
-                    case LOBBY:
-                        dropicalListener.somebodyJoinedTheLobby((ListDataContainer) container);
-                        break;
-                    case RUNNING:
-                    case PAUSE:
-                        dropicalListener.updateUI((GameDataContainer) container);
-                        break;
-                    case GAME_LOST:
-                    case GAME_WON:
-                    case GAME_OVER:
-                        dropicalListener.onGameOver((GameOverContainer) container);
-                        break;
-                }
+                if (container != null)
+                    if (container.getCurrentState() != null)
+                        switch (container.getCurrentState()) {
+                            case STARTING:
+                                dropicalListener.countDown((CountDownContainer) container);
+                                break;
+                            case LOBBY:
+                                dropicalListener.somebodyJoinedTheLobby((ListDataContainer) container);
+                                break;
+                            case RUNNING:
+                            case PAUSE:
+                                dropicalListener.updateUI((GameDataContainer) container);
+                                break;
+                            case GAME_LOST:
+                            case GAME_WON:
+                            case GAME_OVER:
+                                dropicalListener.onGameOver((GameOverContainer) container);
+                                break;
+                        }
             } catch (IOException e) {
                 System.err.println("IO Exception, Stream was closed");
                 return;
