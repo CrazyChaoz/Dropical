@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class Server {
@@ -48,6 +50,8 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     
     //
     private static final boolean isTounamentServer=true;
+
+    private static ExecutorService executorService=Executors.newCachedThreadPool();
 
 //  Constructor
 

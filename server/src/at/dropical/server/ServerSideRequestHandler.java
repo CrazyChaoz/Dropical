@@ -24,7 +24,6 @@ public class ServerSideRequestHandler implements RequestHandler {
         LOGGER.log(Level.INFO, "New Request to Handle");
         this.request = request;
         this.transmitter = transmitter;
-        new Thread(this).start();
     }
 
     @Override

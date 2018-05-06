@@ -8,42 +8,57 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
-public class RemoteAccepterLoop extends Thread{
-    private static ServerSocket serverSocket;
+public class RemoteAccepterLoop extends Thread {
+    private ServerSocket serverSocket;
+    private ExecutorService executorService = Executors.newCachedThreadPool();
 
 
     public RemoteAccepterLoop(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-
-        //"Ends" Serving when a "null" Socket was received
-        if(serverSocket!=null)
-            this.start();
+        this.start();
     }
 
     @Override
     public void run() {
-        try(Socket clientConnection=serverSocket.accept();
-            InputStream inputStream=clientConnection.getInputStream();
-            OutputStream outputStream=clientConnection.getOutputStream()){
-
-            //create new open connection on creation of a new open connection
-            new RemoteAccepterLoop(serverSocket);
-
-            //add new connection to Server
-            ObjectTransmitter transi=new ObjectTransmitter(inputStream,outputStream);
-
-            //Error if not in loop
-            for(;;){
-                Server.LOGGER.log(Level.INFO,"Request Received");
-                new ServerSideRequestHandler(transi.readRequest(),transi);
+        for (; ; ) {
+            try {
+                executorService.execute(new InternalAccepter(serverSocket.accept()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            Server.LOGGER.log(Level.SEVERE,"IOException, Socket probably disconnected");
-            return;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        }
+    }
+
+    private class InternalAccepter implements Runnable {
+        private Socket socket;
+
+        public InternalAccepter(Socket socket) {
+            this.socket=socket;
+        }
+
+        @Override
+        public void run() {
+            try (InputStream inputStream = socket.getInputStream();
+                 OutputStream outputStream = socket.getOutputStream()) {
+
+                //add new connection to Server
+                ObjectTransmitter transi = new ObjectTransmitter(inputStream, outputStream);
+
+                //Error if not in loop
+                for (; ; ) {
+                    Server.LOGGER.log(Level.INFO, "Request Received");
+                    executorService.execute(new ServerSideRequestHandler(transi.readRequest(), transi));
+                }
+            } catch (IOException e) {
+                Server.LOGGER.log(Level.SEVERE, "IOException, Socket probably disconnected");
+                return;
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
