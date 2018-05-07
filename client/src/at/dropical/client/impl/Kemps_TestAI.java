@@ -75,7 +75,6 @@ public class Kemps_TestAI implements DropicalListener {
         currTrock = container.getCurrTrocks().get(myNum);
 
 
-
         try {
             instance.doCalc(container);
         } catch (InterruptedException e) {
@@ -129,7 +128,7 @@ class CalcThread extends Thread {
 
     public CalcThread(GameDataContainer container) {
         this.container = container;
-    this.start();
+        this.start();
     }
 
     @Override
@@ -137,10 +136,6 @@ class CalcThread extends Thread {
         if (!Kemps_TestAI.instance.lock.tryLock())
             return;
 
-//        //fixes slow calc problem
-//        currX = container.getCurrTrockXs().get(myNum);
-//        currY = container.getCurrTrockYs().get(myNum);
-//        currTrock = container.getCurrTrocks().get(myNum);
 
         Kemps_TestAI.instance.possiblePosition.clear();
 
@@ -150,7 +145,6 @@ class CalcThread extends Thread {
             new ColCalcNoThreaded(container.getArenas().get(Kemps_TestAI.instance.myNum), Kemps_TestAI.instance.rotateByNinetyToLeft(container.getCurrTrocks().get(Kemps_TestAI.instance.myNum)), y);
             new ColCalcNoThreaded(container.getArenas().get(Kemps_TestAI.instance.myNum), Kemps_TestAI.instance.rotateByNinetyToLeft(Kemps_TestAI.instance.rotateByNinetyToLeft(container.getCurrTrocks().get(Kemps_TestAI.instance.myNum))), y);
             new ColCalcNoThreaded(container.getArenas().get(Kemps_TestAI.instance.myNum), Kemps_TestAI.instance.rotateByNinetyToLeft(Kemps_TestAI.instance.rotateByNinetyToLeft(Kemps_TestAI.instance.rotateByNinetyToLeft(container.getCurrTrocks().get(Kemps_TestAI.instance.myNum)))), y);
-//            threadies.execute(new ColumnCalculator(container.getArenas().get(myNum), container.getCurrTrocks().get(myNum), y));
         }
 
 //        threadies.awaitTermination(60, TimeUnit.SECONDS);
@@ -177,7 +171,7 @@ class CalcThread extends Thread {
             System.out.println("Move: " + playerAction.name());
             Kemps_TestAI.instance.proxy.writeToServer(new HandleInputRequest(Kemps_TestAI.instance.myName, playerAction));
         }
-        //proxy.writeToServer(new HandleInputRequest(myName, PlayerAction.DOWN));
+        Kemps_TestAI.instance.proxy.writeToServer(new HandleInputRequest(Kemps_TestAI.instance.myName, PlayerAction.DOWN));
 
 //        Thread.sleep(500);
 
@@ -324,13 +318,11 @@ class Position implements Comparable<Position> {
 
     @Override
     public int compareTo(@NotNull Position o) {
-        return o.getWeight() != this.getWeight()?
-                o.getWeight() - this.getWeight():o.getY()!=this.getY()?
-                o.getY()-this.getY():o.getX()-this.getX();
+        return o.getWeight() != this.getWeight() ?
+                o.getWeight() - this.getWeight() : o.getY() != this.getY() ?
+                o.getY() - this.getY() : o.getX() - this.getX();
     }
 }
-
-
 
 
 class ColCalcNoThreaded {
@@ -430,7 +422,6 @@ class ColCalcNoThreaded {
         return weight;
     }
 }
-
 
 
 //class ColumnCalculator implements Runnable {

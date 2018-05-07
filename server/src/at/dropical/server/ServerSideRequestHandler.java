@@ -21,27 +21,36 @@ public class ServerSideRequestHandler implements RequestHandler {
     private ServerSideTransmitter transmitter;
 
     public ServerSideRequestHandler(Request request, ServerSideTransmitter transmitter) {
-        LOGGER.log(Level.INFO, "New Request to Handle");
         this.request = request;
         this.transmitter = transmitter;
     }
 
     @Override
     public void run() {
-        if (request instanceof CreateGameRequest) {
-            handleCreateGameRequest((CreateGameRequest) request);
-        } else if (request instanceof ListGamesRequest) {
-            handleListGamesRequest();
-        } else if (request instanceof JoinRequest) {
-            handleJoinRequest((JoinRequest) request);
-        } else if (request instanceof AddAiToGameRequest) {
-            handleAddAiToGameRequest((AddAiToGameRequest) request);
-        } else if (request instanceof HandleInputRequest) {
-            handleInputDataContainer((HandleInputRequest) request);
-        } else if (request instanceof StartGameRequest) {
-            handleStartGameRequest((StartGameRequest) request);
-        } else if (request instanceof ListPlayersRequest) {
-            handleListPlayersRequest();
+        switch (request.getRequestKind()) {
+            case JOIN:
+                handleJoinRequest((JoinRequest) request);
+                break;
+            case ADD_AI:
+                handleAddAiToGameRequest((AddAiToGameRequest) request);
+                break;
+            case LIST_GAMES:
+                handleListGamesRequest();
+                break;
+            case START_GAME:
+                handleStartGameRequest((StartGameRequest) request);
+                break;
+            case CREATE_GAME:
+                handleCreateGameRequest((CreateGameRequest) request);
+                break;
+            case HANDLE_INPUT:
+                handleHandleInputRequest((HandleInputRequest) request);
+                break;
+            case LIST_PLAYERS:
+                handleListPlayersRequest();
+                break;
+            default:
+                LOGGER.warning("Incorrect RequestKind recieved");
         }
     }
 
@@ -75,7 +84,7 @@ public class ServerSideRequestHandler implements RequestHandler {
                 }
             //if all else fails
             //create game yourself and join that game
-            String gamename = "autoGen_"+request.getPlayerName() + "_game";
+            String gamename = "autoGen_" + request.getPlayerName() + "_game";
             handleCreateGameRequest(new CreateGameRequest(gamename));
             handleJoinRequest(new JoinRequest(gamename, request.getPlayerName()));
         }
@@ -108,7 +117,7 @@ public class ServerSideRequestHandler implements RequestHandler {
 //        }
     }
 
-    private void handleInputDataContainer(HandleInputRequest request) {
+    private void handleHandleInputRequest(HandleInputRequest request) {
         LOGGER.log(Level.INFO, "Request to Handle is a InputDataContainer");
         if (transmitter.getPlayingGame() != null) {
             transmitter.getPlayingGame().handleInput(request);

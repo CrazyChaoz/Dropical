@@ -1,6 +1,6 @@
 package at.dropical.client.transmitter;
 
-import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.SendableItem;
 import at.dropical.shared.net.abstracts.Transmitter;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class RemoteTransmitter implements Transmitter {
     }
 
     @Override
-    public void writeRequest(Request r) {
+    public void writeRequest(SendableItem r) {
         try {
             outputStream.writeObject(r);
         } catch (IOException e) {
@@ -30,9 +30,9 @@ public class RemoteTransmitter implements Transmitter {
     }
 
     @Override
-    public Request readRequest() throws IOException {
+    public SendableItem readRequest() throws IOException {
         try {
-            return (Request) inputStream.readObject();
+            return (SendableItem) inputStream.readObject();
         }catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -3,7 +3,11 @@ package at.dropical.server.gamestates;
 import at.dropical.server.game.Game;
 import at.dropical.server.game.OnePlayer;
 import at.dropical.shared.net.abstracts.Container;
+import at.dropical.shared.net.container.CountDownContainer;
+import at.dropical.shared.net.container.GameOverContainer;
 import at.dropical.shared.net.requests.HandleInputRequest;
+
+import java.util.Map;
 
 public class GameOverState extends State {
 
@@ -21,7 +25,11 @@ public class GameOverState extends State {
 
     @Override
     public Container getContainer() {
-        return null;
+        GameOverContainer container=new GameOverContainer(looser);
+        for (Map.Entry<String,OnePlayer> onePlayer : game.getGames().entrySet()) {
+            container.addPlayerName(onePlayer.getValue().getPlayername());
+        }
+        return container;
     }
 
     @Override

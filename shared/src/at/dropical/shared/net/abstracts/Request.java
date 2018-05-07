@@ -1,6 +1,15 @@
 package at.dropical.shared.net.abstracts;
 
-import java.io.Serializable;
+import at.dropical.shared.RequestKind;
 
-public interface Request extends Serializable {
+public abstract class Request implements SendableItem {
+    private RequestKind requestKind;
+
+    public Request(RequestKind requestKind) {
+        this.requestKind = requestKind;
+    }
+
+    public RequestKind getRequestKind() {
+        return requestKind;
+    }
 }

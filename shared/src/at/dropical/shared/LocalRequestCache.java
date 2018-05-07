@@ -1,6 +1,6 @@
 package at.dropical.shared;
 
-import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.SendableItem;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -12,24 +12,24 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class LocalRequestCache {
-    private Queue<Request> toServerCachedRequest=new ConcurrentLinkedQueue<>();
-    private Queue<Request> toClientCachedRequest=new ConcurrentLinkedQueue<>();
+    private Queue<SendableItem> toServerCachedRequest=new ConcurrentLinkedQueue<>();
+    private Queue<SendableItem> toClientCachedRequest=new ConcurrentLinkedQueue<>();
 
-    public Request getToServer() {
+    public SendableItem getToServer() {
         while (toServerCachedRequest.isEmpty());
         return toServerCachedRequest.poll();
     }
 
-    public void writeToServer(Request toServerCachedRequest) {
+    public void writeToServer(SendableItem toServerCachedRequest) {
         this.toServerCachedRequest.offer(toServerCachedRequest);
     }
 
-    public Request getToClient() {
+    public SendableItem getToClient() {
         while (toClientCachedRequest.isEmpty());
         return toClientCachedRequest.poll();
     }
 
-    public void writeToClient(Request fromServerCachedRequest) {
+    public void writeToClient(SendableItem fromServerCachedRequest) {
         this.toClientCachedRequest.offer(fromServerCachedRequest);
     }
 }

@@ -2,7 +2,7 @@ package at.dropical.client;
 
 import at.dropical.client.transmitter.RemoteTransmitter;
 import at.dropical.shared.net.abstracts.Container;
-import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.SendableItem;
 import at.dropical.shared.net.abstracts.Transmitter;
 import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.container.GameDataContainer;
@@ -30,7 +30,7 @@ public final class DropicalProxy implements Runnable {
         new Thread(this, "DropicalProxy").start();
     }
 
-    public void writeToServer(Request request) {
+    public void writeToServer(SendableItem request) {
         transmitter.writeRequest(request);
     }
 

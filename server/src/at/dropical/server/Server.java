@@ -51,7 +51,7 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     //
     private static final boolean isTounamentServer=true;
 
-    private static ExecutorService executorService=Executors.newCachedThreadPool();
+    public static ExecutorService serverExecutor=Executors.newCachedThreadPool();
 
 //  Constructor
 
@@ -84,6 +84,10 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     public void addLocalClient(LocalRequestCache requestCache) {
         LocalServerTransmitter localServerTransmitter=new LocalServerTransmitter(requestCache);
-        new LocalAccepterLoop(localServerTransmitter);
+        serverExecutor.execute(()->{
+            try {
+                new Loop(localServerTransmitter);
+            } catch (IOException|ClassNotFoundException e) {}
+        });
     }
 }

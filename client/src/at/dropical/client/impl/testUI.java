@@ -66,8 +66,6 @@ public class testUI extends Application implements DropicalListener {
         stage.show();
 
         proxy = new DropicalProxy("localhost", 45000, this);
-
-        System.out.println("to server");
         proxy.writeToServer(new JoinRequest(BESCHTER_PLAYERNAME));
 
     }
@@ -133,12 +131,14 @@ public class testUI extends Application implements DropicalListener {
     public void onGameOver(GameOverContainer container) {
         Platform.runLater(()->{
             VBox root = new VBox();
-            for (int i = 0; i < container.getPlayernames().length; i++) {
-                if(container.getWinnerNumber()==i)
-                    root.getChildren().add(new Label("Winner: "+container.getPlayernames()[i]));
-                else
-                    root.getChildren().add(new Label("Looser: "+container.getPlayernames()[i]));
-            }
+                    for (String s : container.getPlayernames()) {
+                        if(!container.getLooser().equals(s))
+                            root.getChildren().add(new Label("Winner: "+s));
+                        else
+                            root.getChildren().add(new Label("Looser: "+s));
+                    }
+
+
             root.setPrefSize(100,100);
             scene.setRoot(root);
         });

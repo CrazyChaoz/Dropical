@@ -40,7 +40,7 @@ public class Perpetuum_CRASHile {
 
     public static void main(String[] args) throws IOException {
         for (int i = 0; i < 50; i++) {
-            new Perpetuum_CRASHile("Crasher: "+i,10);
+            new Perpetuum_CRASHile("Crasher: "+i,1);
         }
     }
 }

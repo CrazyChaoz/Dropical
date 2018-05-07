@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 public class Game extends Thread{
@@ -31,6 +32,9 @@ public class Game extends Thread{
     //maximum number of players
     private int maxPlayers;
 
+
+    //Lock
+    private ReentrantLock safetyLock=new ReentrantLock();
 
     //Classic
     public Game() {
@@ -58,19 +62,26 @@ public class Game extends Thread{
      * @return -1 if no players can be added
      */
     public void addPlayer(String playerName, ServerSideTransmitter transmitter) {
+        safetyLock.lock();
+
         if (maxPlayers>games.size()) {
             Server.LOGGER.log(Level.INFO,"Player "+playerName+" added");
             players.add(transmitter);
             games.put(playerName,new OnePlayer(playerName));
-            updateClients();
         }
 
         if (games.size()==maxPlayers)
             this.setCurrentGameState(new StartingState(this));
+
+        safetyLock.unlock();
+
+        updateClients();
     }
 
     public void addViewer(ServerSideTransmitter transmitter) {
+        safetyLock.lock();
         viewers.add(transmitter);
+        safetyLock.unlock();
     }
 
     public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
@@ -94,6 +105,8 @@ public class Game extends Thread{
     public void updateClients() {
         Container container = currentGameState.getContainer();
 
+        if(!safetyLock.tryLock())
+            return;
         for (ServerSideTransmitter player : players) {
             if(!player.isDisconnected())
                 player.writeRequest(container);
@@ -109,6 +122,7 @@ public class Game extends Thread{
             else
                 viewers.remove(viewer);
         }
+        safetyLock.unlock();
     }
 
     @Override

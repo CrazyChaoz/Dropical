@@ -1,7 +1,7 @@
 package at.dropical.server.transmitter;
 
 import at.dropical.server.Server;
-import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.SendableItem;
 
 import java.io.*;
 import java.util.logging.Level;
@@ -22,17 +22,17 @@ public class ObjectTransmitter extends ServerSideTransmitter {
     }
 
     @Override
-    public Request readRequest() throws IOException, ClassNotFoundException {
-        return (Request) inputStream.readObject();
+    public SendableItem readRequest() throws IOException, ClassNotFoundException {
+        return (SendableItem) inputStream.readObject();
     }
 
     @Override
-    public void writeRequest(Request r) {
+    public void writeRequest(SendableItem r) {
         try {
             outputStream.writeObject(r);
         } catch (IOException e) {
 
-            Server.LOGGER.log(Level.SEVERE,"Couldn't send Request " + r.getClass());
+            Server.LOGGER.log(Level.SEVERE,"Couldn't send SendableItem " + r.getClass());
         }
     }
 

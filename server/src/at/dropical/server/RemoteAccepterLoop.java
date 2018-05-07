@@ -2,6 +2,7 @@ package at.dropical.server;
 
 
 import at.dropical.server.transmitter.ObjectTransmitter;
+import at.dropical.shared.net.abstracts.Request;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +15,6 @@ import java.util.logging.Level;
 
 public class RemoteAccepterLoop extends Thread {
     private ServerSocket serverSocket;
-    private ExecutorService executorService = Executors.newCachedThreadPool();
 
 
     public RemoteAccepterLoop(ServerSocket serverSocket) {
@@ -26,7 +26,7 @@ public class RemoteAccepterLoop extends Thread {
     public void run() {
         for (; ; ) {
             try {
-                executorService.execute(new InternalAccepter(serverSocket.accept()));
+                Server.serverExecutor.execute(new InternalAccepter(serverSocket.accept()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -37,7 +37,7 @@ public class RemoteAccepterLoop extends Thread {
         private Socket socket;
 
         public InternalAccepter(Socket socket) {
-            this.socket=socket;
+            this.socket = socket;
         }
 
         @Override
@@ -45,19 +45,14 @@ public class RemoteAccepterLoop extends Thread {
             try (InputStream inputStream = socket.getInputStream();
                  OutputStream outputStream = socket.getOutputStream()) {
 
-                //add new connection to Server
-                ObjectTransmitter transi = new ObjectTransmitter(inputStream, outputStream);
+                new Loop(new ObjectTransmitter(inputStream, outputStream));
 
-                //Error if not in loop
-                for (; ; ) {
-                    Server.LOGGER.log(Level.INFO, "Request Received");
-                    executorService.execute(new ServerSideRequestHandler(transi.readRequest(), transi));
-                }
             } catch (IOException e) {
                 Server.LOGGER.log(Level.SEVERE, "IOException, Socket probably disconnected");
-                return;
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                Server.LOGGER.log(Level.SEVERE, "ClassNotFoundException ..... Faulty Client!");
+            } catch (ClassCastException e) {
+                Server.LOGGER.log(Level.SEVERE, "ClassCastException -- class received is not a subclass of Request");
             }
         }
     }

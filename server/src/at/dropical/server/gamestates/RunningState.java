@@ -20,7 +20,10 @@ public class RunningState extends State {
     public RunningState(Game game) {
         super(game);
 
-        game.start();
+        try {
+            game.start();
+        }catch (IllegalThreadStateException ignored){
+        }
     }
 
 
