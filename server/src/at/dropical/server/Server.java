@@ -80,6 +80,11 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 //  Setter
 
+    public void deleteGame(String gameID) {
+        this.games.remove(gameID);
+    }
+
+
 //  Methods
 
     public void addLocalClient(LocalRequestCache requestCache) {

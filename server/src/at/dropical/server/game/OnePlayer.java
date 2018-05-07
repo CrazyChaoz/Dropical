@@ -150,8 +150,10 @@ public class OnePlayer {
 
 
     public boolean update() throws GameOverException {
-        ticks++;
-        if(ticks%((100-level*level*level))==0){
+        ticks+=2;
+        if(ticks%((100-level*level*level)*2)==(ticks/2))
+            return true;
+        else if(ticks%((100-level*level*level)*2)==0){
             ticks=0;
             moveDown();
             return true;

@@ -125,6 +125,7 @@ public class Kemps_TestAI implements DropicalListener {
 class CalcThread extends Thread {
     private List<PlayerAction> movelist = new ArrayList<>();
     private GameDataContainer container;
+    private int currY;
 
     public CalcThread(GameDataContainer container) {
         this.container = container;
@@ -135,6 +136,10 @@ class CalcThread extends Thread {
     public void run() {
         if (!Kemps_TestAI.instance.lock.tryLock())
             return;
+
+
+        currY=container.getCurrTrockYs().get(Kemps_TestAI.instance.myNum);
+
 
 
         Kemps_TestAI.instance.possiblePosition.clear();
@@ -168,10 +173,16 @@ class CalcThread extends Thread {
 
         System.out.println("sending to server");
         for (PlayerAction playerAction : movelist) {
+
+//            if(currY>Kemps_TestAI.instance.currY){
+//                currY--;
+//                continue;
+//            }
+
             System.out.println("Move: " + playerAction.name());
             Kemps_TestAI.instance.proxy.writeToServer(new HandleInputRequest(Kemps_TestAI.instance.myName, playerAction));
         }
-        Kemps_TestAI.instance.proxy.writeToServer(new HandleInputRequest(Kemps_TestAI.instance.myName, PlayerAction.DOWN));
+//        Kemps_TestAI.instance.proxy.writeToServer(new HandleInputRequest(Kemps_TestAI.instance.myName, PlayerAction.DOWN));
 
 //        Thread.sleep(500);
 
@@ -362,7 +373,7 @@ class ColCalcNoThreaded {
     }
 
     public int calculateWeight(int currX) {
-        int weight = currY;
+        int weight = calculatePositionBasedWeight()/10;
 
         weight += calculateSurroundingBlocks(currX);
 //        weight += calculateEmptyBlocksBeneith()/10;
@@ -410,6 +421,14 @@ class ColCalcNoThreaded {
         return weight;
     }
 
+    public int calculatePositionBasedWeight(){
+        int weight=0;
+        for (int y = 0; y < 4; y++)
+            for (int x = 0; x < 4; x++)
+                if (currTrock[y][x] != 0)
+                    weight+=currY+y;
+        return weight;
+    }
     public int calculateEmptyBlocksBeneith() {
         int weight = 0;
         for (int y = currY + 4; y < 20; y++) {
