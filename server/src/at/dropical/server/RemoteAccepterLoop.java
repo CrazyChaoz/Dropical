@@ -2,15 +2,12 @@ package at.dropical.server;
 
 
 import at.dropical.server.transmitter.ObjectTransmitter;
-import at.dropical.shared.net.abstracts.Request;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 public class RemoteAccepterLoop extends Thread {
