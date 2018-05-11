@@ -45,8 +45,9 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     //human tournaments
     public static final boolean isAiAllowed=true;
 
-    //The port 
-    private static final int port=45000;
+    //The serverPort
+    private static final int serverPort =45000;
+    private static final int adminPort =45666;
     
     //
     private static final boolean isTounamentServer=true;
@@ -58,7 +59,8 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private Server() {
         try {
             LoggerSetup.setup();
-            new RemoteAccepterLoop(new ServerSocket(port));
+            new RemoteAccepterLoop(new ServerSocket(serverPort));
+            new WebInterface(new ServerSocket(adminPort));
         } catch (IOException e) {
             e.printStackTrace();
         }

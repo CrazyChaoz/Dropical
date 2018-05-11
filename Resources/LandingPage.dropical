@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dropical Server</title>
+</head>
+<body>
+<h1>this is the landing page for the dropical server admin tool</h1>
+<a href="$$listOpenGames">List Currently Open Games</a>
+</body>
+</html>
