@@ -13,22 +13,13 @@ import at.dropical.server.gamefield.Tetromino;
  */
 public class OnePlayer {
 
-    private static int STARTVAL_X = TetrisArena.width / 2 - Tetromino.size / 2;
-    private static int STARTVAL_Y = -1;
+    private static final int STARTVAL_X = TetrisArena.width / 2 - Tetromino.size / 2;
+    private static final int STARTVAL_Y = -1;
 
-
-    //    Level
     private int level = 0;
-
-    //    Score
     private int score = 0;
-
-    //    Playername
     private String playername;
-
-    //
     private int ticks=0;
-
 
     private TetrisArena arena;
     private Tetromino tetromino = Tetromino.createRandom();
@@ -63,9 +54,12 @@ public class OnePlayer {
      * @throws GameOverException If the placing fails.
      */
     private void placeTetromino() throws GameOverException, LinesClearedException {
-        arena.placeTetromino(tetromino, currTetrY, currTetrX);
-        newNextTetromino();
-        arena.clearLines();
+        try {
+            arena.placeTetromino(tetromino, currTetrY, currTetrX);
+        } finally {
+            newNextTetromino();
+            arena.clearLines();
+        }
     }
 
     /**
