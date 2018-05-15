@@ -1,7 +1,7 @@
 package at.dropical.server;
 
 import at.dropical.server.game.Game;
-import at.dropical.server.transmitter.ObjectTransmitter;
+import at.dropical.server.game.OnePlayer;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -114,12 +114,20 @@ class SendFavIcon {
 
 
 class ScriptingEngine {
+    StringBuilder stringBuilder = new StringBuilder();
+
     public ScriptingEngine(BufferedOutputStream out, String command) throws IOException {
+
+        loadTemplate();
+
         String retval;
-        String[] cmdParts = command.split(" ");
+        String[] cmdParts=command.replaceFirst(" ","%20").split("%20");
         switch (cmdParts[0]) {
             case "listOpenGames":
                 retval = listGamesByName();
+                break;
+            case "examine":
+                retval = examineGame(cmdParts[1]);
                 break;
             default:
                 retval = "unknown command";
@@ -135,30 +143,71 @@ class ScriptingEngine {
         out.flush();
     }
 
-    public String listGamesByName() {
-        StringBuilder stringBuilder = new StringBuilder();
-
+    private void loadTemplate(){
         try {
-            BufferedReader br=new BufferedReader(new FileReader(new File(System.getProperty("user.dir") + File.separator + "Resources" + File.separator + "Template.html")));
+            BufferedReader br = new BufferedReader(new FileReader(new File(System.getProperty("user.dir") + File.separator + "Resources" + File.separator + "Template.html")));
             String line;
-            while ((line=br.readLine())!=null)
+            while ((line = br.readLine()) != null) {
                 stringBuilder.append(line);
+                stringBuilder.append("\r\n");
+            }
         } catch (FileNotFoundException e) {
-            Server.LOGGER.log(Level.WARNING,"Template.html not found");
+            Server.LOGGER.log(Level.WARNING, "Template.html not found");
         } catch (IOException e) {
-            Server.LOGGER.log(Level.WARNING,"Template.html -- io error");
+            Server.LOGGER.log(Level.WARNING, "Template.html -- io error");
         }
+    }
 
+    public String listGamesByName() {
 
         final Set<Map.Entry<String, Game>> entries = Server.instance().getAllGames().entrySet();
 
-        stringBuilder.append("<ul>\r\n");
-        for (Map.Entry<String, Game> entry : entries) {
-            stringBuilder.append("<li>");
-            stringBuilder.append(entry.getKey());
-            stringBuilder.append("</li>\r\n");
+        if (entries.size() <= 0)
+            stringBuilder.append("<h2>There is currently no Game running</h2>");
+        else if (entries.size() == 1)
+            stringBuilder.append("<h2>There is currently one Game running</h2>");
+        else {
+            stringBuilder.append("<h2>There are currently ");
+            stringBuilder.append(entries.size());
+            stringBuilder.append(" Games running</h2>\r\n");
         }
-        stringBuilder.append("</ul>\r\n</body>\r\n</html>\r\n");
+
+        for (Map.Entry<String, Game> entry : entries) {
+            stringBuilder.append("<a id='game' href='$$examine ");
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append("'>");
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append("</a><br>\r\n");
+        }
+
+        stringBuilder.append("</body>\r\n");
+        stringBuilder.append("</html>\r\n");
+        return stringBuilder.toString();
+    }
+
+    public String examineGame(String gameID){
+        final Game game = Server.instance().getGame(gameID);
+
+        if (game.getGames().size() <= 0)
+            stringBuilder.append("<h2>There is currently no Player connected</h2>");
+        else if (game.getGames().size() == 1)
+            stringBuilder.append("<h2>There is currently one Player connected</h2>");
+        else {
+            stringBuilder.append("<h2>There are currently ");
+            stringBuilder.append(game.getGames().size());
+            stringBuilder.append(" Players connected</h2>\r\n");
+        }
+
+        for (Map.Entry<String, OnePlayer> entry : game.getGames().entrySet()) {
+            stringBuilder.append("<p id='player'");
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append("'>");
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append("</p><br>\r\n");
+        }
+
+        stringBuilder.append("</body>\r\n");
+        stringBuilder.append("</html>\r\n");
         return stringBuilder.toString();
     }
 }

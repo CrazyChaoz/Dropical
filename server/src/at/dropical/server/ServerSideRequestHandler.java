@@ -6,17 +6,21 @@ import at.dropical.server.gamestates.RunningState;
 import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.transmitter.ServerSideTransmitter;
 import at.dropical.shared.GameState;
+import at.dropical.shared.PlayerAction;
 import at.dropical.shared.net.abstracts.Request;
 import at.dropical.shared.net.abstracts.RequestHandler;
 import at.dropical.shared.net.container.ListDataContainer;
 import at.dropical.shared.net.requests.*;
 
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
 import static at.dropical.server.Server.LOGGER;
 
 public class ServerSideRequestHandler implements RequestHandler {
+    private static Lock autoJoinLock = new ReentrantLock();
     private Request request;
     private ServerSideTransmitter transmitter;
 
@@ -29,6 +33,7 @@ public class ServerSideRequestHandler implements RequestHandler {
     public void run() {
         switch (request.getRequestKind()) {
             case JOIN:
+                autoJoinLock.lock();
                 handleJoinRequest((JoinRequest) request);
                 break;
             case ADD_AI:
@@ -48,6 +53,9 @@ public class ServerSideRequestHandler implements RequestHandler {
                 break;
             case LIST_PLAYERS:
                 handleListPlayersRequest();
+                break;
+            case HANDLE_BULK_INPUT:
+                handleBulkInput((HandleInputInBulkRequest) request);
                 break;
             default:
                 LOGGER.warning("Incorrect RequestKind recieved");
@@ -75,13 +83,14 @@ public class ServerSideRequestHandler implements RequestHandler {
 
         //assign to a random game
         if (request.getGameID() == null) {
-            if (Server.instance().getAllGames().size() > 0)
+            if (Server.instance().getAllGames().size() > 0){
                 for (Map.Entry<String, Game> games : Server.instance().getAllGames().entrySet()) {
                     if (games.getValue().getCurrentGameState() instanceof WaitingState) {
                         handleJoinRequest(new JoinRequest(games.getKey(), request.getPlayerName()));
                         return;
                     }
                 }
+            }
             //if all else fails
             //create game yourself and join that game
             String gamename = "autoGen_" + request.getPlayerName() + "_game";
@@ -98,7 +107,7 @@ public class ServerSideRequestHandler implements RequestHandler {
 
         game.addPlayer(request.getPlayerName(), transmitter);  //TODO: send message to client ?
         transmitter.setPlayingGame(game);
-
+        autoJoinLock.unlock();
     }
 
     private void handleAddAiToGameRequest(AddAiToGameRequest request) {
@@ -118,10 +127,19 @@ public class ServerSideRequestHandler implements RequestHandler {
     }
 
     private void handleHandleInputRequest(HandleInputRequest request) {
-        LOGGER.log(Level.INFO, "Request to Handle is a InputDataContainer");
+        LOGGER.log(Level.INFO, "Request to Handle is a InputHandle");
         if (transmitter.getPlayingGame() != null) {
             transmitter.getPlayingGame().handleInput(request);
         }
+    }
+
+    private void handleBulkInput(HandleInputInBulkRequest request) {
+        LOGGER.log(Level.INFO, "Request to Handle is a BulkInput");
+
+        for (PlayerAction playerAction : request.getInput()) {
+            handleHandleInputRequest(new HandleInputRequest(request.getPlayername(),playerAction));
+        }
+
     }
 
     private void handleStartGameRequest(StartGameRequest startGameRequest) {
