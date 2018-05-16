@@ -1,9 +1,9 @@
 package com.dropical.client.gameStates;
 
 import com.badlogic.gdx.utils.TimeUtils;
+import com.dropical.client.server.TetrisPlayer;
 import com.dropical.client.serverEssentials.GameState;
 import com.dropical.client.serverEssentials.PollRequest;
-import com.dropical.client.server.TetrisPlayer;
 
 public class Starting implements GameStatePattern {
     private StateOfGame stateOfGame;

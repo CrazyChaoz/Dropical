@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
+import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
 import java.util.List;

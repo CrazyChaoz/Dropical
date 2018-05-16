@@ -1,10 +1,5 @@
 package com.dropical.client.serverEssentials;
 
-import com.dropical.client.serverEssentials.PollRequest;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public interface TetrisServer {
 
 //	public abstract StartRequest start(StartRequest request)

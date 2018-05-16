@@ -1,13 +1,13 @@
 package com.dropical.client.server;
 
+import com.badlogic.gdx.utils.TimeUtils;
+import com.dropical.client.gameStates.StateOfGame;
+import com.dropical.client.serverEssentials.GameState;
+import com.dropical.client.serverEssentials.PlayerAction;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import com.badlogic.gdx.utils.TimeUtils;
-import com.dropical.client.serverEssentials.PlayerAction;
-import com.dropical.client.serverEssentials.GameState;
-import com.dropical.client.gameStates.StateOfGame;
 
 public class TetrisPlayer {
 	//Arena & Tetromino

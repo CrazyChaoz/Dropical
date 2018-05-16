@@ -3,14 +3,16 @@ package com.dropical.client.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
+import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
 
 public class Menu implements Screen {
