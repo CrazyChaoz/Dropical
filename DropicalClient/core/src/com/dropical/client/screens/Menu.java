@@ -12,14 +12,17 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
+import com.dropical.client.managers.ScreenManager;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
 
 public class Menu implements Screen {
     private DropicalCam cam;
-
     private Sprite background;
     private BitmapFont bitmapFont;
+
+    //Manager
+    ScreenManager screenManager = ScreenManager.getInstance();
 
     //DropicalButton
     private Stage stage;
@@ -56,7 +59,8 @@ public class Menu implements Screen {
         singleplayerButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new Game(game, 1));
+                screenManager.setGameScreen(new Game(game, 1), game);
+                screenManager.showScreen(screenManager.getGameScreen());
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -69,7 +73,8 @@ public class Menu implements Screen {
         multiplayerLocalButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new Game(game, 2));
+                screenManager.setGameScreen(new Game(game, 2), game);
+                screenManager.showScreen(screenManager.getGameScreen());
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -141,10 +146,12 @@ public class Menu implements Screen {
 
     private void handleInput() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
-            game.setScreen(new Game(game, 1));
+            screenManager.setGameScreen(new Game(game, 1), game);
+            screenManager.showScreen(screenManager.getGameScreen());
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
-            game.setScreen(new Game(game, 2));
+            screenManager.setGameScreen(new Game(game, 2), game);
+            screenManager.showScreen(screenManager.getGameScreen());
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();

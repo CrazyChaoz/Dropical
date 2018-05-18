@@ -12,9 +12,10 @@ public class DropicalMain extends Game {
 	public void create() {
 		batch = new SpriteBatch();
 
-//		setScreen(new Menu(this));
 		ScreenManager manager = ScreenManager.getInstance();
-		manager.setMenuScreen(new Menu(this));
+		manager.setMain(this);
+
+		manager.setMenuScreen(new Menu(this), this);
 		manager.showScreen(manager.getMenuScreen());
 	}
 

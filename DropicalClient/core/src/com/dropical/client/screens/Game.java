@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
+import com.dropical.client.managers.ScreenManager;
 import com.dropical.client.server.TetrisServerImpl;
 import com.pezcraft.dropical.cam.DropicalCam;
 
@@ -25,6 +26,9 @@ public class Game implements Screen {
     private Sprite overlay;
     private BitmapFont bitmapFont;
     private List<Texture> texturList = new ArrayList<Texture>();
+
+    //Manager
+    ScreenManager screenManager = ScreenManager.getInstance();
 
     //Server
     public TetrisServerImpl server = null;
@@ -203,10 +207,12 @@ public class Game implements Screen {
     private void checkGameLost() {
         if(gameState == GameState.GAME_LOST) {
             if(gameStateP1 == GameState.GAME_LOST) {
-                game.setScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2));
+                screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2), game);
+                screenManager.showScreen(screenManager.getGameOverScreen());
             }
             if(gameStateP2 == GameState.GAME_LOST) {
-                game.setScreen(new GameOver(game, anzahlSpieler, 2, pointsP1, pointsP2));
+                screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 2, pointsP1, pointsP2), game);
+                screenManager.showScreen(screenManager.getGameOverScreen());
             }
         }
     }
@@ -369,7 +375,8 @@ public class Game implements Screen {
         //Spiel abbrechen
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             gameKeyP1 = PlayerAction.QUIT; //wegen SinglePlayer muss der 1. Spieler das Spiel abbrechen
-            game.setScreen(new Menu(game));
+            screenManager.setMenuScreen(new Menu(game), game);
+            screenManager.showScreen(screenManager.getMenuScreen());
         }
     }
     private void handleInputP1() {
@@ -413,4 +420,5 @@ public class Game implements Screen {
     public void dispose() {
 
     }
+
 }

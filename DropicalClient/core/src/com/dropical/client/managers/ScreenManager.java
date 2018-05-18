@@ -32,19 +32,22 @@ public class ScreenManager {
     public Menu getMenuScreen() {
         return menuScreen;
     }
-    public void setMenuScreen(Menu menuScreen) {
+    public void setMenuScreen(Menu menuScreen, DropicalMain main) {
+        setMain(main);
         this.menuScreen = menuScreen;
     }
     public Game getGameScreen() {
         return gameScreen;
     }
-    public void setGameScreen(Game gameScreen) {
+    public void setGameScreen(Game gameScreen, DropicalMain main) {
+        setMain(main);
         this.gameScreen = gameScreen;
     }
     public GameOver getGameOverScreen() {
         return gameOverScreen;
     }
-    public void setGameOverScreen(GameOver gameOverScreen) {
+    public void setGameOverScreen(GameOver gameOverScreen, DropicalMain main) {
+        setMain(main);
         this.gameOverScreen = gameOverScreen;
     }
 }
