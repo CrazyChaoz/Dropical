@@ -1,8 +1,8 @@
 package com.dropical.client.gameStates;
 
+import com.dropical.client.server.TetrisPlayer;
 import com.dropical.client.serverEssentials.GameState;
 import com.dropical.client.serverEssentials.PollRequest;
-import com.dropical.client.server.TetrisPlayer;
 
 public class Won implements GameStatePattern {
     private StateOfGame stateOfGame;

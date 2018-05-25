@@ -1,5 +1,8 @@
 package com.dropical.client.screens;
 
+import at.dropical.shared.GameState;
+import at.dropical.shared.PlayerAction;
+import at.dropical.shared.net.requests.HandleInputRequest;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -8,12 +11,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
+import com.dropical.client.managers.DataManager;
+import com.dropical.client.managers.ScreenManager;
 import com.dropical.client.server.TetrisServerImpl;
-import com.dropical.client.serverEssentials.GameState;
-import com.dropical.client.serverEssentials.PlayerAction;
-import com.dropical.client.serverEssentials.PollRequest;
+import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +27,12 @@ public class Game implements Screen {
     private BitmapFont bitmapFont;
     private List<Texture> texturList = new ArrayList<Texture>();
 
+    //Manager
+    ScreenManager screenManager = ScreenManager.getInstance();
+
     //Server
     public TetrisServerImpl server = null;
-    private PollRequest pollRequest;
+    private DataManager manager;
 
     //Spieldaten
     private int anzahlSpieler;
@@ -60,7 +65,6 @@ public class Game implements Screen {
     public Game(DropicalMain game, int anzahlSpieler) {
         this.game = game;
         this.anzahlSpieler = anzahlSpieler;
-        this.pollRequest = new PollRequest("0");
     }
 
     @Override
@@ -71,6 +75,8 @@ public class Game implements Screen {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        manager = DataManager.getInstance();
 
         //Schrift für Punkte, Level, ... festlegen
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
@@ -131,7 +137,7 @@ public class Game implements Screen {
         try {
             //auf 1. Spieler switchen und dessen PollRequest laden + rendern
             pollPlayerInfo(0);
-            updatePollRequestData();
+            updatePollRequestData(0);
             gameStateP1 = gameState;
             pointsP1 = points;
             renderPlay1er1();
@@ -140,7 +146,7 @@ public class Game implements Screen {
             //wenn Multiplayer, dann auf 2. Spieler switchen und seinen PollRequest laden + rendern
             if(anzahlSpieler == 2) {
                 pollPlayerInfo(1);
-                updatePollRequestData();
+                updatePollRequestData(1);
                 gameStateP2 = gameState;
                 pointsP2 = points;
                 renderPlay1er2();
@@ -201,35 +207,37 @@ public class Game implements Screen {
     private void checkGameLost() {
         if(gameState == GameState.GAME_LOST) {
             if(gameStateP1 == GameState.GAME_LOST) {
-                game.setScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2));
+                screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2), game);
+                screenManager.showScreen(screenManager.getGameOverScreen());
             }
             if(gameStateP2 == GameState.GAME_LOST) {
-                game.setScreen(new GameOver(game, anzahlSpieler, 2, pointsP1, pointsP2));
+                screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 2, pointsP1, pointsP2), game);
+                screenManager.showScreen(screenManager.getGameOverScreen());
             }
         }
     }
 
     private void pollPlayerInfo(int playerNo) throws Exception {
-        pollRequest.setPlayerNo(playerNo);
+//        pollRequest.setPlayerNo(playerNo);
         if(playerNo == 0) {
             handleInputP1();
-            pollRequest.setPlayerAction(gameKeyP1);
+            manager.getProxy().writeToServer(new HandleInputRequest("Player1", gameKeyP1));
         } else {
             handleInputP2();
-            pollRequest.setPlayerAction(gameKeyP2);
+            manager.getProxy().writeToServer(new HandleInputRequest("Player2", gameKeyP2));
         }
-        pollRequest = server.pollGameState(pollRequest);
+//        pollRequest = server.pollGameState(pollRequest);
     }
-    private void updatePollRequestData() {
-        arenaArray = pollRequest.getArena();
-        tetArray = pollRequest.getActTetronimo();
-        nextTetArray = pollRequest.getNextTetronimo();
-        tPosX = pollRequest.getActTetronimoX();
-        tPosY = pollRequest.getActTetronimoY();
-        gameState = pollRequest.getGameState();
-        points = pollRequest.getScore();
-        level = pollRequest.getLevel();
-        timeTillNextLevel = pollRequest.getTime();
+    private void updatePollRequestData(int playerNo) {
+        arenaArray = manager.getGameData().getArenas().get(playerNo);
+        tetArray = manager.getGameData().getCurrTrocks().get(playerNo);
+        nextTetArray = manager.getGameData().getNextTrocks().get(playerNo);
+        tPosX = manager.getGameData().getCurrTrockXs().get(playerNo);
+        tPosY = manager.getGameData().getCurrTrockYs().get(playerNo);
+        gameState = manager.getGameData().getCurrentState();
+//        points = pollRequest.getScore();
+        level = manager.getGameData().getLevels().get(playerNo);
+//        timeTillNextLevel = pollRequest.getTime();
 
         //Ghost aus neuen Daten erstellen
         ghostArray = tetArray;
@@ -245,7 +253,7 @@ public class Game implements Screen {
         int yTMP;
 
         //Ghost-Tetromino in Arena schreiben
-        if(gameState == GameState.GAME_RUNNING) {
+        if(gameState == GameState.RUNNING) {
             while(!moveGhostDown());
         }
 
@@ -367,7 +375,8 @@ public class Game implements Screen {
         //Spiel abbrechen
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             gameKeyP1 = PlayerAction.QUIT; //wegen SinglePlayer muss der 1. Spieler das Spiel abbrechen
-            game.setScreen(new Menu(game));
+            screenManager.setMenuScreen(new Menu(game), game);
+            screenManager.showScreen(screenManager.getMenuScreen());
         }
     }
     private void handleInputP1() {
@@ -411,4 +420,5 @@ public class Game implements Screen {
     public void dispose() {
 
     }
+
 }

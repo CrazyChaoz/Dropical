@@ -11,8 +11,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.pezcraft.dropical.cam.DropicalCam;
 import com.dropical.client.client.DropicalMain;
+import com.dropical.client.managers.ScreenManager;
+import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,9 @@ public class GameOver implements Screen {
     private Sprite overlay;
     private BitmapFont bitmapFont;
     private List<Texture> texturList = new ArrayList<Texture>();
+
+    //Manager
+    ScreenManager screenManager = ScreenManager.getInstance();
 
     //Spieldaten
     private int anzahlSpieler;
@@ -776,7 +780,8 @@ public class GameOver implements Screen {
 
     private void handleInput() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new Menu(game));
+            screenManager.setMenuScreen(new Menu(game), game);
+            screenManager.showScreen(new Menu(game));
         }
     }
 

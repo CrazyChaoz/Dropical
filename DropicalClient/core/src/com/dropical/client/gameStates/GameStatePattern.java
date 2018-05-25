@@ -1,7 +1,7 @@
 package com.dropical.client.gameStates;
 
-import com.dropical.client.serverEssentials.PollRequest;
 import com.dropical.client.server.TetrisPlayer;
+import com.dropical.client.serverEssentials.PollRequest;
 
 public interface GameStatePattern {
     public void run();
