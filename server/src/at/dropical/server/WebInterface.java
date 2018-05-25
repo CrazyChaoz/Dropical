@@ -53,7 +53,7 @@ public class WebInterface extends Thread {
                         requested = s.split(" ")[1];
                         requested = requested.replaceFirst("/", "");
                         if (requested.equals(""))
-                            new PresentLandingPage(out);
+                            new ScriptingEngine(out,"index");
                         else if (requested.equals("favicon.ico"))
                             new SendFavIcon(out);
                         else if (requested.startsWith("$$")) {
@@ -67,27 +67,6 @@ public class WebInterface extends Thread {
             } catch (IOException e) {
             }
         }
-    }
-}
-
-class PresentLandingPage {
-    public PresentLandingPage(BufferedOutputStream out) throws IOException {
-
-        File file = new File(System.getProperty("user.dir") + File.separator + "Resources" + File.separator + "LandingPage.dropical");
-
-        out.write("HTTP/1.1 200 OK\r\n".getBytes());
-        out.write("Server: Java/KempServer\r\n".getBytes());
-        out.write("Content Type: text/html\r\n".getBytes());
-        out.write(("Content-Length: " + file.length() + "\r\n").getBytes());
-        out.write("\r\n".getBytes());
-
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-
-        int symbol;
-        while ((symbol = bufferedInputStream.read()) != -1) {
-            out.write(symbol);
-        }
-        out.flush();
     }
 }
 
@@ -121,8 +100,11 @@ class ScriptingEngine {
         loadTemplate();
 
         String retval;
-        String[] cmdParts=command.replaceFirst(" ","%20").split("%20");
+        String[] cmdParts = command.replaceFirst(" ", "%20").split("%20");
         switch (cmdParts[0]) {
+            case "index":
+                retval = showIndex();
+                break;
             case "listOpenGames":
                 retval = listGamesByName();
                 break;
@@ -143,9 +125,9 @@ class ScriptingEngine {
         out.flush();
     }
 
-    private void loadTemplate(){
+    private void loadTemplate() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(new File(System.getProperty("user.dir") + File.separator + "Resources" + File.separator + "Template.html")));
+            BufferedReader br = new BufferedReader(new FileReader(new File(System.getProperty("user.dir") + File.separator + "Resources" + File.separator + "Template.dropical")));
             String line;
             while ((line = br.readLine()) != null) {
                 stringBuilder.append(line);
@@ -156,6 +138,17 @@ class ScriptingEngine {
         } catch (IOException e) {
             Server.LOGGER.log(Level.WARNING, "Template.html -- io error");
         }
+    }
+
+    public String showIndex() {
+
+
+
+        stringBuilder.append("<h2>Dropical LandingPages</h2>\r\n");
+        stringBuilder.append("<a id='game' href='listOpenGame'>List Open Games</a><br>\r\n");
+        stringBuilder.append("</body>\r\n");
+        stringBuilder.append("</html>\r\n");
+        return stringBuilder.toString();
     }
 
     public String listGamesByName() {
@@ -185,7 +178,7 @@ class ScriptingEngine {
         return stringBuilder.toString();
     }
 
-    public String examineGame(String gameID){
+    public String examineGame(String gameID) {
         final Game game = Server.instance().getGame(gameID);
 
         if (game.getGames().size() <= 0)

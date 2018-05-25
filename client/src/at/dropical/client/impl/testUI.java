@@ -29,7 +29,7 @@ public class testUI extends Application implements DropicalListener {
     private Stage stage;
     private Scene scene;
     private DropicalProxy proxy;
-    private String BESCHTER_PLAYERNAME="Kemps_JFX_GUI";
+    private String BESCHTER_PLAYERNAME="Kemps_JFX_GUI2";
 
     public static void main(String[] args) {
         launch(args);
