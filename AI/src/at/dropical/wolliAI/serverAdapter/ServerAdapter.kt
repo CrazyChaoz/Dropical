@@ -1,4 +1,4 @@
-package at.dropical.wolliAI
+package at.dropical.wolliAI.serverAdapter
 
 import at.dropical.shared.GameState
 import at.dropical.shared.PlayerAction
