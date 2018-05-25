@@ -17,6 +17,7 @@ public class LoggerSetup {
     static private Formatter formatterHTML;
 
     static public void setup() throws IOException {
+        System.out.println("Logger is in setup");
 
         // get the global logger to configure it
         Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);

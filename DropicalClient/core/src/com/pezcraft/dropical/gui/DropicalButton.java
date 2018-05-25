@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+/** A {@link TextButton} styled with pictures.
+ *
+ * @author Pezcraft */
 public class DropicalButton {
     private TextButton button;
     private TextButton.TextButtonStyle style;
@@ -85,7 +88,7 @@ public class DropicalButton {
 
         button.setStyle(style);
     }
-    public void setCheckedTexture(String internalPath, int srcWidth, int srcHeight) {
+    public void setCheckedexture(String internalPath, int srcWidth, int srcHeight) {
         spriteChecked = new Sprite(new Texture(internalPath), srcWidth, srcHeight);
         spriteChecked.setSize(buttonWidth, buttonHeight);
         skin.add("checked", spriteChecked);

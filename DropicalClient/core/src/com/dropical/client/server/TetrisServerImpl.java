@@ -1,11 +1,13 @@
 package com.dropical.client.server;
 
+import com.badlogic.gdx.utils.TimeUtils;
+import com.dropical.client.serverEssentials.GameState;
+import com.dropical.client.serverEssentials.PollRequest;
+import com.dropical.client.serverEssentials.TetrisServer;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-
-import com.badlogic.gdx.utils.TimeUtils;
-import com.dropical.client.serverEssentials.*;
 
 public class TetrisServerImpl implements TetrisServer {
 	private TetrisPlayer[] players;

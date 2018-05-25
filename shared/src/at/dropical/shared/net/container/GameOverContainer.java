@@ -3,27 +3,28 @@ package at.dropical.shared.net.container;
 import at.dropical.shared.GameState;
 import at.dropical.shared.net.abstracts.Container;
 
-public class GameOverContainer extends Container {
-    private String[] playernames;
-    private String gameName;
-    private int winnerNumber;
+import java.util.ArrayList;
+import java.util.List;
 
-    public GameOverContainer(String[] playernames, String gameName, int winnerNumber) {
+public class GameOverContainer extends Container {
+    private List<String> playernames=new ArrayList<>();
+    private String looser;
+
+    public GameOverContainer(String looser) {
         super(GameState.GAME_OVER);
-        this.playernames = playernames;
-        this.gameName = gameName;
-        this.winnerNumber = winnerNumber;
+        this.looser = looser;
     }
 
-    public String[] getPlayernames() {
+
+    public List<String> getPlayernames() {
         return playernames;
     }
 
-    public String getGameName() {
-        return gameName;
+    public void addPlayerName(String playername){
+        playernames.add(playername);
     }
 
-    public int getWinnerNumber() {
-        return winnerNumber;
+    public String getLooser() {
+        return looser;
     }
 }

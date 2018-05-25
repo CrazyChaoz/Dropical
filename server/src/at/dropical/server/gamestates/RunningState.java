@@ -20,7 +20,10 @@ public class RunningState extends State {
     public RunningState(Game game) {
         super(game);
 
-        game.start();
+        try {
+            game.start();
+        }catch (IllegalThreadStateException ignored){
+        }
     }
 
 
@@ -56,7 +59,7 @@ public class RunningState extends State {
                     player.moveRight();
                     break;
                 case UP:
-                    player.rotateRight();
+                    player.rotateLeft();
                     break;
                 case DOWN:
                     player.moveDown();
@@ -74,7 +77,7 @@ public class RunningState extends State {
                     break; //TODO
             }
         }catch (GameOverException goe){
-
+            game.setCurrentGameState(new GameOverState(game,goe.getLooserName()));
         }
     }
 }

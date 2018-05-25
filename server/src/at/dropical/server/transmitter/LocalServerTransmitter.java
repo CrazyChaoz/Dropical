@@ -1,7 +1,7 @@
 package at.dropical.server.transmitter;
 
 import at.dropical.shared.LocalRequestCache;
-import at.dropical.shared.net.abstracts.Request;
+import at.dropical.shared.net.abstracts.SendableItem;
 
 
 public class LocalServerTransmitter extends ServerSideTransmitter {
@@ -12,12 +12,12 @@ public class LocalServerTransmitter extends ServerSideTransmitter {
     }
 
     @Override
-    public void writeRequest(Request r) {
+    public void writeRequest(SendableItem r) {
         requestCache.writeToClient(r);
     }
 
     @Override
-    public Request readRequest() {
+    public SendableItem readRequest() {
         return requestCache.getToServer();
     }
 }

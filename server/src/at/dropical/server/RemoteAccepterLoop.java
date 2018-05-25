@@ -10,39 +10,47 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 
-public class RemoteAccepterLoop extends Thread{
-    private static ServerSocket serverSocket;
+public class RemoteAccepterLoop extends Thread {
+    private ServerSocket serverSocket;
 
 
     public RemoteAccepterLoop(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-
-        //"Ends" Serving when a "null" Socket was received
-        if(serverSocket!=null)
-            this.start();
+        this.start();
     }
 
     @Override
     public void run() {
-        try(Socket clientConnection=serverSocket.accept();
-            InputStream inputStream=clientConnection.getInputStream();
-            OutputStream outputStream=clientConnection.getOutputStream()){
-
-            //create new open connection on creation of a new open connection
-            new RemoteAccepterLoop(serverSocket);
-
-            //add new connection to Server
-            ObjectTransmitter transi=new ObjectTransmitter(inputStream,outputStream);
-
-            //Error if not in loop
-            for(;;){
-                Server.LOGGER.log(Level.INFO,"Request Received");
-                new ServerSideRequestHandler(transi.readRequest(),transi);
+        for (; ; ) {
+            try {
+                Server.serverExecutor.execute(new InternalAccepter(serverSocket.accept()));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        }
+    }
+
+    private class InternalAccepter implements Runnable {
+        private Socket socket;
+
+        public InternalAccepter(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            try (InputStream inputStream = socket.getInputStream();
+                 OutputStream outputStream = socket.getOutputStream()) {
+
+                new Loop(new ObjectTransmitter(inputStream, outputStream));
+
+            } catch (IOException e) {
+                Server.LOGGER.log(Level.SEVERE, "IOException, Socket probably disconnected");
+            } catch (ClassNotFoundException e) {
+                Server.LOGGER.log(Level.SEVERE, "ClassNotFoundException ..... Faulty Client!");
+            } catch (ClassCastException e) {
+                Server.LOGGER.log(Level.SEVERE, "ClassCastException -- class received is not a subclass of Request");
+            }
         }
     }
 }

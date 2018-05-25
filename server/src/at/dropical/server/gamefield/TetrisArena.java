@@ -1,6 +1,7 @@
 package at.dropical.server.gamefield;
 // Created by julian on 17.11.17.
 
+import at.dropical.server.Server;
 import at.dropical.server.game.GameOverException;
 
 import java.util.Random;
@@ -103,7 +104,7 @@ public class TetrisArena {
     public void placeTetromino(Tetromino tetromino, int h, int w) throws GameOverException {
         // Can it be placed here?
         if(!checkTetromino(tetromino, h, w, false)) {
-            System.err.println("The Tetronimo is in an invalid Position. This should never happen." +
+            Server.LOGGER.warning("The Tetronimo is in an invalid Position. This should never happen." +
                     "Bad luck for Player "+ player); // See addLines()
             throw new GameOverException(player);
         }
