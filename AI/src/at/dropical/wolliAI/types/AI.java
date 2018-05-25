@@ -1,4 +1,4 @@
-package at.dropical.wolliAI;
+package at.dropical.wolliAI.types;
 // Created by julian on 26.04.18.
 
 /**

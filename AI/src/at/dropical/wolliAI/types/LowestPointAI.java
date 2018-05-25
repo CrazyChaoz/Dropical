@@ -1,4 +1,4 @@
-package at.dropical.wolliAI;
+package at.dropical.wolliAI.types;
 // Created by julian on 26.04.18.
 
 import at.dropical.shared.PlayerAction;
@@ -22,6 +22,7 @@ public class LowestPointAI implements AI{
         // Make the AI slower
         if(tick % 5 == 0) {
             int column = findLowestColumn(serverAdapter.getArena());
+            System.out.println(column);
             navigateToColumn(column, serverAdapter);
         }
         tick++;

@@ -1,72 +1,134 @@
 package at.dropical.wolliAI.serverAdapter
 
+import at.dropical.client.DropicalListener
+import at.dropical.client.DropicalProxy
+import at.dropical.client.impl.BestJavaListener
 import at.dropical.shared.GameState
 import at.dropical.shared.PlayerAction
+import at.dropical.shared.net.container.CountDownContainer
+import at.dropical.shared.net.container.GameDataContainer
+import at.dropical.shared.net.container.GameOverContainer
+import at.dropical.shared.net.container.ListDataContainer
+import at.dropical.shared.net.requests.HandleInputRequest
+import at.dropical.shared.net.requests.JoinRequest
+import java.io.IOException
 import java.util.*
 
 
 // Created by julian on 11.01.18.
 /**
- * This is the Bridge/Interface that one player field uses
+ * This is the Bridge/Interface that one player uses
  * to communicate to any server.
  * It has convenience methods that allow easy access
- * to the PollRequest-Object.
+ * to the DropicalProxy.
  *
  * The concrete Server implementation/communication is managed
- * in this class. (?)
+ * in this class.
  */
-class ServerAdapter (
-    private val server: TetrisServer,
-    private val playerNo: Int
-){
-    private var latestPollRequest = PollRequest("I have no idea why this text is here")
+class ServerAdapter(
+    player: String = "Wolli AI",
+    hostName: String = "localhost",
+    port: Int = 45000
+): DropicalListener {
 
-    /** Uses a queue to make it possible for the user to press
-     * several buttons in one frame. Every frame/update one
-     * action is sent. */
-    private val inputQueue = LinkedList<PlayerAction>()
+    private var newestGameDataContainer: GameDataContainer? = null
+    /** Which index in the Arrays in the container is this player. */
+    private var index: Int = 0
 
-    public var debugMode = false;
-
-    /** Should be called at the end of each renderCycle.
-     * This then transfers the PollRequest-Object. */
-    fun transmitData() {
-        // First edit the request
-        // If there is no element in the list, then NOKEY.
-        latestPollRequest.playerAction =
-                inputQueue.poll() ?: PlayerAction.NOKEY
-        latestPollRequest.playerNo = playerNo
-
-        // send Request and recieve new one.
-        latestPollRequest = server.pollGameState(latestPollRequest)
+    private val server: DropicalProxy = DropicalProxy(hostName, port, this)
+    private val playerName = player
+    init {
+        /** Auto-queue to a game on the server. */
+        server.writeToServer(JoinRequest(playerName))
+        println("gejoined")
     }
 
+
+    /* The DropicalProxy calls these functions. */
+    override fun updateUI(container: GameDataContainer?) {
+        if (container != null) {
+            val i = 0
+            while (i < container.playernames.size) {
+                if (container.playernames[i] == playerName) {
+                    index = i
+                    break
+                }
+            }
+            newestGameDataContainer = container
+        }
+    }
+
+
+    override fun countDown(container: CountDownContainer?) {
+        println("Game starts in ${container?.seconds}")
+    }
+    override fun somebodyJoinedTheLobby(container: ListDataContainer?) {
+        println("Players:")
+        container?.names?.forEach{ println(it)}
+    }
+    override fun onGameOver(container: GameOverContainer?) {
+        println("Game Over")
+    }
+
+
+    /* ----- Alte Schnittstelle ------------------- */
+
     fun getGameState(): GameState {
-        return latestPollRequest.gameState
+        val container = newestGameDataContainer
+        if(container != null)
+            return container.currentState
+        else
+            return GameState.LOADING
     }
 
     fun getArena(): Array<IntArray> {
-        return latestPollRequest.arena
+        val container = newestGameDataContainer
+        if(container != null)
+            return container.arenas[index]
+        else
+            return emptyArena
     }
 
     fun getTetromino(): Array<IntArray> {
-        return latestPollRequest.actTetronimo
+        val container = newestGameDataContainer
+        if(container != null)
+            return container.currTrocks[index]
+        else
+            return emptyTetromino
     }
     fun getNextTetromino(): Array<IntArray> {
-        return latestPollRequest.nextTetronimo
+        val container = newestGameDataContainer
+        if(container != null)
+            return container.nextTrocks[index]
+        else
+            return emptyTetromino
     }
 
     fun getXPos(): Int {
-        return latestPollRequest.actTetronimoX
+        val container = newestGameDataContainer
+        if(container != null)
+            return container.currTrockXs[index]
+        else
+            return 0
     }
     fun getYPos(): Int {
-        return latestPollRequest.actTetronimoY
+        val container = newestGameDataContainer
+        if(container != null)
+            return container.currTrockYs[index]
+        else
+            return 0
     }
 
-    /** Uses a queue to make it possible for the user to press
-     * several buttons in one frame. Every frame/update one
-     * action is sent. */
     fun sendInput(input: PlayerAction) {
-        inputQueue.add(input)
+        //inputQueue.add(input)
+        server.writeToServer(HandleInputRequest(playerName, input))
+    }
+
+    /** For performance and clarity */
+    companion object {
+        // Size: 20*10 TODO
+        val emptyArena = Array<IntArray>(20, { IntArray(10) })
+        //4*4
+        val emptyTetromino = Array<IntArray>(4, { IntArray(4) })
     }
 }
