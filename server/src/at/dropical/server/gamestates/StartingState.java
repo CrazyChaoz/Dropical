@@ -17,7 +17,7 @@ public class StartingState extends State implements Runnable {
     public StartingState(Game game) {
         super(game);
         this.game=game;
-        time=15;
+        time=5;
         new Thread(this).start();
     }
 
