@@ -229,24 +229,27 @@ public class Game implements Screen {
 //        pollRequest = server.pollGameState(pollRequest);
     }
     private void updatePollRequestData(int playerNo) {
-        arenaArray = manager.getGameData().getArenas().get(playerNo);
-        tetArray = manager.getGameData().getCurrTrocks().get(playerNo);
-        nextTetArray = manager.getGameData().getNextTrocks().get(playerNo);
-        tPosX = manager.getGameData().getCurrTrockXs().get(playerNo);
-        tPosY = manager.getGameData().getCurrTrockYs().get(playerNo);
-        gameState = manager.getGameData().getCurrentState();
+        if(manager.getGameData() != null) {
+            arenaArray = manager.getGameData().getArenas().get(playerNo);
+            tetArray = manager.getGameData().getCurrTrocks().get(playerNo);
+            nextTetArray = manager.getGameData().getNextTrocks().get(playerNo);
+            tPosX = manager.getGameData().getCurrTrockXs().get(playerNo);
+            tPosY = manager.getGameData().getCurrTrockYs().get(playerNo);
+            gameState = manager.getGameData().getCurrentState();
 //        points = pollRequest.getScore();
-        level = manager.getGameData().getLevels().get(playerNo);
+            level = manager.getGameData().getLevels().get(playerNo);
 //        timeTillNextLevel = pollRequest.getTime();
 
-        //Ghost aus neuen Daten erstellen
-        ghostArray = tetArray;
-        ghostPosX = tPosX-2;
-        ghostPosY = tPosY-4;
-        //verhindern der IndexOutOfBounds-Exception
-        if(ghostPosY < 0) {
-            ghostPosY = 0;
+            //Ghost aus neuen Daten erstellen
+            ghostArray = tetArray;
+            ghostPosX = tPosX-2;
+            ghostPosY = tPosY-4;
+            //verhindern der IndexOutOfBounds-Exception
+            if(ghostPosY < 0) {
+                ghostPosY = 0;
+            }
         }
+
     }
     private void buildArena() {
         int xTMP;

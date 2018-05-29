@@ -74,7 +74,8 @@ public class Menu implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 screenManager.setGameScreen(new Game(game, 2), game);
-                screenManager.showScreen(screenManager.getGameScreen());
+                screenManager.setCountdownScreen(new CountDown(game), game);
+                screenManager.showScreen(screenManager.getCountdownScreen());
                 return super.touchDown(event, x, y, pointer, button);
             }
 

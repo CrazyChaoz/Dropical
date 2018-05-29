@@ -6,6 +6,7 @@ import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.container.GameOverContainer;
 import at.dropical.shared.net.container.ListDataContainer;
+import at.dropical.shared.net.requests.JoinRequest;
 
 import java.io.IOException;
 
@@ -27,6 +28,7 @@ public class DataManager implements DropicalListener {
     public void createProxy() {
         try {
             proxy = new DropicalProxy("localhost", 45000, this);
+            proxy.writeToServer(new JoinRequest("RP1"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package com.dropical.client.managers;
 
 import com.badlogic.gdx.Screen;
 import com.dropical.client.client.DropicalMain;
+import com.dropical.client.screens.CountDown;
 import com.dropical.client.screens.Game;
 import com.dropical.client.screens.GameOver;
 import com.dropical.client.screens.Menu;
@@ -11,6 +12,7 @@ public class ScreenManager {
     private Menu menuScreen;
     private Game gameScreen;
     private GameOver gameOverScreen;
+    private CountDown countdownScreen;
 
     private static ScreenManager ourInstance = new ScreenManager();
     public static ScreenManager getInstance() {
@@ -49,5 +51,12 @@ public class ScreenManager {
     public void setGameOverScreen(GameOver gameOverScreen, DropicalMain main) {
         setMain(main);
         this.gameOverScreen = gameOverScreen;
+    }
+    public CountDown getCountdownScreen() {
+        return countdownScreen;
+    }
+    public void setCountdownScreen(CountDown countdownScreen, DropicalMain main) {
+        setMain(main);
+        this.countdownScreen = countdownScreen;
     }
 }
