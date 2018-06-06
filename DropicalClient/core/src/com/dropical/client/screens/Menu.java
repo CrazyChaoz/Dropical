@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
+import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
@@ -22,7 +23,8 @@ public class Menu implements Screen {
     private BitmapFont bitmapFont;
 
     //Manager
-    ScreenManager screenManager = ScreenManager.getInstance();
+    private ScreenManager screenManager = ScreenManager.getInstance();
+    private DataManager manager;
 
     //DropicalButton
     private Stage stage;
@@ -43,7 +45,7 @@ public class Menu implements Screen {
         background.setPosition(0, 0);
         background.setSize(1280, 720);
 
-        //Schrift für Steuerung-Erklärung
+        //Schrift für Buttons
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
         bitmapFont.getData().setScale(0.9f);
         bitmapFont.setColor(new Color(0x4C4C4Cff));
@@ -51,16 +53,27 @@ public class Menu implements Screen {
         //Kamera
         cam = new DropicalCam(1280, 720);
 
+        //Manager
+        manager = DataManager.getInstance();
+
         //DropicalButton
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
+        //Buttons
         singleplayerButton = new DropicalButton("Singleplayer", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 88, 12, 52, 61, 208, 244);
         singleplayerButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                screenManager.setGameScreen(new Game(game, 1), game);
-                screenManager.showScreen(screenManager.getGameScreen());
+                screenManager.setServerListScreen(new ServerList(game), game);
+                screenManager.showScreen(screenManager.getServerListScreen());
+
+//                manager.createProxy();
+//                manager.joinSingleplayer();
+//
+//                screenManager.setGameScreen(new Game(game, 1), game);
+//                screenManager.setCountdownScreen(new CountDown(game), game);
+//                screenManager.showScreen(screenManager.getCountdownScreen());
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -73,8 +86,12 @@ public class Menu implements Screen {
         multiplayerLocalButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                manager.createProxy("localhost");
+                manager.joinTurnier();
+
                 screenManager.setGameScreen(new Game(game, 2), game);
-                screenManager.showScreen(screenManager.getGameScreen());
+                screenManager.setCountdownScreen(new CountDown(game), game);
+                screenManager.showScreen(screenManager.getCountdownScreen());
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -92,8 +109,6 @@ public class Menu implements Screen {
         stage.addActor(multiplayerLocalButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
-
-        singleplayerButton.setDownTexture("GUI/background.png", 52, 61);
     }
 
     @Override
@@ -120,7 +135,7 @@ public class Menu implements Screen {
 
         game.getBatch().end();
 
-        //DropicalButtons render
+        //DropicalButtons rendern
         stage.draw();
     }
 
