@@ -12,6 +12,9 @@ public class AiMain {
     public static void main(String[] args) throws InterruptedException {
         AI ai = new BestPossibilityAI(new ServerAdapter());
 
+        //Temp
+        //AI ai2 = new BestPossibilityAI(new ServerAdapter());
+
         while(true) {
             Thread.sleep(100);
             try {

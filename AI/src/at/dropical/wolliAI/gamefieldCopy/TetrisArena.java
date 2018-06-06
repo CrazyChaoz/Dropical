@@ -76,10 +76,12 @@ public class TetrisArena {
      * blocks at those positions. */
     public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) {
         int[][] tetrominoArr = tetromino.toArray();
+        boolean emptyTetromino = true;
         for(int i = 0; i < Tetromino.size; i++) {
             for(int j = 0; j < Tetromino.size; j++) {
                 // Only care if there is a block
                 if(tetrominoArr[i][j] >= 1) {
+                    emptyTetromino = false;
 
                     // If space is occupied Or out of bounds of actual arena
                     if(arena[marginTop + h + i][marginLeftRight + w + j] >= 1
@@ -95,7 +97,8 @@ public class TetrisArena {
             }
         }
         // Only when all 4*4 spaces of the Tetromino are ok.
-        return true;
+        // Special case when tetromino is empty, then return false. To prevent endless loops.
+        return !emptyTetromino;
     }
 
     /** Only the actual arena. */

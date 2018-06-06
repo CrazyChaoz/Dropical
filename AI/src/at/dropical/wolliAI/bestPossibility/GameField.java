@@ -84,12 +84,14 @@ public class GameField {
 
     /** Move the tetromino as far left as possible. */
     void moveToLeftBorder() {
-        while(arena.checkTetromino(mino, posH, posW -1, true))
+        //replaced while with for loop and sanity check.
+        for(int i = 0; i<TetrisArena.width && arena.checkTetromino(mino, posH, posW -1, true); i++)
             posW--;
     }
     /** Does not place the tetromino. */
     void moveToBottom() {
-        while(arena.checkTetromino(mino, posH +1, posW, true))
+        //replaced while with for loop and sanity check.
+        for(int i = 0; i<TetrisArena.height && arena.checkTetromino(mino, posH +1, posW, true); i++)
             posH++;
     }
     /** Does as if moveToBottom() was never invoked. */

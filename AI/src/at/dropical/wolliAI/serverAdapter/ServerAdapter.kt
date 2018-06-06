@@ -26,7 +26,7 @@ import java.util.*
  * in this class.
  */
 class ServerAdapter(
-    player: String = "Wolli AI",
+    player: String = "Wolli AI "+ Math.random(),
     hostName: String = "localhost",
     port: Int = 45000
 ): DropicalListener {
@@ -37,6 +37,7 @@ class ServerAdapter(
 
     private val server: DropicalProxy = DropicalProxy(hostName, port, this)
     private val playerName = player
+
     init {
         /** Auto-queue to a game on the server. */
         server.writeToServer(JoinRequest(playerName))
@@ -47,12 +48,13 @@ class ServerAdapter(
     /* The DropicalProxy calls these functions. */
     override fun updateUI(container: GameDataContainer?) {
         if (container != null) {
-            val i = 0
+            var i = 0
             while (i < container.playernames.size) {
                 if (container.playernames[i] == playerName) {
                     index = i
                     break
                 }
+                i++;
             }
             newestGameDataContainer = container
         }
