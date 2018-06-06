@@ -26,6 +26,7 @@ public class GameField {
         this.mino = whatTypeIsThis(tetromino);
         posH = xPos;
         posW = yPos;
+        System.out.println("new Gamefield1 posW="+posW);
     }
 
     /** For cloning. */
@@ -34,6 +35,7 @@ public class GameField {
         this.mino = mino;
         this.posH = posH;
         this.posW = posW;
+        System.out.println("new Gamefield2 posW="+posW);
     }
 
     /** This finds out what tetrominoType and what rotation was
@@ -86,6 +88,7 @@ public class GameField {
     void moveToLeftBorder() {
         while(arena.checkTetromino(mino, posH, posW -1, true))
             posW--;
+        System.out.println("moveLeftBorder posW="+ posW);
     }
     /** Does not place the tetromino. */
     void moveToBottom() {
@@ -101,6 +104,7 @@ public class GameField {
         boolean check = arena.checkTetromino(mino, posH, posW + 1, true);
         if (check)
             posW++;
+        System.out.println("moveRight posW="+ posW);
         return check;
     }
     void rotateMino() {

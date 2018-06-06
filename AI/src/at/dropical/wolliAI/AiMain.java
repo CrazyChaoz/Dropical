@@ -2,7 +2,6 @@ package at.dropical.wolliAI;
 // Created by julian on 25.05.18.
 
 import at.dropical.wolliAI.bestPossibility.BestPossibilityAI;
-import at.dropical.wolliAI.serverAdapter.ServerAdapter;
 import at.dropical.wolliAI.types.AI;
 
 /**
@@ -14,11 +13,13 @@ public class AiMain {
         AI ai = new BestPossibilityAI(new ServerAdapter());
 
         while(true) {
-            System.out.println("Schleife");
             Thread.sleep(100);
-            System.out.println("Geschlafen");
-            ai.process();
-            System.out.println("Prozessiert");
+            try {
+                ai.process();
+
+            } catch(IndexOutOfBoundsException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 

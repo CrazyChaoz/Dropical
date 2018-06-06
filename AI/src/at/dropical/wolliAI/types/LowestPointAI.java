@@ -2,7 +2,7 @@ package at.dropical.wolliAI.types;
 // Created by julian on 26.04.18.
 
 import at.dropical.shared.PlayerAction;
-import at.dropical.wolliAI.serverAdapter.ServerAdapter;
+import at.dropical.wolliAI.ServerAdapter;
 
 /**
  * This moves the tetromino to the lowest

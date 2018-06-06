@@ -1,12 +1,13 @@
 package at.dropical.wolliAI.bestPossibility;
 // Created by julian on 26.04.18.
 
+import at.dropical.shared.GameState;
 import at.dropical.shared.PlayerAction;
 import at.dropical.wolliAI.types.AI;
-import at.dropical.wolliAI.serverAdapter.ServerAdapter;
+import at.dropical.wolliAI.ServerAdapter;
 
 /**
- * TODO Description
+ * TODO Nur berechnen, wenn es nötig ist.
  * See Package-info.
  */
 public class BestPossibilityAI implements AI {
@@ -23,13 +24,11 @@ public class BestPossibilityAI implements AI {
     @Override
     public void process() {
         // Make the AI slower
-        if(tick % 10 == 0) {
-
+        if(tick % 3 == 0 && server.getGameState() == GameState.RUNNING) {
             GameField field = new GameField(server.getArena(), server.getTetromino(), server.getXPos(), server.getYPos());
             BestPlaceFinder.BestPlace bestPlace = finder.findBestPlace(field);
 
             int direction = server.getYPos() - bestPlace.column;
-            System.out.println(bestPlace);
 
             // rotate
             if(bestPlace.rotate >= 1)

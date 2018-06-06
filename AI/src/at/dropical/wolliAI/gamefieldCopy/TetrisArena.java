@@ -75,27 +75,39 @@ public class TetrisArena {
      * @return false if it's out of bounds or if there are already
      * blocks at those positions. */
     public boolean checkTetromino(Tetromino tetromino, int h, int w, boolean overTopAllowed) {
-        int[][] tetrominoArr = tetromino.toArray();
-        for(int i = 0; i < Tetromino.size; i++) {
-            for(int j = 0; j < Tetromino.size; j++) {
-                // Only care if there is a block
-                if(tetrominoArr[i][j] >= 1) {
+        try {
 
-                    // If space is occupied Or out of bounds of actual arena
-                    if(arena[marginTop + h + i][marginLeftRight + w + j] >= 1
-                            || w+j < 0    // Out left
-                            || w+j >= width // Out right
-                            || h+i >= height // Out bottom
-                            || !overTopAllowed && (h+i <0))
+            boolean tetrominoEmpty = true;
+            int[][] tetrominoArr = tetromino.toArray();
+            for(int i = 0; i < Tetromino.size; i++) {
+                for(int j = 0; j < Tetromino.size; j++) {
+                    // Only care if there is a block
+                    if(tetrominoArr[i][j] >= 1) {
+                        tetrominoEmpty = false;
+
+                        //System.out.println(arena.length + " " + arena[marginTop + h + i].length);
+                        // If space is occupied Or out of bounds of actual arena
+                        if(arena[marginTop + h + i][marginLeftRight + w + j] >= 1
+                                || w + j < 0    // Out left
+                                || w + j >= width // Out right
+                                || h + i >= height // Out bottom
+                                || !overTopAllowed && (h + i < 0))
                             /* Out top is sometimes allowed because the tetromino
                              * has to start falling down from over the top.*/
 
-                        return false; //Stop if one block fails.
+                            return false; //Stop if one block fails.
+                    }
                 }
             }
+            /* Only return true when all 4*4 spaces of the Tetromino are ok.
+             * In the case that an empty tetromino is checked, return false
+             * to prevent an endless loop in drop() or moveToLeft() */
+            return !tetrominoEmpty;
+
+        }catch(IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return false;
         }
-        // Only when all 4*4 spaces of the Tetromino are ok.
-        return true;
     }
 
     /** Only the actual arena. */
