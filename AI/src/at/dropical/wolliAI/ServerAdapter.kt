@@ -1,8 +1,7 @@
-package at.dropical.wolliAI.serverAdapter
+package at.dropical.wolliAI
 
 import at.dropical.client.DropicalListener
 import at.dropical.client.DropicalProxy
-import at.dropical.client.impl.BestJavaListener
 import at.dropical.shared.GameState
 import at.dropical.shared.PlayerAction
 import at.dropical.shared.net.container.CountDownContainer
@@ -11,8 +10,6 @@ import at.dropical.shared.net.container.GameOverContainer
 import at.dropical.shared.net.container.ListDataContainer
 import at.dropical.shared.net.requests.HandleInputRequest
 import at.dropical.shared.net.requests.JoinRequest
-import java.io.IOException
-import java.util.*
 
 
 // Created by julian on 11.01.18.

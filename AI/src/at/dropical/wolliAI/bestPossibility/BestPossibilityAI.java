@@ -3,7 +3,7 @@ package at.dropical.wolliAI.bestPossibility;
 
 import at.dropical.shared.PlayerAction;
 import at.dropical.wolliAI.types.AI;
-import at.dropical.wolliAI.serverAdapter.ServerAdapter;
+import at.dropical.wolliAI.ServerAdapter;
 
 /**
  * TODO Description
