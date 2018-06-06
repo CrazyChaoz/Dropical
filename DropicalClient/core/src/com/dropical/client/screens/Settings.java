@@ -7,14 +7,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
 import com.pezcraft.dropical.cam.DropicalCam;
-import com.pezcraft.dropical.gui.DropicalButton;
 
-public class CountDown implements Screen {
+public class Settings implements Screen {
     private DropicalCam cam;
     private Sprite background;
     private BitmapFont bitmapFont;
@@ -23,11 +21,8 @@ public class CountDown implements Screen {
     private ScreenManager screenManager = ScreenManager.getInstance();
     private DataManager manager;
 
-    //Countdown
-    private int countdown = 0;
-
     private DropicalMain game;
-    public CountDown(DropicalMain game) {
+    public Settings(DropicalMain game) {
         this.game = game;
     }
 
@@ -58,16 +53,6 @@ public class CountDown implements Screen {
 
         //Hintergrundbild zeichnen
         background.draw(game.getBatch());
-
-        //Countdown zeichnen
-        if(manager.getCountDownContainer() != null) {
-            countdown = manager.getCountDownContainer().getSeconds();
-        }
-        bitmapFont.draw(game.getBatch(), countdown+"", 0, 360, 1280, 1, false);
-
-        if(manager.getGameData() != null) {
-            screenManager.showScreen(screenManager.getGameScreen());
-        }
 
         game.getBatch().end();
     }

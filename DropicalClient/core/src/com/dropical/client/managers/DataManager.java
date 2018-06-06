@@ -6,6 +6,7 @@ import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.container.GameOverContainer;
 import at.dropical.shared.net.container.ListDataContainer;
+import at.dropical.shared.net.requests.CreateGameRequest;
 import at.dropical.shared.net.requests.JoinRequest;
 
 import java.io.IOException;
@@ -25,13 +26,21 @@ public class DataManager implements DropicalListener {
 
     private DataManager() { }
 
-    public void createProxy() {
+    public void createProxy(String ip) {
         try {
-            proxy = new DropicalProxy("localhost", 45000, this);
-            proxy.writeToServer(new JoinRequest("RP1"));
+            proxy = new DropicalProxy(ip, 45000, this);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void joinSingleplayer() {
+        proxy.writeToServer(new CreateGameRequest("Game1",1));
+        proxy.writeToServer(new JoinRequest("Game1","RP1"));
+    }
+
+    public void joinTurnier() {
+        proxy.writeToServer(new JoinRequest("RP1"));
     }
 
     @Override

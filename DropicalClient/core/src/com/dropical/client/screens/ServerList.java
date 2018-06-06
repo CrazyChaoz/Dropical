@@ -3,18 +3,21 @@ package com.dropical.client.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
 import com.pezcraft.dropical.cam.DropicalCam;
-import com.pezcraft.dropical.gui.DropicalButton;
+import com.pezcraft.dropical.gui.DropicalTextField;
 
-public class CountDown implements Screen {
+public class ServerList implements Screen {
     private DropicalCam cam;
     private Sprite background;
     private BitmapFont bitmapFont;
@@ -23,11 +26,12 @@ public class CountDown implements Screen {
     private ScreenManager screenManager = ScreenManager.getInstance();
     private DataManager manager;
 
-    //Countdown
-    private int countdown = 0;
+    //TextField
+    private Stage stage;
+    private DropicalTextField ipTextField;
 
     private DropicalMain game;
-    public CountDown(DropicalMain game) {
+    public ServerList(DropicalMain game) {
         this.game = game;
     }
 
@@ -38,15 +42,24 @@ public class CountDown implements Screen {
         background.setPosition(0, 0);
         background.setSize(1280, 720);
 
-        //Schrift für Steuerung-Erklärung
+        //Schrift für TextFields
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
         bitmapFont.getData().setScale(0.9f);
         bitmapFont.setColor(new Color(0x4C4C4Cff));
 
-        manager = DataManager.getInstance();
-
         //Kamera
         cam = new DropicalCam(1280, 720);
+
+        //Manager
+        manager = DataManager.getInstance();
+
+        //DropicaltextField
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+
+        ipTextField = new DropicalTextField("", bitmapFont, "GUI/textFields/textField_background.png", "GUI/textFields/textField_cursor.png", 440, 250, 100, 22, 400, 88);
+
+        stage.addActor(ipTextField.getField());
     }
 
     @Override
@@ -54,22 +67,18 @@ public class CountDown implements Screen {
         //Tastatureingaben
         handleInput();
 
+        //TextFieldevents
+        stage.act(delta);
+
         game.getBatch().begin();
 
         //Hintergrundbild zeichnen
         background.draw(game.getBatch());
 
-        //Countdown zeichnen
-        if(manager.getCountDownContainer() != null) {
-            countdown = manager.getCountDownContainer().getSeconds();
-        }
-        bitmapFont.draw(game.getBatch(), countdown+"", 0, 360, 1280, 1, false);
-
-        if(manager.getGameData() != null) {
-            screenManager.showScreen(screenManager.getGameScreen());
-        }
-
         game.getBatch().end();
+
+        //DropicalTextFields rendern
+        stage.draw();
     }
 
     @Override
@@ -96,6 +105,14 @@ public class CountDown implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             screenManager.setMenuScreen(new Menu(game), game);
             screenManager.showScreen(screenManager.getMenuScreen());
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            manager.createProxy(ipTextField.getField().getText());
+            manager.joinSingleplayer();
+
+            screenManager.setGameScreen(new Game(game, 1), game);
+            screenManager.setCountdownScreen(new CountDown(game), game);
+            screenManager.showScreen(screenManager.getCountdownScreen());
         }
     }
 

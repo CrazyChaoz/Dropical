@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
-import com.dropical.client.server.TetrisServerImpl;
 import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
@@ -28,10 +27,9 @@ public class Game implements Screen {
     private List<Texture> texturList = new ArrayList<Texture>();
 
     //Manager
-    ScreenManager screenManager = ScreenManager.getInstance();
+    private ScreenManager screenManager = ScreenManager.getInstance();
 
     //Server
-    public TetrisServerImpl server = null;
     private DataManager manager;
 
     //Spieldaten
@@ -69,13 +67,6 @@ public class Game implements Screen {
 
     @Override
     public void show() {
-        //Server erstellen
-        try {
-            createServer(anzahlSpieler);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         manager = DataManager.getInstance();
 
         //Schrift für Punkte, Level, ... festlegen
@@ -106,9 +97,6 @@ public class Game implements Screen {
 
         //Kamera
         cam = new DropicalCam(1280, 720);
-    }
-    private void createServer(int anzahlSpieler) throws Exception {
-        server = new TetrisServerImpl(anzahlSpieler);
     }
 
     @Override
@@ -218,15 +206,13 @@ public class Game implements Screen {
     }
 
     private void pollPlayerInfo(int playerNo) throws Exception {
-//        pollRequest.setPlayerNo(playerNo);
         if(playerNo == 0) {
             handleInputP1();
-            manager.getProxy().writeToServer(new HandleInputRequest("Player1", gameKeyP1));
+            manager.getProxy().writeToServer(new HandleInputRequest("RP1", gameKeyP1));
         } else {
             handleInputP2();
-            manager.getProxy().writeToServer(new HandleInputRequest("Player2", gameKeyP2));
+            manager.getProxy().writeToServer(new HandleInputRequest("Kemps_JFX_GUI2", gameKeyP2));
         }
-//        pollRequest = server.pollGameState(pollRequest);
     }
     private void updatePollRequestData(int playerNo) {
         if(manager.getGameData() != null) {
