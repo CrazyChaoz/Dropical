@@ -11,13 +11,16 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class StartingState extends State implements Runnable {
+
+    private static final int STARTING_TIME = 3;
+
     private int time;
     private Game game;
 
     public StartingState(Game game) {
         super(game);
         this.game=game;
-        time=15;
+        time = STARTING_TIME;
         new Thread(this).start();
     }
 

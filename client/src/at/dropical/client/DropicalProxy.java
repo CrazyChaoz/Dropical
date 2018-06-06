@@ -21,9 +21,6 @@ public final class DropicalProxy implements Runnable {
 
 
     public DropicalProxy(String host, int port, DropicalListener dropicalListener) throws IOException {
-//        if(host.equals("localhost")||host.equals("127.0.0.1"))
-//            transmitter=new LocalTransmitter(new LocalRequestCache());
-//        else
         transmitter = new RemoteTransmitter(new Socket(host, port));
         System.out.println("Connected to "+host+" on Port "+port);
         this.dropicalListener = dropicalListener;

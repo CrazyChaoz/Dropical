@@ -31,6 +31,11 @@ public class ServerSideRequestHandler implements RequestHandler {
 
     @Override
     public void run() {
+        /*try {
+            Thread.sleep(30);
+        } catch(InterruptedException ignored) {
+        }*/
+
         switch (request.getRequestKind()) {
             case JOIN:
                 autoJoinLock.lock();
@@ -99,7 +104,11 @@ public class ServerSideRequestHandler implements RequestHandler {
         }
 
         //when user is too fast & game is not yet created
-        while (Server.instance().getGame(request.getGameID()) == null) ;
+        while (Server.instance().getGame(request.getGameID()) == null) {
+            try {
+                Thread.sleep(10);
+            } catch(InterruptedException ignored) { }
+        }
         Game game = Server.instance().getGame(request.getGameID());
 
 //            if(game==null)

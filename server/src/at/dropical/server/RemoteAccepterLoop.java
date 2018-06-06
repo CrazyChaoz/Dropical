@@ -23,7 +23,8 @@ public class RemoteAccepterLoop extends Thread {
     public void run() {
         for (; ; ) {
             try {
-                Server.serverExecutor.execute(new InternalAccepter(serverSocket.accept()));
+                Server.serverExecutor.execute(new InternalAccepter(
+                        serverSocket.accept()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

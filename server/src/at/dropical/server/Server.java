@@ -3,7 +3,7 @@ package at.dropical.server;
 /**
  * The Top Level Class
  * Callable with Server.instance();
- * */
+ */
 
 import at.dropical.server.game.Game;
 import at.dropical.server.logging.LoggerSetup;
@@ -16,43 +16,45 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Logger;
 
 public class Server {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Server.instance();
     }
 
     //Singleton code
     //NO TOUCHY-TOUCHY
     private static Server privateInstance = new Server();
+
     public static Server instance() {
         return privateInstance;
     }
 
 
-/**
- * The Server starts here
- */
+    /**
+     * The Server starts here
+     */
 
 //  STATICS
 
-public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 
     //spamprotection
-    public static final boolean isPureAiGameAllowed=true;
+    public static final boolean isPureAiGameAllowed = true;
     //human tournaments
-    public static final boolean isAiAllowed=true;
+    public static final boolean isAiAllowed = true;
 
     //The serverPort
-    private static final int serverPort =45000;
-    private static final int adminPort =45666;
-    
-    //
-    private static final boolean isTounamentServer=true;
+    private static final int serverPort = 45000;
+    private static final int adminPort = 45666;
 
-    public static ExecutorService serverExecutor=Executors.newCachedThreadPool();
+    //
+    private static final boolean isTounamentServer = true;
+
+    public static ExecutorService serverExecutor = Executors.newCachedThreadPool();
 
 //  Constructor
 
@@ -61,22 +63,22 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
             LoggerSetup.setup();
             new RemoteAccepterLoop(new ServerSocket(serverPort));
             new WebInterface(new ServerSocket(adminPort));
-        } catch (IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
 
-//  Declarations
-    private Map<String,Game> games=new HashMap<>();
+    //  Declarations
+    private Map<String, Game> games = new HashMap<>();
 
 
-//  Getter
+    //  Getter
     public Map<String, Game> getAllGames() {
         return games;
     }
 
-    public Game getGame(String gameID){
+    public Game getGame(String gameID) {
         return games.get(gameID);
     }
 
@@ -90,11 +92,12 @@ public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 //  Methods
 
     public void addLocalClient(LocalRequestCache requestCache) {
-        LocalServerTransmitter localServerTransmitter=new LocalServerTransmitter(requestCache);
-        serverExecutor.execute(()->{
+        LocalServerTransmitter localServerTransmitter = new LocalServerTransmitter(requestCache);
+        serverExecutor.execute(() -> {
             try {
                 new Loop(localServerTransmitter);
-            } catch (IOException|ClassNotFoundException e) {}
+            } catch(IOException | ClassNotFoundException ignored) {
+            }
         });
     }
 }

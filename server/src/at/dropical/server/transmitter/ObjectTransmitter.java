@@ -18,7 +18,7 @@ public class ObjectTransmitter extends ServerSideTransmitter {
         super();
         //Die reihenfolge zählt ......
         this.outputStream=new ObjectOutputStream(outputStream);
-        this.inputStream=new ObjectInputStream(inputStream);
+        this.inputStream=new ObjectInputStream(new BufferedInputStream(inputStream));
     }
 
     @Override
