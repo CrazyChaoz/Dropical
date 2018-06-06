@@ -1,7 +1,7 @@
 package at.dropical.wolliAI.types;// Created by julian on 25.04.18.
 
 import at.dropical.shared.PlayerAction;
-import at.dropical.wolliAI.ServerAdapter;
+import at.dropical.wolliAI.serverAdapter.ServerAdapter;
 
 /**
  * This is a simple test AI that always sends

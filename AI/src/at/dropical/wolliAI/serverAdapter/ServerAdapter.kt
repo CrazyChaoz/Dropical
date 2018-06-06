@@ -1,7 +1,8 @@
-package at.dropical.wolliAI
+package at.dropical.wolliAI.serverAdapter
 
 import at.dropical.client.DropicalListener
 import at.dropical.client.DropicalProxy
+import at.dropical.client.impl.BestJavaListener
 import at.dropical.shared.GameState
 import at.dropical.shared.PlayerAction
 import at.dropical.shared.net.container.CountDownContainer
@@ -10,6 +11,8 @@ import at.dropical.shared.net.container.GameOverContainer
 import at.dropical.shared.net.container.ListDataContainer
 import at.dropical.shared.net.requests.HandleInputRequest
 import at.dropical.shared.net.requests.JoinRequest
+import java.io.IOException
+import java.util.*
 
 
 // Created by julian on 11.01.18.
@@ -37,6 +40,7 @@ class ServerAdapter(
     init {
         /** Auto-queue to a game on the server. */
         server.writeToServer(JoinRequest(playerName))
+        println("gejoined")
     }
 
 
@@ -79,10 +83,9 @@ class ServerAdapter(
 
     fun getArena(): Array<IntArray> {
         val container = newestGameDataContainer
-        if(container != null) {
-            println("Arena Größe: "+ container.arenas[index].size +"*"+ container.arenas[index][0].size)
+        if(container != null)
             return container.arenas[index]
-        } else
+        else
             return emptyArena
     }
 
@@ -103,7 +106,6 @@ class ServerAdapter(
 
     fun getXPos(): Int {
         val container = newestGameDataContainer
-        println("TrockX="+ container?.currTrockXs?.get(index))
         if(container != null)
             return container.currTrockXs[index]
         else
@@ -111,7 +113,6 @@ class ServerAdapter(
     }
     fun getYPos(): Int {
         val container = newestGameDataContainer
-        println("TrockY="+container?.currTrockXs?.get(index))
         if(container != null)
             return container.currTrockYs[index]
         else
