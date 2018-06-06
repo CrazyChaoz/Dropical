@@ -27,7 +27,10 @@ public final class DropicalProxy implements Runnable {
         transmitter = new RemoteTransmitter(new Socket(host, port));
         System.out.println("Connected to "+host+" on Port "+port);
         this.dropicalListener = dropicalListener;
-        new Thread(this, "DropicalProxy").start();
+
+        Thread thread = new Thread(this, "DropicalProxy");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void writeToServer(SendableItem request) {
