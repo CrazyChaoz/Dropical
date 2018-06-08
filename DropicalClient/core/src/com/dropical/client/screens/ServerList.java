@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -15,6 +17,7 @@ import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
 import com.pezcraft.dropical.cam.DropicalCam;
+import com.pezcraft.dropical.gui.DropicalButton;
 import com.pezcraft.dropical.gui.DropicalTextField;
 
 public class ServerList implements Screen {
@@ -26,9 +29,10 @@ public class ServerList implements Screen {
     private ScreenManager screenManager = ScreenManager.getInstance();
     private DataManager manager;
 
-    //TextField
+    //TextField/Button
     private Stage stage;
     private DropicalTextField ipTextField;
+    private DropicalButton localhostButton;
 
     private DropicalMain game;
     public ServerList(DropicalMain game) {
@@ -53,13 +57,33 @@ public class ServerList implements Screen {
         //Manager
         manager = DataManager.getInstance();
 
-        //DropicaltextField
+        //DropicalTextField
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         ipTextField = new DropicalTextField("", bitmapFont, "GUI/textFields/textField_background.png", "GUI/textFields/textField_cursor.png", 440, 250, 100, 22, 400, 88);
+        localhostButton = new DropicalButton("", bitmapFont, "GUI/buttons/hammock/hammock_up.png", "GUI/buttons/hammock/hammock_down.png", "GUI/buttons/hammock/hammock_down.png", "GUI/buttons/hammock/hammock_down.png", "GUI/buttons/hammock/hammock_disabled.png", 524, 552, 58, 14, 232, 56);
+        localhostButton.getButton().addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                manager.createProxy("localhost");
+                manager.joinSingleplayer();
+
+                screenManager.setGameScreen(new Game(game, 1), game);
+                screenManager.setCountdownScreen(new CountDown(game), game);
+                screenManager.showScreen(screenManager.getCountdownScreen());
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
 
         stage.addActor(ipTextField.getField());
+        stage.addActor(localhostButton.getButton());
     }
 
     @Override

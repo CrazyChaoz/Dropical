@@ -130,9 +130,6 @@ public class Menu implements Screen {
         //Hintergrundbild zeichnen
         background.draw(game.getBatch());
 
-        //Eingabeerklärung zeichnen
-        bitmapFont.draw(game.getBatch(), "[1] Singleplayer (Steuerung: WASD + SPACE)\n[2] Multiplayer (Steuerung: Pfeiltasten + ENTER)\n[P] Pause im Spiel", 0, 360, 1280, 1, false);
-
         game.getBatch().end();
 
         //DropicalButtons rendern

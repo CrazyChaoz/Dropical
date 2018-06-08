@@ -226,14 +226,14 @@ public class Game implements Screen {
             level = manager.getGameData().getLevels().get(playerNo);
 //        timeTillNextLevel = pollRequest.getTime();
 
-            //Ghost aus neuen Daten erstellen
-            ghostArray = tetArray;
-            ghostPosX = tPosX-2;
-            ghostPosY = tPosY-4;
-            //verhindern der IndexOutOfBounds-Exception
-            if(ghostPosY < 0) {
-                ghostPosY = 0;
-            }
+//            //Ghost aus neuen Daten erstellen
+//            ghostArray = tetArray;
+//            ghostPosX = tPosX-2;
+//            ghostPosY = tPosY-4;
+//            //verhindern der IndexOutOfBounds-Exception
+//            if(ghostPosY < 0) {
+//                ghostPosY = 0;
+//            }
         }
 
     }
