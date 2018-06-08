@@ -24,8 +24,8 @@ public class GameField {
     GameField(int[][] arena, int[][] tetromino, int xPos, int yPos) {
         this.arena = new TetrisArena(arena, true);
         this.mino = whatTypeIsThis(tetromino);
-        posH = xPos;
-        posW = yPos;
+        posH = yPos;
+        posW = xPos;
     }
 
     /** For cloning. */
@@ -119,5 +119,10 @@ public class GameField {
     }
     int getPosW() {
         return posW;
+    }
+
+    @Override
+    public String toString() {
+        return arena.toString();
     }
 }

@@ -62,7 +62,7 @@ public class LowestPointAI implements AI{
 
     /** Schaun ma moi hot da blinde gsogt. */
     private void navigateToColumn(int column, ServerAdapter server) {
-        int direction = server.getYPos() - column;
+        int direction = server.getXPos() - column;
 
         //Adjust to the tetromino
         boolean nothing = true;

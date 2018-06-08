@@ -17,24 +17,15 @@ import java.util.logging.Level;
 
 public class Game extends Thread{
 
-    //Zuseher
-    private List<ServerSideTransmitter> viewers = new ArrayList();
-
-    //Players
+    private List<ServerSideTransmitter> viewers = new ArrayList<>();
     private List<ServerSideTransmitter> players = new ArrayList<>();
 
-    //Games
     private Map<String,OnePlayer> games = new HashMap<>();
-
-
     private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
-
-    //maximum number of players
     private int maxPlayers;
 
-
-    //Lock
     private ReentrantLock safetyLock=new ReentrantLock();
+    private boolean updateClientsNextTime = false;
 
     //Classic
     public Game() {
@@ -46,21 +37,6 @@ public class Game extends Thread{
     }
 
 
-
-
-    public Map<String, OnePlayer> getGames() {
-        return games;
-    }
-
-    public at.dropical.server.gamestates.State getCurrentGameState() {
-        return currentGameState;
-    }
-
-
-
-    /**
-     * @return -1 if no players can be added
-     */
     public void addPlayer(String playerName, ServerSideTransmitter transmitter) {
         safetyLock.lock();
 
@@ -87,19 +63,19 @@ public class Game extends Thread{
     public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
         Server.LOGGER.log(Level.INFO,"State changed to "+currentGameState.getClass());
         this.currentGameState = currentGameState;
+
+        updateClientsNextTime = true;
     }
 
     public void handleInput(HandleInputRequest handleInputRequest){
         for (Map.Entry<String,OnePlayer> game : games.entrySet()) {
             if(game.getValue().getPlayername().equals(handleInputRequest.getPlayername())) {
                 currentGameState.handleInput(game.getValue(),handleInputRequest);
+                updateClientsNextTime = true;
+
                 return;
             }
         }
-    }
-
-    public void reJoin(String playerName, ServerSideTransmitter transmitter){
-        //TODO: somebody implement
     }
 
     public void updateClients() {
@@ -112,7 +88,6 @@ public class Game extends Thread{
                 player.writeRequest(container);
             else{
                 players.remove(player);
-                // TODO: players.add(new AI());
             }
 
         }
@@ -125,11 +100,11 @@ public class Game extends Thread{
         safetyLock.unlock();
     }
 
+    /** Loops every 10ms. */
     @Override
     public void run() {
-        boolean doUpdate;
         while (!isInterrupted()) {
-            doUpdate=false;
+            boolean doUpdate = false;
 
             for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
                 try {
@@ -141,12 +116,26 @@ public class Game extends Thread{
                     Server.LOGGER.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
                 }
             }
-            if(doUpdate)
+            if(doUpdate || updateClientsNextTime) {
+                updateClientsNextTime = false;
                 updateClients();
+            }
+
             try {
                 Thread.sleep(10);
-            } catch (InterruptedException e) {}
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         updateClients();
     }
+
+    public Map<String, OnePlayer> getGames() {
+        return games;
+    }
+
+    public at.dropical.server.gamestates.State getCurrentGameState() {
+        return currentGameState;
+    }
+
 }

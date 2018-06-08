@@ -23,13 +23,13 @@ public class BestPossibilityAI implements AI {
     @Override
     public void process() {
         // Make the AI slower
-        if(tick % 10 == 0) {
+        if(tick % 2 == 0) {
 
             GameField field = new GameField(server.getArena(), server.getTetromino(), server.getXPos(), server.getYPos());
             BestPlaceFinder.BestPlace bestPlace = finder.findBestPlace(field);
 
-            int direction = server.getYPos() - bestPlace.column;
-            System.out.println(bestPlace);
+            int direction = server.getXPos() - bestPlace.column;
+            //System.out.println(bestPlace);
 
             // rotate
             if(bestPlace.rotate >= 1)
