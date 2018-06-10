@@ -1,5 +1,6 @@
 package com.dropical.client.screens;
 
+import at.dropical.shared.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -131,9 +132,8 @@ public class ServerList implements Screen {
             manager.createProxy(ipTextField.getField().getText());
             manager.joinSingleplayer();
 
-            screenManager.setGameScreen(new Game(game, 1), game);
-            screenManager.setCountdownScreen(new CountDown(game), game);
-            screenManager.showScreen(screenManager.getCountdownScreen());
+            screenManager.setLobbyScreen(new Lobby(game), game);
+            screenManager.showScreen(screenManager.getLobbyScreen());
         }
     }
 

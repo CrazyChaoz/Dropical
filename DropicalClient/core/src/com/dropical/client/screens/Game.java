@@ -198,7 +198,7 @@ public class Game implements Screen {
 
     //wenn Gameover, dann auf GameOver-Screen wechseln
     private void checkGameLost() {
-        if(gameState == GameState.GAME_LOST) {
+        if(gameState == GameState.GAME_OVER) {
             if(gameStateP1 == GameState.GAME_LOST) {
                 screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2), game);
                 screenManager.showScreen(screenManager.getGameOverScreen());

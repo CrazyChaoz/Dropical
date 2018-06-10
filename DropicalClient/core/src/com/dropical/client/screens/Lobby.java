@@ -1,5 +1,6 @@
 package com.dropical.client.screens;
 
+import at.dropical.shared.GameState;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -69,7 +70,11 @@ public class Lobby implements Screen {
         //Hintergrundbild zeichnen
         background.draw(game.getBatch());
 
-
+        if(manager.getGameData().getCurrentState() != GameState.LOBBY) {
+            screenManager.setGameScreen(new Game(game, 1), game);
+            screenManager.setCountdownScreen(new CountDown(game), game);
+            screenManager.showScreen(screenManager.getCountdownScreen());
+        }
 
         game.getBatch().end();
     }
