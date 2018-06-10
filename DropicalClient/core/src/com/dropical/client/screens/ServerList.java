@@ -3,7 +3,6 @@ package com.dropical.client.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
@@ -57,7 +54,7 @@ public class ServerList implements Screen {
         //Manager
         manager = DataManager.getInstance();
 
-        //DropicalTextField
+        //Dropical TextField, Buttons
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 

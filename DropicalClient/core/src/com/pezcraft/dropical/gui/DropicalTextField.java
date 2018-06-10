@@ -40,6 +40,7 @@ public class DropicalTextField {
         style.cursor = skin.newDrawable("cursor");
         style.font = skin.getFont("font");
         style.fontColor = new Color(0x4C4C4Cff);
+        style.messageFontColor = new Color(0x4C4C4C55);
         skin.add("default", style);
 
         field = new TextField(text, skin);
@@ -53,6 +54,8 @@ public class DropicalTextField {
         field.setAlignment(1);
         field.setMaxLength(15);
         field.setPosition(x, y);
+
+        field.setMessageText("IP");
     }
 
     public TextField getField() {

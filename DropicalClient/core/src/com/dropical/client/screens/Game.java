@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
+import com.dropical.client.managers.SettingsManager;
 import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public class Game implements Screen {
     private List<Texture> texturList = new ArrayList<Texture>();
 
     //Manager
-    private ScreenManager screenManager = ScreenManager.getInstance();
+    private ScreenManager screenManager;
+    private SettingsManager settingsManager;
 
     //Server
     private DataManager manager;
@@ -44,11 +46,11 @@ public class Game implements Screen {
     private GameState gameStateP2;
 
     //Tetromino-Attribute
-    private int[][] arenaArray;
-    private int[][] tetArray;
-    private int[][] nextTetArray;
-    private int tPosX;
-    private int tPosY;
+    private int[][] arenaArray = new int[20][10];
+    private int[][] tetArray = new int[4][4];
+    private int[][] nextTetArray = new int[4][4];
+    private int tPosX = 0;
+    private int tPosY = 0;
 
     //Ghost-Tetromino-Attribute
     private int[][] ghostArray;
@@ -67,6 +69,9 @@ public class Game implements Screen {
 
     @Override
     public void show() {
+        //Manager
+        screenManager = ScreenManager.getInstance();
+        settingsManager = SettingsManager.getInstance();
         manager = DataManager.getInstance();
 
         //Schrift für Punkte, Level, ... festlegen
@@ -226,14 +231,16 @@ public class Game implements Screen {
             level = manager.getGameData().getLevels().get(playerNo);
 //        timeTillNextLevel = pollRequest.getTime();
 
-//            //Ghost aus neuen Daten erstellen
-//            ghostArray = tetArray;
-//            ghostPosX = tPosX-2;
-//            ghostPosY = tPosY-4;
-//            //verhindern der IndexOutOfBounds-Exception
-//            if(ghostPosY < 0) {
-//                ghostPosY = 0;
-//            }
+            //Ghost aus neuen Daten erstellen
+            if(settingsManager.isGhostActive()) {
+                ghostArray = tetArray;
+                ghostPosX = tPosX;
+                ghostPosY = tPosY;
+                //verhindern der IndexOutOfBounds-Exception
+                if(ghostPosY < 0) {
+                    ghostPosY = 0;
+                }
+            }
         }
 
     }
@@ -242,16 +249,18 @@ public class Game implements Screen {
         int yTMP;
 
         //Ghost-Tetromino in Arena schreiben
-        if(gameState == GameState.RUNNING) {
-            while(!moveGhostDown());
+        if(settingsManager.isGhostActive()) {
+            if(gameState == GameState.RUNNING) {
+                while(!moveGhostDown());
+            }
         }
 
         //Tetromino in Arena schreiben
         for(int y = 0; y < 4; y++) {
             for(int x = 0; x < 4; x++) {
                 if(tetArray[y][x] != 0) { //Bereich mit 0er ignorieren
-                    xTMP = tPosX-2+x;   //-2, weil die Arena rechts und links unsichtbar ist
-                    yTMP = tPosY-4+y;   //-4, weil die Arena oben unsichtbar ist
+                    xTMP = tPosX+x;
+                    yTMP = tPosY+y;
                     //sicherstellen, dass der aktuelle einzelne Block des Tetrominos im sichtbare Bereich liegt
                     if(xTMP >= 0 && yTMP >= 0 && xTMP < 10 && yTMP < 20) {
                         //Tetromino in Arena schreiben
@@ -370,13 +379,13 @@ public class Game implements Screen {
     }
     private void handleInputP1() {
         //Tetromino-Steuerung
-        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             gameKeyP1 = PlayerAction.LEFT;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             gameKeyP1 = PlayerAction.RIGHT;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             gameKeyP1 = PlayerAction.DOWN;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.W)) {
@@ -388,13 +397,13 @@ public class Game implements Screen {
     }
     private void handleInputP2() {
         //Tetromino-Steuerung
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             gameKeyP2 = PlayerAction.LEFT;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             gameKeyP2 = PlayerAction.RIGHT;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             gameKeyP2 = PlayerAction.DOWN;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {

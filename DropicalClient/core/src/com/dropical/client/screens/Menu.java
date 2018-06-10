@@ -32,6 +32,10 @@ public class Menu implements Screen {
     private DropicalButton multiplayerLocalButton;
     private DropicalButton multiplayerOnlineButton;
     private DropicalButton tournamentButton;
+    private DropicalButton settingsButton;
+
+    //Mobs
+    private Sprite fishSprite;
 
     private DropicalMain game;
     public Menu(DropicalMain game) {
@@ -56,6 +60,12 @@ public class Menu implements Screen {
         //Manager
         manager = DataManager.getInstance();
 
+        //Mobs
+        fishSprite = new Sprite(new Texture(Gdx.files.internal("Fish/fish.png")));
+        fishSprite.setSize(56, 56);
+        fishSprite.setPosition(600,260);
+        fishSprite.rotate(-30);
+
         //DropicalButton
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -65,8 +75,9 @@ public class Menu implements Screen {
         singleplayerButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                screenManager.setServerListScreen(new ServerList(game), game);
-                screenManager.showScreen(screenManager.getServerListScreen());
+                if(!singleplayerButton.getButton().isDisabled()) {
+                    screenManager.setServerListScreen(new ServerList(game), game);
+                    screenManager.showScreen(screenManager.getServerListScreen());
 
 //                manager.createProxy();
 //                manager.joinSingleplayer();
@@ -74,6 +85,7 @@ public class Menu implements Screen {
 //                screenManager.setGameScreen(new Game(game, 1), game);
 //                screenManager.setCountdownScreen(new CountDown(game), game);
 //                screenManager.showScreen(screenManager.getCountdownScreen());
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -86,12 +98,14 @@ public class Menu implements Screen {
         multiplayerLocalButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                manager.createProxy("localhost");
-                manager.joinTurnier();
+                if(!multiplayerLocalButton.getButton().isDisabled()) {
+                    manager.createProxy("localhost");
+                    manager.joinTurnier();
 
-                screenManager.setGameScreen(new Game(game, 2), game);
-                screenManager.setCountdownScreen(new CountDown(game), game);
-                screenManager.showScreen(screenManager.getCountdownScreen());
+                    screenManager.setGameScreen(new Game(game, 2), game);
+                    screenManager.setCountdownScreen(new CountDown(game), game);
+                    screenManager.showScreen(screenManager.getCountdownScreen());
+                }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -100,15 +114,34 @@ public class Menu implements Screen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+        multiplayerLocalButton.getButton().setDisabled(true);
         multiplayerOnlineButton = new DropicalButton("Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 688, 28, 65, 44, 260, 176);
         multiplayerOnlineButton.flipX();
+        multiplayerOnlineButton.getButton().setDisabled(true);
         tournamentButton = new DropicalButton("Tournaments", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 984, 12, 52, 61, 208, 244);
         tournamentButton.flipX();
+        tournamentButton.getButton().setDisabled(true);
+        settingsButton = new DropicalButton("Einstellungen", bitmapFont, "GUI/buttons/main/main_up.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_disabled.png", 524, 552, 100, 22, 400, 88);
+        settingsButton.getButton().addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                screenManager.setSettingsScreen(new Settings(game), game);
+                screenManager.showScreen(screenManager.getSettingsScreen());
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
 
         stage.addActor(singleplayerButton.getButton());
         stage.addActor(multiplayerLocalButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
+        stage.addActor(settingsButton.getButton());
     }
 
     @Override
@@ -130,7 +163,12 @@ public class Menu implements Screen {
         //Hintergrundbild zeichnen
         background.draw(game.getBatch());
 
+        //Mobs zeichnen
+        fishSprite.draw(game.getBatch());
+
         game.getBatch().end();
+
+        //----------------------------------------------------------
 
         //DropicalButtons rendern
         stage.draw();
