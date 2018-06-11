@@ -82,6 +82,7 @@ public class ServerList implements Screen {
 
         stage.addActor(ipTextField.getField());
         stage.addActor(localhostButton.getButton());
+        stage.setViewport(cam.getViewport());
     }
 
     @Override
@@ -106,6 +107,7 @@ public class ServerList implements Screen {
     @Override
     public void resize(int width, int height) {
         cam.update(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override

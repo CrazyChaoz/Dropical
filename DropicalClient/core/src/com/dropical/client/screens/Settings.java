@@ -73,6 +73,7 @@ public class Settings implements Screen {
         });
 
         stage.addActor(ghostButton.getButton());
+        stage.setViewport(cam.getViewport());
     }
 
     @Override
@@ -97,6 +98,7 @@ public class Settings implements Screen {
     @Override
     public void resize(int width, int height) {
         cam.update(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override
