@@ -142,6 +142,7 @@ public class Menu implements Screen {
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
         stage.addActor(settingsButton.getButton());
+        stage.setViewport(cam.getViewport());
     }
 
     @Override
@@ -177,6 +178,7 @@ public class Menu implements Screen {
     @Override
     public void resize(int width, int height) {
         cam.update(width, height);
+        stage.getViewport().update(width, height);
     }
 
     @Override

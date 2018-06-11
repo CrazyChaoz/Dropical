@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-/** A {@link TextButton} styled with pictures.
+/** A {@link TextButton} styled with pictures. It facilitates the use of buttons.
  *
  * @author Pezcraft */
 public class DropicalButton {
