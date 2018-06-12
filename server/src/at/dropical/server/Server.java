@@ -21,15 +21,15 @@ public class Server {
 
     /** Singleton Code. Initialised in main(). */
     private static Server serverInstance;
-    private static Logger logger;
 
     /** Fields of the instance. */
+    private Logger logger;
     private GameManager manager;
     /** The pool is mainly used for the Receiver Threads. */
     private ExecutorService executor;
 
+    /** Initialise and wait for connections. */
     public static void main(String[] args) {
-        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         try {
             serverInstance = new Server();
             // Only returns on Error.
@@ -37,10 +37,13 @@ public class Server {
 
         } catch(IOException e) {
             log(Level.SEVERE, e.toString());
+        } finally {
+            instance().executor.shutdownNow();
         }
     }
 
     private Server() throws IOException {
+        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         //TODO Deamon Threads Factory
         executor = Executors.newCachedThreadPool();
 
@@ -52,13 +55,18 @@ public class Server {
     public static Server instance() {
         return serverInstance;
     }
+
     /** Log in a file and sout. */
     public static void log(Level level, String msg) {
-        logger.log(level, msg);
+        instance().logger.log(level, msg);
     }
 
     /** Run some code concurrenty in the global Thread pool. */
-    public void execute(Runnable runnable) {
-        executor.execute(runnable);
+    public static void execute(Runnable runnable) {
+        instance().executor.execute(runnable);
+    }
+
+    public GameManager getManager() {
+        return manager;
     }
 }

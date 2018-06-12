@@ -22,10 +22,6 @@ public class ServerSideRequestHandler implements RequestHandler {
     private Request request;
     private ServerToClientAdapter transmitter;
 
-    public ServerSideRequestHandler(Request request, ServerToClientAdapter transmitter) {
-        this.request = request;
-        this.transmitter = transmitter;
-    }
 
     @Override
     public void run() {
@@ -35,14 +31,8 @@ public class ServerSideRequestHandler implements RequestHandler {
         }*/
 
         switch (request.getRequestKind()) {
-            case JOIN:
-                handleJoinRequest((JoinRequest) request);
-                break;
             case LIST_GAMES:
                 handleListGamesRequest();
-                break;
-            case START_GAME:
-                handleStartGameRequest((StartGameRequest) request);
                 break;
             case CREATE_GAME:
                 handleCreateGameRequest((CreateGameRequest) request);
@@ -53,8 +43,6 @@ public class ServerSideRequestHandler implements RequestHandler {
             case LIST_PLAYERS:
                 handleListPlayersRequest();
                 break;
-            default:
-                Server.warning("Incorrect RequestKind recieved");
         }
     }
 

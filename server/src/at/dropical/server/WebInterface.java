@@ -24,7 +24,7 @@ public class WebInterface extends Thread {
     public void run() {
         for (; ; ) {
             try {
-                Server.instance().execute(new WebInterfaceClass(serverSocket.accept()));
+                Server.execute(new WebInterfaceClass(serverSocket.accept()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -153,7 +153,7 @@ class ScriptingEngine {
 
     public String listGamesByName() {
 
-        final Set<Map.Entry<String, Game>> entries = Server.instance().getAllGames().entrySet();
+        final Set<Map.Entry<String, Game>> entries = Server.instance().getManager().getAllGames().entrySet();
 
         if (entries.size() <= 0)
             stringBuilder.append("<h2>There is currently no Game running</h2>");
@@ -179,7 +179,7 @@ class ScriptingEngine {
     }
 
     public String examineGame(String gameID) {
-        final Game game = Server.instance().getGame(gameID);
+        final Game game = Server.instance().getManager().getGame(gameID);
 
         if (game.getGames().size() <= 0)
             stringBuilder.append("<h2>There is currently no Player connected</h2>");

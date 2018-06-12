@@ -6,6 +6,7 @@ import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.WaitingState;
 import at.dropical.server.transmitter.ServerToClientAdapter;
 import at.dropical.shared.net.abstracts.Container;
+import at.dropical.shared.net.abstracts.Transmitter;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
 import java.util.ArrayList;
@@ -15,50 +16,100 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
-public class Game extends Thread {
+public class Game implements Runnable {
 
     private List<ServerToClientAdapter> viewers = new ArrayList<>();
     private List<ServerToClientAdapter> players = new ArrayList<>();
 
     private Map<String,OnePlayer> games = new HashMap<>();
     private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
-    private int maxPlayers;
+    /** When this amrtsount of players is reached, the game starts. */
+    private int countPlayers;
 
-    private ReentrantLock safetyLock=new ReentrantLock();
+    private ReentrantLock playerLock =new ReentrantLock();
     private boolean updateClientsNextTime = false;
 
     //Classic
     public Game() {
-        maxPlayers=2;
+        countPlayers =2;
     }
     //Variable Players
     public Game(int playercount) {
-        this.maxPlayers=playercount;
+        this.countPlayers =playercount;
     }
 
+    @Override
+    public void run() {
+        while (!Thread.currentThread().isInterrupted()) {
 
-    public void addPlayer(String playerName, ServerToClientAdapter transmitter) {
-        safetyLock.lock();
+            gameLoop();
 
-        if (maxPlayers>games.size()) {
+            // Wait some time.
+            try {
+                Thread.sleep(10);
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        updateClients();
+    }
+
+    /** Loops every 10ms.
+     * First processes all inputs and
+     * then updates the arenas and
+     * sends packages back to the client. */
+    private void gameLoop() {
+        boolean doUpdate = false;
+
+        // Process inputs
+        for(ServerToClientAdapter player : players) {
+            for(HandleInputRequest inputRequest : player.getInputQueue()) {
+                handleInput(inputRequest);
+            }
+        }
+
+        // Do game logic
+        for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
+            try {
+                if (game.getValue().update()) {
+                    doUpdate = true;
+                }
+            } catch (GameOverException e) {
+                setCurrentGameState(new GameOverState(this,e.getLooserName()));
+                Server.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
+            }
+        }
+
+        // Send out data containers
+        if(doUpdate || updateClientsNextTime) {
+            updateClientsNextTime = false;
+            updateClients();
+        }
+    }
+
+    public void addPlayer(String playerName, Transmitter transmitter) {
+        playerLock.lock();
+
+        if (games.size() < countPlayers) {
             Server.log(Level.INFO,"Player "+playerName+" added");
-            players.add(transmitter);
+
+            players.add(new ServerToClientAdapter(transmitter));
             games.put(playerName,new OnePlayer(playerName));
         }
 
-        if (games.size()==maxPlayers)
+        if (games.size()== countPlayers)
             this.setCurrentGameState(new StartingState(this));
 
-        safetyLock.unlock();
+        playerLock.unlock();
 
         updateClients();
     }
 
     /** TODO be able to Join as a Viewer. */
     public void addViewer(ServerToClientAdapter transmitter) {
-        safetyLock.lock();
+        playerLock.lock();
         viewers.add(transmitter);
-        safetyLock.unlock();
+        playerLock.unlock();
     }
 
     public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
@@ -68,7 +119,9 @@ public class Game extends Thread {
         updateClientsNextTime = true;
     }
 
-    public void handleInput(HandleInputRequest handleInputRequest){
+    /** Don't call this from any RequestHandler Threads!
+     * Only from gameLoop. */
+    private void handleInput(HandleInputRequest handleInputRequest){
         for (Map.Entry<String,OnePlayer> game : games.entrySet()) {
             if(game.getValue().getPlayername().equals(handleInputRequest.getPlayername())) {
                 currentGameState.handleInput(game.getValue(),handleInputRequest);
@@ -79,10 +132,10 @@ public class Game extends Thread {
         }
     }
 
-    public void updateClients() {
+    private void updateClients() {
         Container container = currentGameState.getContainer();
 
-        if(!safetyLock.tryLock())
+        if(!playerLock.tryLock())
             return;
         for (ServerToClientAdapter player : players) {
             if(player.stillConnected())
@@ -98,37 +151,7 @@ public class Game extends Thread {
             else
                 viewers.remove(viewer);
         }
-        safetyLock.unlock();
-    }
-
-    /** Loops every 10ms. */
-    @Override
-    public void run() {
-        while (!isInterrupted()) {
-            boolean doUpdate = false;
-
-            for (Map.Entry<String, OnePlayer> game : games.entrySet()) {
-                try {
-                    if (game.getValue().update()) {
-                        doUpdate = true;
-                    }
-                } catch (GameOverException e) {
-                    setCurrentGameState(new GameOverState(this,e.getLooserName()));
-                    Server.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
-                }
-            }
-            if(doUpdate || updateClientsNextTime) {
-                updateClientsNextTime = false;
-                updateClients();
-            }
-
-            try {
-                Thread.sleep(10);
-            } catch(InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        updateClients();
+        playerLock.unlock();
     }
 
     public Map<String, OnePlayer> getGames() {
