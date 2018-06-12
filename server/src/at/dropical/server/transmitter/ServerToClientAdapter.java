@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * TODO RequestHandler: a map of consumers that are called
  * when a request comes.
  */
-public class ServerToClientAdapter implements Transmitter {
+public class ServerToClientAdapter implements Transmitter, AutoCloseable {
 
     private Transmitter underlyingTransmitter;
     private boolean transmitterDied = false;
@@ -71,5 +71,13 @@ public class ServerToClientAdapter implements Transmitter {
     /** So kann gleich ein foreach gemacht werden. */
     public ConcurrentLinkedQueue<HandleInputRequest> getInputQueue() {
         return inputQueue;
+    }
+
+    @Override
+    public void close() {
+        try {
+            if(underlyingTransmitter instanceof AutoCloseable)
+                ((AutoCloseable)underlyingTransmitter).close();
+        } catch(Exception ignored) { }
     }
 }

@@ -16,28 +16,30 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
-public class Game implements Runnable {
+public class Game extends Thread implements AutoCloseable {
 
     private List<ServerToClientAdapter> viewers = new ArrayList<>();
     private List<ServerToClientAdapter> players = new ArrayList<>();
 
     private Map<String,OnePlayer> games = new HashMap<>();
     private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
-    /** When this amrtsount of players is reached, the game starts. */
-    private int countPlayers;
+    /** When this amount of players is reached, the game starts. */
+    private int necessaryPlayers;
 
     private ReentrantLock playerLock =new ReentrantLock();
     private boolean updateClientsNextTime = false;
 
     //Classic
     public Game() {
-        countPlayers =2;
+        necessaryPlayers =2;
     }
     //Variable Players
     public Game(int playercount) {
-        this.countPlayers =playercount;
+        this.necessaryPlayers =playercount;
     }
 
+    /** TODO Now the game is a own Thread,
+     * but it doesn't run in the Server executor. */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -49,6 +51,7 @@ public class Game implements Runnable {
                 Thread.sleep(10);
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
+                Server.log(Level.INFO, "Game was terminated");
             }
         }
         updateClients();
@@ -57,7 +60,11 @@ public class Game implements Runnable {
     /** Loops every 10ms.
      * First processes all inputs and
      * then updates the arenas and
-     * sends packages back to the client. */
+     * sends packages back to the client.
+     *
+     * Apparently this is not the only place where logic
+     * happens. In the gamestates there is a bunch
+     * of logic too :( */
     private void gameLoop() {
         boolean doUpdate = false;
 
@@ -87,17 +94,18 @@ public class Game implements Runnable {
         }
     }
 
-    public void addPlayer(String playerName, Transmitter transmitter) {
+    /** The game starts when enough players entered. */
+    public void addPlayerAndStart(String playerName, Transmitter transmitter) {
         playerLock.lock();
 
-        if (games.size() < countPlayers) {
+        if (games.size() < necessaryPlayers) {
             Server.log(Level.INFO,"Player "+playerName+" added");
 
             players.add(new ServerToClientAdapter(transmitter));
             games.put(playerName,new OnePlayer(playerName));
         }
 
-        if (games.size()== countPlayers)
+        if (games.size()== necessaryPlayers)
             this.setCurrentGameState(new StartingState(this));
 
         playerLock.unlock();
@@ -121,10 +129,10 @@ public class Game implements Runnable {
 
     /** Don't call this from any RequestHandler Threads!
      * Only from gameLoop. */
-    private void handleInput(HandleInputRequest handleInputRequest){
-        for (Map.Entry<String,OnePlayer> game : games.entrySet()) {
-            if(game.getValue().getPlayername().equals(handleInputRequest.getPlayername())) {
-                currentGameState.handleInput(game.getValue(),handleInputRequest);
+    private void handleInput(HandleInputRequest inputRequest){
+        for (Map.Entry<String,OnePlayer> gameEntry : games.entrySet()) {
+            if(gameEntry.getValue().getPlayername().equals(inputRequest.getPlayername())) {
+                currentGameState.handleInput(gameEntry.getValue(),inputRequest);
                 updateClientsNextTime = true;
 
                 return;
@@ -132,7 +140,8 @@ public class Game implements Runnable {
         }
     }
 
-    private void updateClients() {
+    /** Send game data containers. */
+    public void updateClients() {
         Container container = currentGameState.getContainer();
 
         if(!playerLock.tryLock())
@@ -154,6 +163,19 @@ public class Game implements Runnable {
         playerLock.unlock();
     }
 
+    /** End all connections and terminate Threads. */
+    public void close() {
+        this.interrupt();
+        try {
+            for(ServerToClientAdapter player : players) {
+                player.close();
+            }
+            for(ServerToClientAdapter viewer : viewers) {
+                viewer.close();
+            }
+        } catch(Exception ignored) { }
+    }
+
     public Map<String, OnePlayer> getGames() {
         return games;
     }
@@ -162,4 +184,7 @@ public class Game implements Runnable {
         return currentGameState;
     }
 
+    public boolean acceptsMorePlayers() {
+        return getCurrentGameState() instanceof WaitingState;
+    }
 }

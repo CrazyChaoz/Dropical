@@ -9,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -58,10 +56,8 @@ public class GameManager {
     }
 
     private void waitForJoinRequestAndJoin(Socket connection) {
-        try(InputStream inputStream = connection.getInputStream();
-            OutputStream outputStream = connection.getOutputStream()) {
-
-            Transmitter trans = new ObjectTransmitter(inputStream, outputStream);
+        try {
+            Transmitter trans = new ObjectTransmitter(connection.getInputStream(), connection.getOutputStream(), serverSocket);
             JoinRequest request = (JoinRequest) trans.readRequest();
 
             // Create game or join existing
@@ -84,25 +80,40 @@ public class GameManager {
 
         if(gameID != null && !gameID.equals(""))
             game = joinExistingGame(gameID, playerName, trans);
-        else game = createAndJoinGame(playerName, trans);
-
+        else game = autoJoinOrCreateGame(playerName, trans);
         //if(playAgainsAI) //TODO
             //joinExistingGame(new AI);
     }
 
     private Game joinExistingGame(String gameID, String playerName, Transmitter trans) {
         Game game = gamesMap.get(gameID);
-        game.addPlayer(playerName, trans);
+        game.addPlayerAndStart(playerName, trans);
         return game;
     }
 
-    private Game createAndJoinGame(String playerName, Transmitter trans) {
+    private Game autoJoinOrCreateGame(String playerName, Transmitter trans) {
         String name = playerName +"'s game "+ Math.random();
-        Game game = new Game();
+        // Lamda expression wants a final variable.
+        final Game[] game = {null};
 
-        gamesMap.put(name, game);
-        game.addPlayer(playerName, trans);
-        return game;
+        // Search for a non-full game.
+        gamesMap.forEachValue(Long.MAX_VALUE, (gameValue -> {
+            if(gameValue.acceptsMorePlayers())
+                game[0] = gameValue;
+        }));
+        // No waiting game found.
+        if(game[0] == null) {
+            game[0] = new Game();
+            gamesMap.put(name, game[0]);
+        }
+
+        game[0].addPlayerAndStart(playerName, trans);
+        Server.log(Level.INFO, "Game "+ name +" added");
+        return game[0];
+    }
+
+    public void deleteGame(Game game) {
+        gamesMap.remove(game.getName()).close();
     }
 
     /** Get a game by its ID or name. */

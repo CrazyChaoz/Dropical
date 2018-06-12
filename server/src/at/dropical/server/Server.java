@@ -1,5 +1,7 @@
 package at.dropical.server;
 
+import at.dropical.server.logging.LoggerSetup;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
@@ -43,6 +45,7 @@ public class Server {
     }
 
     private Server() throws IOException {
+        LoggerSetup.setup();
         logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         //TODO Deamon Threads Factory
         executor = Executors.newCachedThreadPool();
@@ -56,7 +59,8 @@ public class Server {
         return serverInstance;
     }
 
-    /** Log in a file and sout. */
+    /** Log in a file and sout.
+     * fixme This is always used as the stack location in the message. Not useful. */
     public static void log(Level level, String msg) {
         instance().logger.log(level, msg);
     }
