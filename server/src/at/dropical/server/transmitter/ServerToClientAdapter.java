@@ -55,7 +55,7 @@ public class ServerToClientAdapter implements Transmitter, AutoCloseable {
 
     /** Returns null when no request is in the queue. */
     @Override
-    public SendableItem readRequest() throws IOException {
+    public SendableItem readRequest() {
         return requestQueue.poll();
     }
 
@@ -68,9 +68,8 @@ public class ServerToClientAdapter implements Transmitter, AutoCloseable {
         return !transmitterDied;
     }
 
-    /** So kann gleich ein foreach gemacht werden. */
-    public ConcurrentLinkedQueue<HandleInputRequest> getInputQueue() {
-        return inputQueue;
+    public HandleInputRequest pollInput() {
+        return inputQueue.poll();
     }
 
     @Override

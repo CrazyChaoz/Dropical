@@ -119,7 +119,6 @@ class ServerAdapter(
     }
 
     fun sendInput(input: PlayerAction) {
-        //inputQueue.add(input)
         server.writeToServer(HandleInputRequest(playerName, input))
     }
 

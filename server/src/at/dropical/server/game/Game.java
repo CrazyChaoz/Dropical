@@ -9,10 +9,7 @@ import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.abstracts.Transmitter;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
@@ -30,11 +27,13 @@ public class Game extends Thread implements AutoCloseable {
     private boolean updateClientsNextTime = false;
 
     //Classic
-    public Game() {
+    public Game(String name) {
+        setName(name);
         necessaryPlayers =2;
     }
     //Variable Players
-    public Game(int playercount) {
+    public Game(int playercount, String name) {
+        setName(name);
         this.necessaryPlayers =playercount;
     }
 
@@ -70,8 +69,10 @@ public class Game extends Thread implements AutoCloseable {
 
         // Process inputs
         for(ServerToClientAdapter player : players) {
-            for(HandleInputRequest inputRequest : player.getInputQueue()) {
-                handleInput(inputRequest);
+            HandleInputRequest request = player.pollInput();
+            while(request != null) {
+                handleInput(request);
+                request = player.pollInput();
             }
         }
 
@@ -146,19 +147,21 @@ public class Game extends Thread implements AutoCloseable {
 
         if(!playerLock.tryLock())
             return;
-        for (ServerToClientAdapter player : players) {
+        for(Iterator<ServerToClientAdapter> iterator = players.iterator(); iterator.hasNext(); ) {
+            ServerToClientAdapter player = iterator.next();
             if(player.stillConnected())
                 player.writeRequest(container);
             else {
-                players.remove(player);
+                iterator.remove();
             }
 
         }
-        for (ServerToClientAdapter viewer : viewers) {
+        for(Iterator<ServerToClientAdapter> iterator = viewers.iterator(); iterator.hasNext(); ) {
+            ServerToClientAdapter viewer = iterator.next();
             if(viewer.stillConnected())
                 viewer.writeRequest(container);
             else
-                viewers.remove(viewer);
+                iterator.remove();
         }
         playerLock.unlock();
     }
@@ -166,6 +169,7 @@ public class Game extends Thread implements AutoCloseable {
     /** End all connections and terminate Threads. */
     public void close() {
         this.interrupt();
+        playerLock.lock();
         try {
             for(ServerToClientAdapter player : players) {
                 player.close();
@@ -174,6 +178,7 @@ public class Game extends Thread implements AutoCloseable {
                 viewer.close();
             }
         } catch(Exception ignored) { }
+        playerLock.unlock();
     }
 
     public Map<String, OnePlayer> getGames() {

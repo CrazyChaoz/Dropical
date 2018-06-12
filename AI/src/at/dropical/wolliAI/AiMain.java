@@ -3,6 +3,8 @@ package at.dropical.wolliAI;
 
 import at.dropical.wolliAI.bestPossibility.BestPossibilityAI;
 import at.dropical.wolliAI.types.AI;
+import at.dropical.wolliAI.types.AlwaysLeftAI;
+import at.dropical.wolliAI.types.TryToLoseAI;
 
 /**
  * Starts the AI and connects to the default
@@ -12,16 +14,17 @@ public class AiMain {
     public static void main(String[] args) throws InterruptedException {
         AI ai = new BestPossibilityAI(new ServerAdapter());
 
-        //Temp
-        //AI ai2 = new BestPossibilityAI(new ServerAdapter());
+        //Temp to occupy full game
+        //AI ai2 = new TryToLoseAI(new ServerAdapter());
 
         while(true) {
             Thread.sleep(100);
             try {
                 ai.process();
+                //ai2.process();
 
             } catch(IndexOutOfBoundsException e) {
-                System.out.println(e.getMessage());
+                System.err.println(e.getMessage());
             }
         }
     }

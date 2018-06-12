@@ -103,7 +103,7 @@ public class GameManager {
         }));
         // No waiting game found.
         if(game[0] == null) {
-            game[0] = new Game();
+            game[0] = new Game(name);
             gamesMap.put(name, game[0]);
         }
 
