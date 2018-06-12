@@ -34,6 +34,8 @@ public class Menu implements Screen {
     private DropicalButton tournamentButton;
     private DropicalButton settingsButton;
 
+    private DropicalButton testButton;
+
     //Mobs
     private Sprite fishSprite;
 
@@ -121,7 +123,16 @@ public class Menu implements Screen {
         tournamentButton = new DropicalButton("Tournaments", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 984, 12, 52, 61, 208, 244);
         tournamentButton.flipX();
         tournamentButton.getButton().setDisabled(true);
-        settingsButton = new DropicalButton("Einstellungen", bitmapFont, "GUI/buttons/main/main_up.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_disabled.png", 524, 552, 100, 22, 400, 88);
+        settingsButton = new DropicalButton();
+        settingsButton.setFont(bitmapFont);
+        settingsButton.setText("Einstellungen");
+        settingsButton.setUpTexture("GUI/buttons/main/main_up.png", 100, 22);
+        settingsButton.setDownTexture("GUI/buttons/main/main_down.png", 100, 22);
+        settingsButton.setOverTexture("GUI/buttons/main/main_down.png", 100, 22);
+        settingsButton.setDisabledTexture("GUI/buttons/main/main_disabled.png", 100, 22);
+        settingsButton.setPosition(440, 250);
+        settingsButton.setSize(400, 88);
+        settingsButton.updateStyle();
         settingsButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
