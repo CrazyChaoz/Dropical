@@ -7,7 +7,6 @@ import at.dropical.wolliAI.types.AI;
 import at.dropical.wolliAI.ServerAdapter;
 
 /**
- * TODO Description
  * See Package-info.
  */
 public class BestPossibilityAI implements AI {

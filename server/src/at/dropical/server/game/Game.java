@@ -37,8 +37,7 @@ public class Game extends Thread implements AutoCloseable {
         this.necessaryPlayers =playercount;
     }
 
-    /** TODO Now the game is a own Thread,
-     * but it doesn't run in the Server executor. */
+    /** TODO game doesn't run in the Server executor. */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {

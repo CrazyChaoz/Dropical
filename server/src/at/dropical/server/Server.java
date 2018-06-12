@@ -1,6 +1,7 @@
 package at.dropical.server;
 
 import at.dropical.server.logging.LoggerSetup;
+import at.dropical.wolliAI.AiMain;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -72,5 +73,18 @@ public class Server {
 
     public GameManager getManager() {
         return manager;
+    }
+
+
+    /** It communicates over a socket instead of localTransmitter. */
+    static void startLocalAI(String gameID) {
+        execute(() -> {
+            try {
+                AiMain.newAIconnection(gameID);
+            } catch(InterruptedException e) {
+               log(Level.INFO, "AI was interrupted.");
+            }
+        });
+
     }
 }

@@ -1,8 +1,7 @@
 package at.dropical.shared;
 /** Up means turn.
  *
- * TODO We should change that for our version and
- * turnLeft and turnRight should be possible
+ * TODO turnLeft and turnRight should be possible in our version
  */
 
 

@@ -81,8 +81,9 @@ public class GameManager {
         if(gameID != null && !gameID.equals(""))
             game = joinExistingGame(gameID, playerName, trans);
         else game = autoJoinOrCreateGame(playerName, trans);
-        //if(playAgainsAI) //TODO
-            //joinExistingGame(new AI);
+
+        if(playAgainsAI)
+            Server.startLocalAI(game.getName());
     }
 
     private Game joinExistingGame(String gameID, String playerName, Transmitter trans) {

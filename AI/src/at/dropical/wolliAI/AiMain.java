@@ -11,21 +11,26 @@ import at.dropical.wolliAI.types.TryToLoseAI;
  * localhost server.
  */
 public class AiMain {
+    /** Execute direktly */
     public static void main(String[] args) throws InterruptedException {
-        AI ai = new BestPossibilityAI(new ServerAdapter());
+        new AiMain(new ServerAdapter()).loop();
+    }
+    /** Called from Server. */
+    public static void newAIconnection(String gameID) throws InterruptedException {
+        new AiMain(new ServerAdapter(gameID)).loop();
+    }
 
-        //Temp to occupy full game
-        //AI ai2 = new TryToLoseAI(new ServerAdapter());
 
-        while(true) {
+    private AI ai;
+
+    public AiMain(ServerAdapter adapter) {
+        ai = new BestPossibilityAI(adapter);
+    }
+
+    private void loop() throws InterruptedException{
+        while(!Thread.currentThread().isInterrupted()) {
             Thread.sleep(100);
-            try {
-                ai.process();
-                //ai2.process();
-
-            } catch(IndexOutOfBoundsException e) {
-                System.err.println(e.getMessage());
-            }
+            ai.process();
         }
     }
 
