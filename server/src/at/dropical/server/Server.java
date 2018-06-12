@@ -1,103 +1,64 @@
 package at.dropical.server;
 
-/**
- * The Top Level Class
- * Callable with Server.instance();
- */
-
-import at.dropical.server.game.Game;
-import at.dropical.server.logging.LoggerSetup;
-import at.dropical.server.transmitter.LocalServerTransmitter;
-import at.dropical.shared.LocalRequestCache;
-
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Here are main() and some functionality that
+ * is globally managed, like
+ * + execute() as a global thread pool
+ * + log()
+ */
 public class Server {
-    public static void main(String[] args) {
-        Server.instance();
-    }
-
-    //Singleton code
-    //NO TOUCHY-TOUCHY
-    private static Server privateInstance = new Server();
-
-    public static Server instance() {
-        return privateInstance;
-    }
-
-
-    /**
-     * The Server starts here
-     */
-
-//  STATICS
-
-    public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
-
-    //spamprotection
-    public static final boolean isPureAiGameAllowed = true;
-    //human tournaments
-    public static final boolean isAiAllowed = true;
 
     //The serverPort
     private static final int serverPort = 45000;
     private static final int adminPort = 45666;
 
-    //
-    private static final boolean isTounamentServer = true;
+    /** Singleton Code. Initialised in main(). */
+    private static Server serverInstance;
+    private static Logger logger;
 
-    public static ExecutorService serverExecutor = Executors.newCachedThreadPool();
+    /** Fields of the instance. */
+    private GameManager manager;
+    /** The pool is mainly used for the Receiver Threads. */
+    private ExecutorService executor;
 
-//  Constructor
-
-    private Server() {
+    public static void main(String[] args) {
+        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         try {
-            LoggerSetup.setup();
-            new RemoteAccepterLoop(new ServerSocket(serverPort));
-            new WebInterface(new ServerSocket(adminPort));
+            serverInstance = new Server();
+            // Only returns on Error.
+            serverInstance.manager.endlesslyAcceptConnections();
+
         } catch(IOException e) {
-            e.printStackTrace();
+            log(Level.SEVERE, e.toString());
         }
     }
 
+    private Server() throws IOException {
+        //TODO Deamon Threads Factory
+        executor = Executors.newCachedThreadPool();
 
-    //  Declarations
-    private Map<String, Game> games = new HashMap<>();
-
-
-    //  Getter
-    public Map<String, Game> getAllGames() {
-        return games;
+        manager = new GameManager(new ServerSocket(serverPort));
+        new WebInterface(new ServerSocket(adminPort));
     }
 
-    public Game getGame(String gameID) {
-        return games.get(gameID);
+    /*  Globally available functions of the Server. */
+    public static Server instance() {
+        return serverInstance;
+    }
+    /** Log in a file and sout. */
+    public static void log(Level level, String msg) {
+        logger.log(level, msg);
     }
 
-//  Setter
-
-    public void deleteGame(String gameID) {
-        this.games.remove(gameID);
-    }
-
-
-//  Methods
-
-    public void addLocalClient(LocalRequestCache requestCache) {
-        LocalServerTransmitter localServerTransmitter = new LocalServerTransmitter(requestCache);
-        serverExecutor.execute(() -> {
-            try {
-                new Loop(localServerTransmitter);
-            } catch(IOException | ClassNotFoundException ignored) {
-            }
-        });
+    /** Run some code concurrenty in the global Thread pool. */
+    public void execute(Runnable runnable) {
+        executor.execute(runnable);
     }
 }

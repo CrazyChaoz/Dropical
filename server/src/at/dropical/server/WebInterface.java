@@ -24,7 +24,7 @@ public class WebInterface extends Thread {
     public void run() {
         for (; ; ) {
             try {
-                Server.serverExecutor.execute(new WebInterfaceClass(serverSocket.accept()));
+                Server.instance().execute(new WebInterfaceClass(serverSocket.accept()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -134,9 +134,9 @@ class ScriptingEngine {
                 stringBuilder.append("\r\n");
             }
         } catch (FileNotFoundException e) {
-            Server.LOGGER.log(Level.WARNING, "Template.html not found");
+            Server.log(Level.WARNING, "Template.html not found");
         } catch (IOException e) {
-            Server.LOGGER.log(Level.WARNING, "Template.html -- io error");
+            Server.log(Level.WARNING, "Template.html -- io error");
         }
     }
 

@@ -48,8 +48,9 @@ public class BestJavaClient {
                     proxy.writeToServer(new ListPlayersRequest());
                     break;
                 case 5:
-                    System.out.println("Which game do you want to start?");
-                    proxy.writeToServer(new StartGameRequest(scanner.next()));
+                    //System.out.println("Which game do you want to start?");
+                    //proxy.writeToServer(new StartGameRequest(scanner.next()));
+                    System.out.println("Not supported anymore. Use join a game.");
                     break;
                 case 6:
                     System.out.println("What Input Key do you want to send?");

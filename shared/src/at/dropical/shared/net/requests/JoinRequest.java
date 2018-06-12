@@ -8,11 +8,15 @@ public class JoinRequest extends Request {
     private String gameID;
     private String playerName;
 
+    /** Instruct the Server to launch a AI and add it to your game.*/
+    private boolean playAgainsAI;
+
     //for players
     public JoinRequest(String gameID, String playerName) {
         super(RequestKind.JOIN);
         this.gameID = gameID;
         this.playerName = playerName;
+        this.playAgainsAI = false;
     }
 
     //join a random game
@@ -21,6 +25,14 @@ public class JoinRequest extends Request {
         super(RequestKind.JOIN);
         this.gameID = null;
         this.playerName = playerName;
+        this.playAgainsAI = false;
+    }
+
+    public JoinRequest(String playerName, boolean playAgainsAI) {
+        super(RequestKind.JOIN);
+        this.gameID = null;
+        this.playerName = playerName;
+        this.playAgainsAI = playAgainsAI;
     }
 
     public String getGameID() {
@@ -29,5 +41,9 @@ public class JoinRequest extends Request {
 
     public String getPlayerName() {
         return playerName;
+    }
+
+    public boolean wantsToPlayAgainsAI() {
+        return playAgainsAI;
     }
 }

@@ -2,9 +2,10 @@ package at.dropical.server.transmitter;
 
 import at.dropical.shared.LocalRequestCache;
 import at.dropical.shared.net.abstracts.SendableItem;
+import at.dropical.shared.net.abstracts.Transmitter;
 
 
-public class LocalServerTransmitter extends ServerSideTransmitter {
+public class LocalServerTransmitter implements Transmitter {
     private LocalRequestCache requestCache;
 
     public LocalServerTransmitter(LocalRequestCache requestCache) {

@@ -4,7 +4,7 @@ import at.dropical.server.Server;
 import at.dropical.server.gamestates.GameOverState;
 import at.dropical.server.gamestates.StartingState;
 import at.dropical.server.gamestates.WaitingState;
-import at.dropical.server.transmitter.ServerSideTransmitter;
+import at.dropical.server.transmitter.ServerToClientAdapter;
 import at.dropical.shared.net.abstracts.Container;
 import at.dropical.shared.net.requests.HandleInputRequest;
 
@@ -15,10 +15,10 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 
-public class Game extends Thread{
+public class Game extends Thread {
 
-    private List<ServerSideTransmitter> viewers = new ArrayList<>();
-    private List<ServerSideTransmitter> players = new ArrayList<>();
+    private List<ServerToClientAdapter> viewers = new ArrayList<>();
+    private List<ServerToClientAdapter> players = new ArrayList<>();
 
     private Map<String,OnePlayer> games = new HashMap<>();
     private at.dropical.server.gamestates.State currentGameState = new WaitingState(this);
@@ -37,11 +37,11 @@ public class Game extends Thread{
     }
 
 
-    public void addPlayer(String playerName, ServerSideTransmitter transmitter) {
+    public void addPlayer(String playerName, ServerToClientAdapter transmitter) {
         safetyLock.lock();
 
         if (maxPlayers>games.size()) {
-            Server.LOGGER.log(Level.INFO,"Player "+playerName+" added");
+            Server.log(Level.INFO,"Player "+playerName+" added");
             players.add(transmitter);
             games.put(playerName,new OnePlayer(playerName));
         }
@@ -54,14 +54,15 @@ public class Game extends Thread{
         updateClients();
     }
 
-    public void addViewer(ServerSideTransmitter transmitter) {
+    /** TODO be able to Join as a Viewer. */
+    public void addViewer(ServerToClientAdapter transmitter) {
         safetyLock.lock();
         viewers.add(transmitter);
         safetyLock.unlock();
     }
 
     public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
-        Server.LOGGER.log(Level.INFO,"State changed to "+currentGameState.getClass());
+        Server.log(Level.INFO,"State changed to "+currentGameState.getClass());
         this.currentGameState = currentGameState;
 
         updateClientsNextTime = true;
@@ -83,16 +84,16 @@ public class Game extends Thread{
 
         if(!safetyLock.tryLock())
             return;
-        for (ServerSideTransmitter player : players) {
-            if(!player.isDisconnected())
+        for (ServerToClientAdapter player : players) {
+            if(player.stillConnected())
                 player.writeRequest(container);
-            else{
+            else {
                 players.remove(player);
             }
 
         }
-        for (ServerSideTransmitter viewer : viewers) {
-            if(!viewer.isDisconnected())
+        for (ServerToClientAdapter viewer : viewers) {
+            if(viewer.stillConnected())
                 viewer.writeRequest(container);
             else
                 viewers.remove(viewer);
@@ -113,7 +114,7 @@ public class Game extends Thread{
                     }
                 } catch (GameOverException e) {
                     setCurrentGameState(new GameOverState(this,e.getLooserName()));
-                    Server.LOGGER.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
+                    Server.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
                 }
             }
             if(doUpdate || updateClientsNextTime) {
