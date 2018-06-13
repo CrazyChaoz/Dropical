@@ -5,6 +5,7 @@ import at.dropical.shared.PlayerAction;
 import at.dropical.shared.net.requests.HandleInputRequest;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
-import com.dropical.client.managers.SettingsManager;
 import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class Game implements Screen {
 
     //Manager
     private ScreenManager screenManager;
-    private SettingsManager settingsManager;
+    private Preferences settings = Gdx.app.getPreferences("settings");
 
     //Server
     private DataManager manager;
@@ -71,7 +71,6 @@ public class Game implements Screen {
     public void show() {
         //Manager
         screenManager = ScreenManager.getInstance();
-        settingsManager = SettingsManager.getInstance();
         manager = DataManager.getInstance();
 
         //Schrift für Punkte, Level, ... festlegen
@@ -232,7 +231,7 @@ public class Game implements Screen {
 //        timeTillNextLevel = pollRequest.getTime();
 
             //Ghost aus neuen Daten erstellen
-            if(settingsManager.isGhostActive()) {
+            if(settings.getBoolean("ghost")) {
                 ghostArray = tetArray;
                 ghostPosX = tPosX;
                 ghostPosY = tPosY;
@@ -249,7 +248,7 @@ public class Game implements Screen {
         int yTMP;
 
         //Ghost-Tetromino in Arena schreiben
-        if(settingsManager.isGhostActive()) {
+        if(settings.getBoolean("ghost")) {
             if(gameState == GameState.RUNNING) {
                 while(!moveGhostDown());
             }

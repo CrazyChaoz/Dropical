@@ -2,6 +2,7 @@ package com.dropical.client.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,12 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
-import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
-import com.dropical.client.managers.SettingsManager;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
-import com.pezcraft.dropical.gui.DropicalTextField;
 
 public class Settings implements Screen {
     private DropicalCam cam;
@@ -25,7 +23,7 @@ public class Settings implements Screen {
 
     //Manager
     private ScreenManager screenManager = ScreenManager.getInstance();
-    private SettingsManager settingsManager;
+    private Preferences settings = Gdx.app.getPreferences("settings");
 
     //Button
     private Stage stage;
@@ -48,9 +46,6 @@ public class Settings implements Screen {
         bitmapFont.getData().setScale(0.9f);
         bitmapFont.setColor(new Color(0x4C4C4Cff));
 
-        //Manager
-        settingsManager = SettingsManager.getInstance();
-
         //Kamera
         cam = new DropicalCam(1280, 720);
 
@@ -62,7 +57,13 @@ public class Settings implements Screen {
         ghostButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                settingsManager.setGhostActive(true);
+                if(settings.getBoolean("ghost")) {
+                    settings.putBoolean("ghost", true);
+                }
+                else {
+                    settings.putBoolean("ghost", false);
+                }
+
                 return super.touchDown(event, x, y, pointer, button);
             }
 

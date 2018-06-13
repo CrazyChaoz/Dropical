@@ -154,6 +154,12 @@ public class Menu implements Screen {
         stage.addActor(tournamentButton.getButton());
         stage.addActor(settingsButton.getButton());
         stage.setViewport(cam.getViewport());
+
+
+
+        DropicalButton test = new DropicalButton("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", 50, 50, 600, 600);
+
+        stage.addActor(test.getButton());
     }
 
     @Override

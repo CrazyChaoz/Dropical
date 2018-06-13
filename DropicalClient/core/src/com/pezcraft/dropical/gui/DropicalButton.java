@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-/** A {@link TextButton} styled with pictures. It simplifies the use of buttons.
+/** A {@link TextButton} styled with textures. It simplifies the use of buttons.
  *
  * @author Pezcraft */
 public class DropicalButton {
@@ -24,31 +24,89 @@ public class DropicalButton {
     private Sprite spriteOver;
     private Sprite spriteDisabled;
 
+    /** Constructs a new DropicalButton with no text, but nevertheless the basic {@link BitmapFont}, on position 0 with the size 0.
+     *  The button cannot be seen without a text or texture in it.
+     */
     public DropicalButton() {
         this("", new BitmapFont(), 0, 0, 0, 0);
     }
+
+    /** Constructs a new DropicalButton with no text, but nevertheless the basic {@link BitmapFont}, on a certain position with the size 0.
+     *  The button cannot be seen without a text or texture in it.
+     *
+     *  @param x x position of button
+     *  @param y y position of button
+     *
+     */
     public DropicalButton(int x, int y) {
         this("", new BitmapFont(), x, y, 0, 0);
     }
+
+    /** Constructs a new DropicalButton with no text, but nevertheless the basic {@link BitmapFont}, on a certain position with a certain size.
+     *  The button cannot be seen without a text or texture in it.
+     *
+     *  @param x x position of button
+     *  @param y y position of button
+     *  @param buttonWidth width of button
+     *  @param buttonHeight height of button
+     *
+     */
     public DropicalButton(int x, int y, int buttonWidth, int buttonHeight) {
         this("", new BitmapFont(), x, y, buttonWidth, buttonHeight);
     }
+
+    /** Constructs a new DropicalButton with a certain text and the basic {@link BitmapFont}, on position 0 with the size 0.
+     *  But the size of the button will be as big as the size of the {@link BitmapFont}.
+     *
+     *  @param text text inside the button
+     *
+     */
     public DropicalButton(String text) {
         this(text, new BitmapFont(), 0, 0, 0, 0);
     }
+
+    /** Constructs a new DropicalButton with a certain text and a {@link BitmapFont}, on position 0 with the size 0.
+     *  But the size of the button will be as big as the size of the {@link BitmapFont}.
+     *
+     *  @param text text inside the button
+     *  @param font font of the text
+     *
+     */
     public DropicalButton(String text, BitmapFont font) {
         this(text, font, 0, 0, 0, 0);
     }
+
+    /** Constructs a new DropicalButton with a certain text and the basic {@link BitmapFont}, on a certain position with the size 0.
+     *  But the size of the button will be as big as the size of the {@link BitmapFont}.
+     */
     public DropicalButton(String text, int x, int y) {
         this(text, new BitmapFont(), x, y, 0, 0);
     }
+
+    /** Constructs a new DropicalButton with a certain text and the basic {@link BitmapFont}, on a certain position with a certain size.
+     *
+     * @param text text inside the button
+     * @param x x position of button
+     * @param y y position of button
+     * @param buttonWidth width of button
+     * @param buttonHeight height of button
+     *
+     */
+    public DropicalButton(String text, int x, int y, int buttonWidth, int buttonHeight) {
+        this(text, new BitmapFont(), x, y, buttonWidth, buttonHeight);
+    }
+
+    /** Constructs a new DropicalButton with a certain text and and a {@link BitmapFont}, on a certain position with a certain size.
+     *
+     * @param text text inside the button
+     * @param x x position of button
+     * @param y y position of button
+     *
+     */
     public DropicalButton(String text, BitmapFont font, int x, int y) {
         this(text, font, x, y, 0, 0);
     }
     public DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int buttonHeight) {
-//        this.buttonWidth = buttonWidth;   //not needed in new DropicalButton
-//        this.buttonHeight = buttonHeight;
-
         //create skin for button style
         skin = new Skin();
 
@@ -173,9 +231,53 @@ public class DropicalButton {
         skin.add("disabled", spriteDisabled);
         style.disabled = skin.newDrawable("disabled");
     }
+
     public void setFont(BitmapFont font) {
         skin.add("font", font);
         style.font = skin.getFont("font");
+    }
+    public void setFontColor(Color color) {
+        skin.add("fontColor", color);
+        style.fontColor = skin.getColor("fontColor");
+    }
+    public void setDownFontColor(Color color) {
+        skin.add("downFontColor", color);
+        style.downFontColor = skin.getColor("downFontColor");
+    }
+    public void setCheckedFontColor(Color color) {
+        skin.add("checkedFontColor", color);
+        style.checkedFontColor = skin.getColor("checkedFontColor");
+    }
+    public void setCheckedOverFontColor(Color color) {
+        skin.add("checkedOverFontColor", color);
+        style.checkedOverFontColor = skin.getColor("checkedOverFontColor");
+    }
+    public void setOverFontColor(Color color) {
+        skin.add("overFontColor", color);
+        style.overFontColor = skin.getColor("overFontColor");
+    }
+    public void setDisabledFontColor(Color color) {
+        skin.add("disabledFontColor", color);
+        style.disabledFontColor = skin.getColor("disabledFontColor");
+    }
+
+    public void setCheckedOffsetX(float offsetX) {
+        style.checkedOffsetX = offsetX;
+    }
+    public void setCheckedOffsetY(float offsetY) {
+        style.checkedOffsetY = offsetY;
+    }
+    public void setUnpressedOffsetX(float offsetX) {
+        style.unpressedOffsetX = offsetX;
+    }
+    public void setUnpressedOffsetY(float offsetY) {
+        style.unpressedOffsetY = offsetY;
+    }
+    public void setPressedOffsetX(float offsetX) {
+        style.pressedOffsetX = offsetX;
+    }
+    public void setPressedOffsetY(float offsetY) {
+        style.pressedOffsetY = offsetY;
     }
 
     public void updateStyle() {
@@ -187,7 +289,6 @@ public class DropicalButton {
 //        button.setSkin(skin);
 //        button = new TextButton("df", skin);
 //        button.setStyle(skin.get("lol", TextButton.TextButtonStyle.class));
-
 //        button.setStyle(skin.get("default", TextButton.TextButtonStyle.class));
         button.setStyle(style);
     }
