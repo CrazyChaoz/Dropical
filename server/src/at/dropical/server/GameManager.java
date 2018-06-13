@@ -55,6 +55,7 @@ public class GameManager {
         }
     }
 
+    /** TODO CreateGameRequest behandeln mit einem RequestHandler */
     private void waitForJoinRequestAndJoin(Socket connection) {
         try {
             Transmitter trans = new ObjectTransmitter(connection.getInputStream(), connection.getOutputStream(), serverSocket);

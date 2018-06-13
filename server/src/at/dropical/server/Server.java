@@ -2,11 +2,13 @@ package at.dropical.server;
 
 import at.dropical.server.logging.LoggerSetup;
 import at.dropical.wolliAI.AiMain;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,11 +47,16 @@ public class Server {
         }
     }
 
+    /** Initialise most stuff. */
     private Server() throws IOException {
         LoggerSetup.setup();
         logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-        //TODO Deamon Threads Factory
-        executor = Executors.newCachedThreadPool();
+        /* Daemon Thread factory */
+        executor = Executors.newCachedThreadPool(r -> {
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            return thread;
+        });
 
         manager = new GameManager(new ServerSocket(serverPort));
         new WebInterface(new ServerSocket(adminPort));
@@ -85,6 +92,5 @@ public class Server {
                 logger().log(Level.INFO, "AI was interrupted.");
             }
         });
-
     }
 }
