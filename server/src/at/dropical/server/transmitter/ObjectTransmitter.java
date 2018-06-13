@@ -43,7 +43,7 @@ public class ObjectTransmitter implements Transmitter, AutoCloseable {
             outputStream.writeObject(r);
         } catch (IOException e) {
 
-            Server.log(Level.SEVERE,"Couldn't send SendableItem " + r.getClass());
+            Server.logger().log(Level.SEVERE, "Couldn't send SendableItem " + r.getClass());
         }
     }
 

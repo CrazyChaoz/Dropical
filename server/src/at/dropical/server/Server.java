@@ -39,7 +39,7 @@ public class Server {
             serverInstance.manager.endlesslyAcceptConnections();
 
         } catch(IOException e) {
-            log(Level.SEVERE, e.toString());
+            logger().log(Level.SEVERE, e.toString());
         } finally {
             instance().executor.shutdownNow();
         }
@@ -60,10 +60,10 @@ public class Server {
         return serverInstance;
     }
 
-    /** Log in a file and sout.
-     * fixme This is always used as the stack location in the message. Not useful. */
-    public static void log(Level level, String msg) {
-        instance().logger.log(level, msg);
+    /** I tried to have a static Method Server.log() before,
+     * but then the stack trace always just shows that method. Not helpful. */
+    public static Logger logger() {
+        return instance().logger;
     }
 
     /** Run some code concurrenty in the global Thread pool. */
@@ -82,7 +82,7 @@ public class Server {
             try {
                 AiMain.newAIconnection(gameID);
             } catch(InterruptedException e) {
-               log(Level.INFO, "AI was interrupted.");
+                logger().log(Level.INFO, "AI was interrupted.");
             }
         });
 

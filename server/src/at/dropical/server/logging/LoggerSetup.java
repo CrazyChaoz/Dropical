@@ -43,5 +43,7 @@ public class LoggerSetup {
         formatterHTML = new HtmlLogFormatter();
         fileHTML.setFormatter(formatterHTML);
         logger.addHandler(fileHTML);
+
+        System.out.println("Logger setup finished.");
     }
 }

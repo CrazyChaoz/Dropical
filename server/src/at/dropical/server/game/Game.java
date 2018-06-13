@@ -49,7 +49,7 @@ public class Game extends Thread implements AutoCloseable {
                 Thread.sleep(10);
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
-                Server.log(Level.INFO, "Game was terminated");
+                Server.logger().log(Level.INFO, "Game was terminated");
             }
         }
         updateClients();
@@ -83,7 +83,7 @@ public class Game extends Thread implements AutoCloseable {
                 }
             } catch (GameOverException e) {
                 setCurrentGameState(new GameOverState(this,e.getLooserName()));
-                Server.log(Level.INFO,"Player "+e.getLooserName()+" lost his game.");
+                Server.logger().log(Level.INFO, "Player "+e.getLooserName()+" lost his game.");
             }
         }
 
@@ -99,7 +99,7 @@ public class Game extends Thread implements AutoCloseable {
         playerLock.lock();
 
         if (games.size() < necessaryPlayers) {
-            Server.log(Level.INFO,"Player "+playerName+" added");
+            Server.logger().log(Level.INFO, "Player "+playerName+" added");
 
             players.add(new ServerToClientAdapter(transmitter));
             games.put(playerName,new OnePlayer(playerName));
@@ -121,7 +121,7 @@ public class Game extends Thread implements AutoCloseable {
     }
 
     public void setCurrentGameState(at.dropical.server.gamestates.State currentGameState) {
-        Server.log(Level.INFO,"State changed to "+currentGameState.getClass());
+        Server.logger().log(Level.INFO, "State changed to "+currentGameState.getClass());
         this.currentGameState = currentGameState;
 
         updateClientsNextTime = true;

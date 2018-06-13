@@ -15,7 +15,8 @@ public class AiMain {
     public static void main(String[] args) throws InterruptedException {
         new AiMain(new ServerAdapter()).loop();
     }
-    /** Called from Server. */
+    /** Called from Server.
+     * May be wise to execute in other thread. */
     public static void newAIconnection(String gameID) throws InterruptedException {
         new AiMain(new ServerAdapter(gameID)).loop();
     }
@@ -23,6 +24,7 @@ public class AiMain {
 
     private AI ai;
 
+    /** The AI type is fixed. */
     public AiMain(ServerAdapter adapter) {
         ai = new BestPossibilityAI(adapter);
     }

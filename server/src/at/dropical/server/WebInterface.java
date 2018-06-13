@@ -134,9 +134,9 @@ class ScriptingEngine {
                 stringBuilder.append("\r\n");
             }
         } catch (FileNotFoundException e) {
-            Server.log(Level.WARNING, "Template.html not found");
+            Server.logger().log(Level.WARNING, "Template.html not found");
         } catch (IOException e) {
-            Server.log(Level.WARNING, "Template.html -- io error");
+            Server.logger().log(Level.WARNING, "Template.html -- io error");
         }
     }
 

@@ -51,7 +51,7 @@ public class GameManager {
             }
         // The ServerSocket is died. No hope :'(
         } catch(IOException e) {
-            Server.log(Level.SEVERE, "IOException, ServerSocket probably faulty.");
+            Server.logger().log(Level.SEVERE, "IOException, ServerSocket probably faulty.");
         }
     }
 
@@ -64,9 +64,9 @@ public class GameManager {
             joinGame(request.getGameID(), request.getPlayerName(), request.wantsToPlayAgainsAI(), trans);
 
         } catch(ClassCastException e) {
-            Server.log(Level.WARNING, "ClassCastException -- class received is not a subclass of Request");
+            Server.logger().log(Level.WARNING, "ClassCastException -- class received is not a subclass of Request");
         } catch(IOException | RuntimeException e) {
-            Server.log(Level.WARNING, e.getLocalizedMessage());
+            Server.logger().log(Level.WARNING, e.getLocalizedMessage());
         }
     }
 
@@ -109,7 +109,7 @@ public class GameManager {
         }
 
         game[0].addPlayerAndStart(playerName, trans);
-        Server.log(Level.INFO, "Game "+ name +" added");
+        Server.logger().log(Level.INFO, "Game "+ name +" added");
         return game[0];
     }
 
