@@ -53,7 +53,14 @@ public class Settings implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        ghostButton = new DropicalButton("Ghost", bitmapFont, "GUI/buttons/main/main_up.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_disabled.png", 524, 552, 100, 22, 400, 88);
+//        ghostButton = new DropicalButton("Ghost", bitmapFont, "GUI/buttons/main/main_up.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_disabled.png", 524, 552, 100, 22, 400, 88);
+        ghostButton = new DropicalButton("Ghost", bitmapFont, 524, 552, 400, 88);
+        ghostButton.setUpTexture("GUI/buttons/main/main_up.png", 100, 22);
+        ghostButton.setDownTexture("GUI/buttons/main/main_down.png", 100, 22);
+        ghostButton.setOverTexture("GUI/buttons/main/main_down.png", 100, 22);
+        ghostButton.setCheckedTexture("GUI/buttons/main/main_down.png", 100, 22);
+        ghostButton.setDisabledTexture("GUI/buttons/main/main_disabled.png", 100, 22);
+        ghostButton.updateStyle();
         ghostButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -72,6 +79,9 @@ public class Settings implements Screen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
+//        if(settings.getBoolean("ghost")) {
+//            ghostButton.setChecked(true);
+//        }
 
         stage.addActor(ghostButton.getButton());
         stage.setViewport(cam.getViewport());

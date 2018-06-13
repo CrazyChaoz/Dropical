@@ -10,21 +10,22 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Don' t forget to update the cam in the resize method.
  * <h3>Usage Example</h3>
  * <pre>{@code
- DropicalCam cam;
+DropicalCam cam;
 
- public void show() {    //show or. create
+public void show() {    //show or. create
     cam = new DropicalCam(1280, 720);
 
     //only if you have a stage for something other
     stage.setViewport(dropicalCam.getViewport());
- }
+}
 
- public void resize(int width, int height) {
+public void resize(int width, int height) {
     dropicalCam.update(width, height);
 
     //only if you have a stage for something other
     stage.getViewport().update(width, height);
- }}</pre>
+}
+ * }</pre>
  *
  * @author Pezcraft */
 public class DropicalCam {
@@ -37,7 +38,6 @@ public class DropicalCam {
      *
      * @param width viewport width of camera
      * @param height viewport height of camera
-     *
      */
     public DropicalCam(int width, int height) {
         view = new FillViewport(width, height, new OrthographicCamera());
@@ -46,9 +46,9 @@ public class DropicalCam {
 
 
     /** Resizes the camera viewport. Should be called in the resize-method.
-     *  <br>
-     *  If you use a stage, add the viewport of the {@link DropicalCam} to the stage and update the viewport then.
-     *  <pre>{@code
+     * <br>
+     * If you use a stage, add the viewport of the {@link DropicalCam} to the stage and update the viewport then.
+     * <pre>{@code
     public void show() {    //show or. create
         stage.setViewport(dropicalCam.getViewport());
     }
@@ -66,8 +66,7 @@ public class DropicalCam {
 
 
 
-    /**
-     * @return the viewport of the camera.
+    /** @return the viewport of the camera.
      */
     public Viewport getViewport() {
         return view;
