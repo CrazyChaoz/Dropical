@@ -85,13 +85,6 @@ public class Menu implements Screen {
                 if(!singleplayerButton.getButton().isDisabled()) {
                     screenManager.setServerListScreen(new ServerList(game), game);
                     screenManager.showScreen(screenManager.getServerListScreen());
-
-//                manager.createProxy();
-//                manager.joinSingleplayer();
-//
-//                screenManager.setGameScreen(new Game(game, 1), game);
-//                screenManager.setCountdownScreen(new CountDown(game), game);
-//                screenManager.showScreen(screenManager.getCountdownScreen());
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -102,33 +95,51 @@ public class Menu implements Screen {
             }
         });
 
-//        multiplayerLocalButton = new DropicalButton("local Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 332, 28, 65, 44, 260, 176);
-//        multiplayerLocalButton.getButton().addListener(new InputListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                if(!multiplayerLocalButton.isDisabled()) {
-//                    manager.createProxy("localhost");
-//                    manager.joinTurnier();
-//
-//                    screenManager.setGameScreen(new Game(game, 2), game);
-//                    screenManager.setCountdownScreen(new CountDown(game), game);
-//                    screenManager.showScreen(screenManager.getCountdownScreen());
-//                }
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                super.touchUp(event, x, y, pointer, button);
-//            }
-//        });
-//        multiplayerLocalButton.getButton().setDisabled(true);
-//        multiplayerOnlineButton = new DropicalButton("Multiplayer", bitmapFont, "GUI/buttons/map/map_up.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_down.png", "GUI/buttons/map/map_disabled.png", 688, 28, 65, 44, 260, 176);
-//        multiplayerOnlineButton.flipX();
-//        multiplayerOnlineButton.getButton().setDisabled(true);
-//        tournamentButton = new DropicalButton("Tournaments", bitmapFont, "GUI/buttons/cat/cat_up.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_down.png", "GUI/buttons/cat/cat_disabled.png", 984, 12, 52, 61, 208, 244);
-//        tournamentButton.flipX();
-//        tournamentButton.getButton().setDisabled(true);
+        multiplayerLocalButton = new DropicalButton("local Multiplayer", bitmapFont, 332, 28, 260, 176);
+        multiplayerLocalButton.setUpTexture("GUI/buttons/map/map_up.png", 65, 44);
+        multiplayerLocalButton.setDownTexture("GUI/buttons/map/map_down.png", 65, 44);
+        multiplayerLocalButton.setOverTexture("GUI/buttons/map/map_down.png", 65, 44);
+        multiplayerLocalButton.setDisabledTexture("GUI/buttons/map/map_disabled.png", 65, 44);
+        multiplayerLocalButton.updateStyle();
+        multiplayerLocalButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(!multiplayerLocalButton.isDisabled()) {
+                    manager.createProxy("localhost");
+                    manager.joinTurnier();
+
+                    screenManager.setGameScreen(new Game(game, 2), game);
+                    screenManager.setCountdownScreen(new CountDown(game), game);
+                    screenManager.showScreen(screenManager.getCountdownScreen());
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
+        multiplayerLocalButton.setDisabled(true);
+
+
+        multiplayerOnlineButton = new DropicalButton("Multiplayer", bitmapFont, 688, 28, 260, 176);
+        multiplayerOnlineButton.setUpTexture("GUI/buttons/map/map_up.png",65, 44);
+        multiplayerOnlineButton.setDownTexture("GUI/buttons/map/map_down.png", 65, 44);
+        multiplayerOnlineButton.setOverTexture("GUI/buttons/map/map_down.png", 65, 44);
+        multiplayerOnlineButton.setDisabledTexture("GUI/buttons/map/map_disabled.png", 65, 44);
+        multiplayerOnlineButton.flipX();
+        multiplayerOnlineButton.updateStyle();
+        multiplayerOnlineButton.setDisabled(true);
+
+        tournamentButton = new DropicalButton("Tournaments", bitmapFont, 984, 12, 208, 244);
+        tournamentButton.setUpTexture("GUI/buttons/cat/cat_up.png", 52, 61);
+        tournamentButton.setDownTexture("GUI/buttons/cat/cat_down.png", 52, 61);
+        tournamentButton.setOverTexture("GUI/buttons/cat/cat_down.png", 52, 61);
+        tournamentButton.setDisabledTexture("GUI/buttons/cat/cat_disabled.png", 52, 61);
+        tournamentButton.flipX();
+        tournamentButton.updateStyle();
+        tournamentButton.setDisabled(true);
 
         settingsButton = new DropicalButton("Einstellungen", bitmapFont, 440, 250, 400, 88);
         settingsButton.setUpTexture("GUI/buttons/main/main_up.png", 100, 22);
@@ -153,9 +164,9 @@ public class Menu implements Screen {
         });
 
         stage.addActor(singleplayerButton.getButton());
-//        stage.addActor(multiplayerLocalButton.getButton());
-//        stage.addActor(multiplayerOnlineButton.getButton());
-//        stage.addActor(tournamentButton.getButton());
+        stage.addActor(multiplayerLocalButton.getButton());
+        stage.addActor(multiplayerOnlineButton.getButton());
+        stage.addActor(tournamentButton.getButton());
         stage.addActor(settingsButton.getButton());
         stage.setViewport(cam.getViewport());
     }

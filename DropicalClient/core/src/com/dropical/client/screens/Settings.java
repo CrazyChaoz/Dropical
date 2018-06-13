@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
+import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
@@ -22,8 +23,8 @@ public class Settings implements Screen {
     private BitmapFont bitmapFont;
 
     //Manager
-    private ScreenManager screenManager = ScreenManager.getInstance();
-    private Preferences settings = Gdx.app.getPreferences("settings");
+    private ScreenManager screenManager;
+    private Preferences settings;
 
     //Button
     private Stage stage;
@@ -49,11 +50,13 @@ public class Settings implements Screen {
         //Kamera
         cam = new DropicalCam(1280, 720);
 
+        //Manager
+        screenManager = ScreenManager.getInstance();
+
         //Buttons
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-//        ghostButton = new DropicalButton("Ghost", bitmapFont, "GUI/buttons/main/main_up.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_down.png", "GUI/buttons/main/main_disabled.png", 524, 552, 100, 22, 400, 88);
         ghostButton = new DropicalButton("Ghost", bitmapFont, 524, 552, 400, 88);
         ghostButton.setUpTexture("GUI/buttons/main/main_up.png", 100, 22);
         ghostButton.setDownTexture("GUI/buttons/main/main_down.png", 100, 22);
@@ -61,15 +64,16 @@ public class Settings implements Screen {
         ghostButton.setCheckedTexture("GUI/buttons/main/main_down.png", 100, 22);
         ghostButton.setDisabledTexture("GUI/buttons/main/main_disabled.png", 100, 22);
         ghostButton.updateStyle();
-        ghostButton.getButton().addListener(new InputListener() {
+        ghostButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(settings.getBoolean("ghost")) {
-                    settings.putBoolean("ghost", true);
-                }
-                else {
                     settings.putBoolean("ghost", false);
                 }
+                else {
+                    settings.putBoolean("ghost", true);
+                }
+                settings.flush();
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -79,12 +83,11 @@ public class Settings implements Screen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-//        if(settings.getBoolean("ghost")) {
-//            ghostButton.setChecked(true);
-//        }
 
         stage.addActor(ghostButton.getButton());
         stage.setViewport(cam.getViewport());
+
+        loadSettings();
     }
 
     @Override
@@ -131,6 +134,14 @@ public class Settings implements Screen {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             screenManager.setMenuScreen(new Menu(game), game);
             screenManager.showScreen(screenManager.getMenuScreen());
+        }
+    }
+
+    private void loadSettings() {
+        settings = Gdx.app.getPreferences("settings");
+
+        if(settings.getBoolean("ghost")) {
+            ghostButton.setChecked(true);
         }
     }
 
