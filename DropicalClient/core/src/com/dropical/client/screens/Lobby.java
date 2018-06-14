@@ -71,7 +71,7 @@ public class Lobby implements Screen {
         background.draw(game.getBatch());
 
         if(manager.getGameData().getCurrentState() != GameState.LOBBY) {
-            screenManager.setGameScreen(new Game(game, 1), game);
+            screenManager.setGameScreen(new Game(game, 2), game);
             screenManager.setCountdownScreen(new CountDown(game), game);
             screenManager.showScreen(screenManager.getCountdownScreen());
         }

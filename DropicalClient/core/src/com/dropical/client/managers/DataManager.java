@@ -35,8 +35,15 @@ public class DataManager implements DropicalListener {
     }
 
     public void joinSingleplayer() {
-        proxy.writeToServer(new CreateGameRequest("Game1",1));
+        //proxy.writeToServer(new CreateGameRequest("Game1",1));
         proxy.writeToServer(new JoinRequest("Game1","RP1"));
+        //fixme Es wird ein zweiter Spieler benötigt, damit das Spiel startet.
+        proxy.writeToServer(new JoinRequest("RP1", true));
+    }
+
+    public void playAgainstAI() {
+        //Gegen AI spielen
+        proxy.writeToServer(new JoinRequest("RP1", true));
     }
 
     public void joinTurnier() {
