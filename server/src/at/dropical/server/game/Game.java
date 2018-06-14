@@ -102,7 +102,7 @@ public class Game extends Thread implements AutoCloseable {
             Server.logger().log(Level.INFO, "Player "+playerName+" added");
 
             players.add(new ServerToClientAdapter(transmitter));
-            games.put(playerName,new OnePlayer(playerName));
+            games.put(playerName,new OnePlayer(playerName, this::addLinesToOthers));
         }
 
         if (games.size()== necessaryPlayers)
@@ -163,6 +163,22 @@ public class Game extends Thread implements AutoCloseable {
                 iterator.remove();
         }
         playerLock.unlock();
+    }
+
+    /** When a player clears lines, those are added to
+     * the other players. Given to OnePlayer as an argument. */
+    private void addLinesToOthers(String playername, Integer lines) {
+        Server.logger().log(Level.INFO, lines +" lines cleared.");
+        for(Map.Entry<String, OnePlayer> entry : games.entrySet()) {
+            // For all other players
+            if(!entry.getKey().equals(playername)) {
+                try {
+                    entry.getValue().addLines(lines);
+                } catch(GameOverException e) {
+                    this.setCurrentGameState(new GameOverState(this,e.getLooserName()));
+                }
+            }
+        }
     }
 
     /** End all connections and terminate Threads. */
