@@ -24,7 +24,7 @@ public class ServerList implements Screen {
     private BitmapFont bitmapFont;
 
     //Manager
-    private ScreenManager screenManager = ScreenManager.getInstance();
+    private ScreenManager screenManager;
     private DataManager manager;
 
     //TextField/Button
@@ -54,13 +54,23 @@ public class ServerList implements Screen {
 
         //Manager
         manager = DataManager.getInstance();
+        screenManager = ScreenManager.getInstance();
 
         //Dropical TextField, Buttons
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         ipTextField = new DropicalTextField("", bitmapFont, "GUI/textFields/textField_background.png", "GUI/textFields/textField_cursor.png", 440, 250, 100, 22, 400, 88);
-        localhostButton = new DropicalButton("", bitmapFont, "GUI/buttons/hammock/hammock_up.png", "GUI/buttons/hammock/hammock_down.png", "GUI/buttons/hammock/hammock_down.png", "GUI/buttons/hammock/hammock_down.png", "GUI/buttons/hammock/hammock_disabled.png", 524, 552, 58, 14, 232, 56);
+        ipTextField = new DropicalTextField("WWWWWWWWW", bitmapFont, 440, 250, 400, 88);
+        ipTextField.setBackgroundTexture("GUI/textFields/textField_background.png", 100, 22);
+        ipTextField.setFocusedTexture("GUI/textFields/textField_cursor.png", 100, 22);
+
+        localhostButton = new DropicalButton(524, 552, 232, 56);
+        localhostButton.setUpTexture("GUI/buttons/hammock/hammock_up.png", 58, 14);
+        localhostButton.setDownTexture("GUI/buttons/hammock/hammock_down.png", 58, 14);
+        localhostButton.setOverTexture("GUI/buttons/hammock/hammock_down.png", 58, 14);
+        localhostButton.setDisabledTexture("GUI/buttons/hammock/hammock_disabled.png", 58, 14);
+        localhostButton.updateStyle();
         localhostButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
