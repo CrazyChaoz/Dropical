@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
@@ -60,10 +62,20 @@ public class ServerList implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        ipTextField = new DropicalTextField("", bitmapFont, "GUI/textFields/textField_background.png", "GUI/textFields/textField_cursor.png", 440, 250, 100, 22, 400, 88);
         ipTextField = new DropicalTextField("WWWWWWWWW", bitmapFont, 440, 250, 400, 88);
+        ipTextField.setCursorTexture("GUI/textFields/textField_cursor.png",4, 14);
         ipTextField.setBackgroundTexture("GUI/textFields/textField_background.png", 100, 22);
-        ipTextField.setFocusedTexture("GUI/textFields/textField_cursor.png", 100, 22);
+        ipTextField.setSelectionTexture("GUI/textFields/textField_cursor.png", 100, 22);
+        ipTextField.setDisabledTexture("GUI/textFields/textField_disabled.png", 100, 22);
+        ipTextField.setMaxLength(16);
+        ipTextField.setTextFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c) || c == '.';
+            }
+        });
+        ipTextField.setTextAlignment(Align.center);
+        ipTextField.setBlinkInterval(0.5f);
 
         localhostButton = new DropicalButton(524, 552, 232, 56);
         localhostButton.setUpTexture("GUI/buttons/hammock/hammock_up.png", 58, 14);
