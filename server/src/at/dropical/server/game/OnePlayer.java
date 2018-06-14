@@ -78,6 +78,17 @@ public class OnePlayer {
             throw new GameOverException(playername);
     }
 
+    /** Adds random lines and pushes up the tetromino. */
+    void addLines(Integer lines) throws GameOverException {
+        //First lift Tetromino up but don't go up to high.
+        int newYpos = Math.max(currTetrY - lines, STARTVAL_Y);
+        if(arena.checkTetromino(tetromino, newYpos, currTetrX, true))
+            currTetrY = newYpos;
+
+        if(arena.addLines(lines))
+            throw new GameOverException(playername);
+    }
+
 
     /**
      * Lowering the Tetromino a block.
@@ -88,10 +99,6 @@ public class OnePlayer {
             currTetrY++;
         } else
             placeTetromino();
-    }
-
-    void addLines(Integer lines) throws GameOverException {
-        arena.addLines(lines);
     }
 
     /**

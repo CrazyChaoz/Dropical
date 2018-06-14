@@ -1,6 +1,8 @@
 package at.dropical.wolliAI.bestPossibility;
 // Created by julian on 26.04.18.
 
+import at.dropical.wolliAI.gamefieldCopy.TetrisArena;
+
 /**
  * See Package-info.
  */
@@ -45,9 +47,11 @@ public class BestPlaceFinder {
         do {
             field.moveToBottom();
             int below = field.countSpacesBelowTetromino();
+            // The higher up, the worse
+            below += (TetrisArena.height - field.getPosH() )/4;
 
             if(bestColumnCount > below
-                    || bestColumnCount == below && bestColumnHeight < field.getPosH()) { //lowest point
+                    || bestColumnCount == below && bestColumnHeight < field.getPosH()) { //prefer lowest point
                 bestColumnCount = below;
                 bestColumn = field.getPosW();
                 bestColumnHeight = field.getPosH();
