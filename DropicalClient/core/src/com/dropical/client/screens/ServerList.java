@@ -62,10 +62,10 @@ public class ServerList implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        ipTextField = new DropicalTextField("WWWWWWWWW", bitmapFont, 440, 250, 400, 88);
+        ipTextField = new DropicalTextField("IP", bitmapFont, 440, 250, 400, 88);
         ipTextField.setCursorTexture("GUI/textFields/textField_cursor.png",4, 14);
         ipTextField.setBackgroundTexture("GUI/textFields/textField_background.png", 100, 22);
-        ipTextField.setSelectionTexture("GUI/textFields/textField_cursor.png", 100, 22);
+        ipTextField.setSelectionTexture("GUI/textFields/textField_selection.png", 1, 1);
         ipTextField.setDisabledTexture("GUI/textFields/textField_disabled.png", 100, 22);
         ipTextField.setMaxLength(16);
         ipTextField.setTextFilter(new TextField.TextFieldFilter() {
@@ -89,7 +89,7 @@ public class ServerList implements Screen {
                 manager.createProxy("localhost");
                 manager.joinSingleplayer();
 
-                screenManager.setGameScreen(new Game(game, 1), game);
+                screenManager.setGameScreen(new Game(game, 2), game);
                 screenManager.setCountdownScreen(new CountDown(game), game);
                 screenManager.showScreen(screenManager.getCountdownScreen());
 
@@ -154,7 +154,7 @@ public class ServerList implements Screen {
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             manager.createProxy(ipTextField.getField().getText());
-            manager.joinSingleplayer();
+            manager.joinMultiplayer();
 
             screenManager.setLobbyScreen(new Lobby(game), game);
             screenManager.showScreen(screenManager.getLobbyScreen());

@@ -48,7 +48,8 @@ public class DataManager implements DropicalListener {
     }
 
     public void joinMultiplayer() {
-
+        proxy.writeToServer(new CreateGameRequest("Game1",2));
+        proxy.writeToServer(new JoinRequest("Game1","RP1"));
     }
 
     public void joinTurnier() {
