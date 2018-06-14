@@ -17,14 +17,14 @@ public class GameOverState extends State {
     public GameOverState(Game game) {
         super(game);
         game.interrupt();
-        Server.instance().deleteGame(game.getName());
+        Server.instance().getManager().deleteGame(game);
     }
 
     public GameOverState(Game game,String looser) {
         super(game);
         this.looser=looser;
         game.interrupt();
-        Server.instance().deleteGame(game.getName());
+        Server.instance().getManager().deleteGame(game);
     }
 
     @Override

@@ -3,26 +3,36 @@ package at.dropical.wolliAI;
 
 import at.dropical.wolliAI.bestPossibility.BestPossibilityAI;
 import at.dropical.wolliAI.types.AI;
+import at.dropical.wolliAI.types.AlwaysLeftAI;
+import at.dropical.wolliAI.types.TryToLoseAI;
 
 /**
  * Starts the AI and connects to the default
  * localhost server.
  */
 public class AiMain {
+    /** Execute direktly */
     public static void main(String[] args) throws InterruptedException {
-        AI ai = new BestPossibilityAI(new ServerAdapter());
+        new AiMain(new ServerAdapter()).loop();
+    }
+    /** Called from Server.
+     * May be wise to execute in other thread. */
+    public static void newAIconnection(String gameID) throws InterruptedException {
+        new AiMain(new ServerAdapter(gameID)).loop();
+    }
 
-        //Temp
-        //AI ai2 = new BestPossibilityAI(new ServerAdapter());
 
-        while(true) {
+    private AI ai;
+
+    /** The AI type is fixed. */
+    public AiMain(ServerAdapter adapter) {
+        ai = new BestPossibilityAI(adapter);
+    }
+
+    private void loop() throws InterruptedException{
+        while(!Thread.currentThread().isInterrupted()) {
             Thread.sleep(100);
-            try {
-                ai.process();
-
-            } catch(IndexOutOfBoundsException e) {
-                System.out.println(e.getMessage());
-            }
+            ai.process();
         }
     }
 

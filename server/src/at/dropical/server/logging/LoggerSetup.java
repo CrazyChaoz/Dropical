@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.logging.*;
 
 /**
- * fixme How do I use this Logger ?
- * TODO Replace "System.err.println" with the logger.
  *
  */
 public class LoggerSetup {
@@ -45,5 +43,7 @@ public class LoggerSetup {
         formatterHTML = new HtmlLogFormatter();
         fileHTML.setFormatter(formatterHTML);
         logger.addHandler(fileHTML);
+
+        System.out.println("Logger setup finished.");
     }
 }

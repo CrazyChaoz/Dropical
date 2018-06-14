@@ -62,7 +62,7 @@ public final class DropicalProxy implements Runnable {
             } catch (IOException e) {
                 System.err.println("IO Exception, Stream was closed");
                 return;
-            } catch (ClassNotFoundException e) {
+            } catch (ClassCastException e) {
                 e.printStackTrace();
             }
         }

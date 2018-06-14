@@ -24,7 +24,7 @@ public class RemoteTransmitter implements Transmitter {
         try {
             outputStream.writeObject(r);
         } catch(IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getLocalizedMessage());
         }
     }
 

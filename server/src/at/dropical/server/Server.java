@@ -1,102 +1,95 @@
 package at.dropical.server;
 
-/**
- * The Top Level Class
- * Callable with Server.instance();
- */
-
-import at.dropical.server.game.Game;
 import at.dropical.server.logging.LoggerSetup;
-import at.dropical.server.transmitter.LocalServerTransmitter;
-import at.dropical.shared.LocalRequestCache;
+import at.dropical.wolliAI.AiMain;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Here are main() and some functionality that
+ * is globally managed, like
+ * + execute() as a global thread pool
+ * + log()
+ */
 public class Server {
-    public static void main(String[] args) {
-        Server.instance();
-    }
-
-    //Singleton code
-    //NO TOUCHY-TOUCHY
-    private static Server privateInstance = new Server();
-
-    public static Server instance() {
-        return privateInstance;
-    }
-
-
-    /**
-     * The Server starts here
-     */
-
-//  STATICS
-
-    public static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
-
-    //spamprotection
-    public static final boolean isPureAiGameAllowed = true;
-    //human tournaments
-    public static final boolean isAiAllowed = true;
 
     //The serverPort
     private static final int serverPort = 45000;
     private static final int adminPort = 45666;
 
-    //
-    private static final boolean isTounamentServer = true;
+    /** Singleton Code. Initialised in main(). */
+    private static Server serverInstance;
 
-    public static ExecutorService serverExecutor = Executors.newCachedThreadPool();
+    /** Fields of the instance. */
+    private Logger logger;
+    private GameManager manager;
+    /** The pool is mainly used for the Receiver Threads. */
+    private ExecutorService executor;
 
-//  Constructor
-
-    private Server() {
+    /** Initialise and wait for connections. */
+    public static void main(String[] args) {
         try {
-            LoggerSetup.setup();
-            new RemoteAccepterLoop(new ServerSocket(serverPort));
-            new WebInterface(new ServerSocket(adminPort));
+            serverInstance = new Server();
+            // Only returns on Error.
+            serverInstance.manager.endlesslyAcceptConnections();
+
         } catch(IOException e) {
-            e.printStackTrace();
+            logger().log(Level.SEVERE, e.toString());
+        } finally {
+            instance().executor.shutdownNow();
         }
     }
 
+    /** Initialise most stuff. */
+    private Server() throws IOException {
+        LoggerSetup.setup();
+        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        /* Daemon Thread factory */
+        executor = Executors.newCachedThreadPool(r -> {
+            Thread thread = new Thread(r);
+            thread.setDaemon(true);
+            return thread;
+        });
 
-    //  Declarations
-    private Map<String, Game> games = new HashMap<>();
-
-
-    //  Getter
-    public Map<String, Game> getAllGames() {
-        return games;
+        manager = new GameManager(new ServerSocket(serverPort));
+        new WebInterface(new ServerSocket(adminPort));
     }
 
-    public Game getGame(String gameID) {
-        return games.get(gameID);
+    /*  Globally available functions of the Server. */
+    public static Server instance() {
+        return serverInstance;
     }
 
-//  Setter
+    /** I tried to have a static Method Server.log() before,
+     * but then the stack trace always just shows that method. Not helpful. */
+    public static Logger logger() {
+        return instance().logger;
+    }
 
-    public void deleteGame(String gameID) {
-        this.games.remove(gameID);
+    /** Run some code concurrenty in the global Thread pool. */
+    public static void execute(Runnable runnable) {
+        instance().executor.execute(runnable);
+    }
+
+    public GameManager getManager() {
+        return manager;
     }
 
 
-//  Methods
-
-    public void addLocalClient(LocalRequestCache requestCache) {
-        LocalServerTransmitter localServerTransmitter = new LocalServerTransmitter(requestCache);
-        serverExecutor.execute(() -> {
+    /** It communicates over a socket instead of localTransmitter. */
+    static void startLocalAI(String gameID) {
+        execute(() -> {
             try {
-                new Loop(localServerTransmitter);
-            } catch(IOException | ClassNotFoundException ignored) {
+                AiMain.newAIconnection(gameID);
+            } catch(InterruptedException e) {
+                logger().log(Level.INFO, "AI was interrupted.");
             }
         });
     }

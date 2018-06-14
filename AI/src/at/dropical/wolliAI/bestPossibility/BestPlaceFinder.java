@@ -58,7 +58,7 @@ public class BestPlaceFinder {
             field.resetToTop();
         } while(field.moveRight());
 
-        System.out.println(line);
+        //System.out.println(line);
         return new BestPlace(bestColumn, 0, bestColumnCount);
     }
 

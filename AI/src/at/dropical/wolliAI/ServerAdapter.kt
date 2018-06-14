@@ -23,9 +23,10 @@ import at.dropical.shared.net.requests.JoinRequest
  * in this class.
  */
 class ServerAdapter(
-    player: String = "Wolli AI "+ Math.random(),
-    hostName: String = "localhost",
-    port: Int = 45000
+        player: String = "Wolli AI "+ Math.random(),
+        hostName: String = "localhost",
+        port: Int = 45000,
+        gameName: String? = null
 ): DropicalListener {
 
     private var newestGameDataContainer: GameDataContainer? = null
@@ -37,10 +38,11 @@ class ServerAdapter(
 
     init {
         /** Auto-queue to a game on the server. */
-        server.writeToServer(JoinRequest(playerName))
-        println("gejoined")
+        server.writeToServer(JoinRequest(gameName, playerName))
+        println("gejoint")
     }
-
+    // Needed because Java.
+    constructor(gameID: String) : this(gameName = gameID)
 
     /* The DropicalProxy calls these functions. */
     override fun updateUI(container: GameDataContainer?) {
@@ -119,13 +121,12 @@ class ServerAdapter(
     }
 
     fun sendInput(input: PlayerAction) {
-        //inputQueue.add(input)
         server.writeToServer(HandleInputRequest(playerName, input))
     }
 
-    /** For performance and clarity */
+    /** For performance and readability */
     companion object {
-        // Size: 20*10 TODO
+        // Size: 20*10
         val emptyArena = Array<IntArray>(20, { IntArray(10) })
         //4*4
         val emptyTetromino = Array<IntArray>(4, { IntArray(4) })

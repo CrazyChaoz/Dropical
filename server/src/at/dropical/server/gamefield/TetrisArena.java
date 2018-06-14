@@ -5,6 +5,7 @@ import at.dropical.server.Server;
 import at.dropical.server.game.GameOverException;
 
 import java.util.Random;
+import java.util.logging.Level;
 
 /**
  * The Game Arena is a 2D-Array that stores which
@@ -104,8 +105,9 @@ public class TetrisArena {
     public void placeTetromino(Tetromino tetromino, int h, int w) throws GameOverException {
         // Can it be placed here?
         if(!checkTetromino(tetromino, h, w, false)) {
-            Server.LOGGER.warning("The Tetronimo is in an invalid Position. This should never happen." +
-                    "Bad luck for Player "+ player); // See addLines()
+            // See addLines()
+            Server.logger().log(Level.WARNING, "The Tetronimo is in an invalid Position. This should never happen." +
+                        "Bad luck for Player "+ player);
             throw new GameOverException(player);
         }
 
