@@ -59,6 +59,7 @@ public class GameManager {
     private void waitForJoinRequestAndJoin(Socket connection) {
         try {
             Transmitter trans = new ObjectTransmitter(connection.getInputStream(), connection.getOutputStream(), serverSocket);
+
             JoinRequest request = (JoinRequest) trans.readRequest();
 
             // Create game or join existing
