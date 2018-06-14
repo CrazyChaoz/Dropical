@@ -380,7 +380,16 @@ public class DropicalTextField {
         }
     }
 
-
+    public void setTextFilter(TextField.TextFieldFilter filter) {
+        field.setTextFieldFilter(new TextField.TextFieldFilter() {
+            @Override
+            public boolean acceptChar(TextField textField, char c) {
+                return Character.isDigit(c) || c == '.';
+            }
+        });
+        field.setAlignment(1);
+        field.setMaxLength(15);
+    }
 
     public TextField getField() {
         return field;
