@@ -61,6 +61,9 @@ public class ServerList implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         ipTextField = new DropicalTextField("", bitmapFont, "GUI/textFields/textField_background.png", "GUI/textFields/textField_cursor.png", 440, 250, 100, 22, 400, 88);
+        ipTextField = new DropicalTextField("WWWWWWWWW", bitmapFont, 440, 250, 400, 88);
+        ipTextField.setBackgroundTexture("GUI/textFields/textField_background.png", 100, 22);
+        ipTextField.setFocusedTexture("GUI/textFields/textField_cursor.png", 100, 22);
 
         localhostButton = new DropicalButton(524, 552, 232, 56);
         localhostButton.setUpTexture("GUI/buttons/hammock/hammock_up.png", 58, 14);

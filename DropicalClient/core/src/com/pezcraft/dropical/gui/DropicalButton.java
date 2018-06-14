@@ -275,6 +275,9 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
 
     /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.
      *
+     * @param internalPath path to image file
+     * @param srcHeight exact height of image file in pixels
+     * @param srcWidth exact width of image file in pixels
      * @throws IllegalArgumentException if path is null.
      */
     public void setUpTexture(String internalPath, int srcWidth, int srcHeight) {
@@ -288,6 +291,9 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
     }
     /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.
      *
+     * @param internalPath path to image file
+     * @param srcHeight exact height of image file in pixels
+     * @param srcWidth exact width of image file in pixels
      * @throws IllegalArgumentException if path is null.
      */
     public void setDownTexture(String internalPath, int srcWidth, int srcHeight) {
@@ -301,6 +307,9 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
     }
     /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.
      *
+     * @param internalPath path to image file
+     * @param srcHeight exact height of image file in pixels
+     * @param srcWidth exact width of image file in pixels
      * @throws IllegalArgumentException if path is null.
      */
     public void setCheckedTexture(String internalPath, int srcWidth, int srcHeight) {
@@ -314,6 +323,9 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
     }
     /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.
      *
+     * @param internalPath path to image file
+     * @param srcHeight exact height of image file in pixels
+     * @param srcWidth exact width of image file in pixels
      * @throws IllegalArgumentException if path is null.
      */
     public void setCheckedOverTexture(String internalPath, int srcWidth, int srcHeight) {
@@ -325,8 +337,11 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
             throw new IllegalArgumentException("Texture path cannot be null!");
         }
     }
-    /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.
+    /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.#
      *
+     * @param internalPath path to image file
+     * @param srcHeight exact height of image file in pixels
+     * @param srcWidth exact width of image file in pixels
      * @throws IllegalArgumentException if path is null.
      */
     public void setOverTexture(String internalPath, int srcWidth, int srcHeight) {
@@ -340,6 +355,9 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
     }
     /** You have to call <code>yourDropicalButton.updateStyle()</code> afterwards.
      *
+     * @param internalPath path to image file
+     * @param srcHeight exact height of image file in pixels
+     * @param srcWidth exact width of image file in pixels
      * @throws IllegalArgumentException if path is null.
      */
     public void setDisabledTexture(String internalPath, int srcWidth, int srcHeight) {
@@ -586,7 +604,7 @@ Align.  left  center  right}</pre>
         return button.getHeight();
     }
 
-    /** Sets whether the button is checked or not
+    /** Sets whether the button is checked or not. If you press a button, checked will be set automatically.)
      */
     public void setChecked(boolean isChecked) {
         button.setChecked(isChecked);
@@ -600,7 +618,7 @@ Align.  left  center  right}</pre>
     /** Disables the button.
      */
     public void setDisabled(boolean isDisabled) {
-        button.setDisabled(true);
+        button.setDisabled(isDisabled);
     }
     /** @return if button is disabled or not.
      */
