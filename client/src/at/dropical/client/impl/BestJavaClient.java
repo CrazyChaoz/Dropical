@@ -12,7 +12,7 @@ public class BestJavaClient {
     private static Scanner scanner=new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        DropicalProxy proxy=new DropicalProxy("localhost",45000,new BestJavaListener());
+        DropicalProxy proxy=new DropicalProxy("192.168.43.238",45000,new BestJavaListener());
         String playername;
 
         System.out.println("Whats your name?");

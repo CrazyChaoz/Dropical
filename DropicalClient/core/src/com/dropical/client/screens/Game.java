@@ -378,40 +378,58 @@ public class Game implements Screen {
     }
     private void handleInputP1() {
         //Tetromino-Steuerung
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             gameKeyP1 = PlayerAction.LEFT;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             gameKeyP1 = PlayerAction.RIGHT;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             gameKeyP1 = PlayerAction.DOWN;
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             gameKeyP1 = PlayerAction.UP;
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             gameKeyP1 = PlayerAction.DROP;
         }
     }
-    private void handleInputP2() {
-        //Tetromino-Steuerung
-        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            gameKeyP2 = PlayerAction.LEFT;
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            gameKeyP2 = PlayerAction.RIGHT;
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            gameKeyP2 = PlayerAction.DOWN;
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            gameKeyP2 = PlayerAction.UP;
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            gameKeyP2 = PlayerAction.DROP;
-        }
-    }
+//    private void handleInputP1() {
+//        //Tetromino-Steuerung
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+//            gameKeyP1 = PlayerAction.LEFT;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+//            gameKeyP1 = PlayerAction.RIGHT;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+//            gameKeyP1 = PlayerAction.DOWN;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+//            gameKeyP1 = PlayerAction.UP;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//            gameKeyP1 = PlayerAction.DROP;
+//        }
+//    }
+//    private void handleInputP2() {
+//        //Tetromino-Steuerung
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+//            gameKeyP2 = PlayerAction.LEFT;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+//            gameKeyP2 = PlayerAction.RIGHT;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+//            gameKeyP2 = PlayerAction.DOWN;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+//            gameKeyP2 = PlayerAction.UP;
+//        }
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+//            gameKeyP2 = PlayerAction.DROP;
+//        }
+//    }
 
     @Override
     public void dispose() {

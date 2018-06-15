@@ -2,7 +2,8 @@ package at.dropical.client.impl;
 
 import at.dropical.client.DropicalProxy;
 import at.dropical.shared.PlayerAction;
-import at.dropical.shared.net.requests.*;
+import at.dropical.shared.net.requests.HandleInputRequest;
+import at.dropical.shared.net.requests.JoinRequest;
 
 import java.io.IOException;
 import java.util.Scanner;

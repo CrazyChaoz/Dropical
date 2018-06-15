@@ -61,7 +61,7 @@ public class Lobby implements Screen {
         //Tastatureingaben
         handleInput();
 
-        playerList = manager.getListData().getNames();
+//        playerList = manager.getListData().getNames();
 
         //----------------------------------------------------------
 
