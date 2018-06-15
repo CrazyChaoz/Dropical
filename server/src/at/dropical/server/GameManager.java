@@ -63,7 +63,7 @@ public class GameManager {
             JoinRequest request = (JoinRequest) trans.readRequest();
 
             // Create game or join existing
-            joinGame(request.getGameID(), request.getPlayerName(), request.wantsToPlayAgainsAI(), trans);
+            joinGame(request.getGameID(), request.getPlayerName(), request.wantsToPlayAgainsAI(), request.getPlayerCount(), trans);
 
         } catch(ClassCastException e) {
             Server.logger().log(Level.WARNING, "ClassCastException -- class received is not a subclass of Request");
@@ -76,13 +76,13 @@ public class GameManager {
      * @param gameID Join existing or new game. Null means autojoin.
      * @param playAgainsAI Make an AI connect too.
      * @param trans The game needs the connection. */
-    private void joinGame(@Nullable String gameID, @NotNull String playerName, boolean playAgainsAI, Transmitter trans) throws IllegalArgumentException {
+    private void joinGame(@Nullable String gameID, @NotNull String playerName, boolean playAgainsAI, int playerCount, Transmitter trans) throws IllegalArgumentException {
         Objects.requireNonNull(playerName);
         Game game;
 
         if(gameID != null && !gameID.equals(""))
             game = joinExistingGame(gameID, playerName, trans);
-        else game = autoJoinOrCreateGame(playerName, trans);
+        else game = autoJoinOrCreateGame(playerName, trans, playerCount);
 
         if(playAgainsAI)
             Server.startLocalAI(game.getName());
@@ -94,7 +94,7 @@ public class GameManager {
         return game;
     }
 
-    private Game autoJoinOrCreateGame(String playerName, Transmitter trans) {
+    private Game autoJoinOrCreateGame(String playerName, Transmitter trans, int playerCount) {
         String name = playerName +"'s game "+ Math.random();
         // Lamda expression wants a final variable.
         final Game[] game = {null};
@@ -104,19 +104,29 @@ public class GameManager {
             if(gameValue.acceptsMorePlayers())
                 game[0] = gameValue;
         }));
+
         // No waiting game found.
-        if(game[0] == null) {
-            game[0] = new Game(name);
-            gamesMap.put(name, game[0]);
-        }
+        if(game[0] == null)
+            game[0] = createGame(name, playerCount);
 
         game[0].addPlayerAndStart(playerName, trans);
         Server.logger().log(Level.INFO, "Game "+ name +" added");
         return game[0];
     }
 
+    /** Bug: When there is a waiting game but player
+     * wants Singleplayer, he joins the waiting game. */
+    private Game createGame(String name, int playerCount) {
+        if(playerCount <= 0)
+            playerCount = Game.STANDARD_PLAYERCOUNT;
+
+        Game game = new Game(playerCount, name);
+        gamesMap.put(name, game);
+        return game;
+    }
+
     public void deleteGame(Game game) {
-        gamesMap.remove(game.getName()).close();
+        gamesMap.remove(game.getName()); //.close(); todo
     }
 
     /** Get a game by its ID or name. */

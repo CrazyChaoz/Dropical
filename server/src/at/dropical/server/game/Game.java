@@ -26,10 +26,12 @@ public class Game extends Thread implements AutoCloseable {
     private ReentrantLock playerLock =new ReentrantLock();
     private boolean updateClientsNextTime = false;
 
+    public static final int STANDARD_PLAYERCOUNT = 2;
+
     //Classic
     public Game(String name) {
         setName(name);
-        necessaryPlayers =2;
+        necessaryPlayers = STANDARD_PLAYERCOUNT;
     }
     //Variable Players
     public Game(int playercount, String name) {
@@ -183,6 +185,7 @@ public class Game extends Thread implements AutoCloseable {
 
     /** End all connections and terminate Threads. */
     public void close() {
+        this.updateClients();
         this.interrupt();
         playerLock.lock();
         try {

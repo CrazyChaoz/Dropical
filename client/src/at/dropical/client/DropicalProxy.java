@@ -8,6 +8,7 @@ import at.dropical.shared.net.container.CountDownContainer;
 import at.dropical.shared.net.container.GameDataContainer;
 import at.dropical.shared.net.container.GameOverContainer;
 import at.dropical.shared.net.container.ListDataContainer;
+import at.dropical.shared.net.requests.HandleInputRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
