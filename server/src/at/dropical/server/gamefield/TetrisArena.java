@@ -99,16 +99,17 @@ public class TetrisArena {
 
     /** First checks, if the place is not obscured and if not,
      * write it into the arena.
-     * @throws GameOverException If the tetromino is in a
+     * @return false If the tetromino is in a
      * invalid position. -> Game Over!
      * But this is actually a programming error! */
-    public void placeTetromino(Tetromino tetromino, int h, int w) throws GameOverException {
+    public boolean placeTetromino(Tetromino tetromino, int h, int w) {
         // Can it be placed here?
         if(!checkTetromino(tetromino, h, w, false)) {
             // See addLines()
             Server.logger().log(Level.WARNING, "The Tetronimo is in an invalid Position. This should never happen." +
                         "Bad luck for Player "+ player);
-            throw new GameOverException(player);
+
+            return false;
         }
 
         // Place it.
@@ -118,6 +119,7 @@ public class TetrisArena {
                 arena[marginTop + h + i][marginLeftRight + w + j] += tetrominoArr[i][j];
             }
         }
+        return true;
     }
 
     /** Checks if lines are full (every block in a horizontal
@@ -185,11 +187,8 @@ public class TetrisArena {
      * This is for multiplayer.
      * Maybe add a mode with this in singleplayer too?
      * @return wherever a block got over the top of
-     * the arena. True -> game over!
-     *
-     * fixme The current Tetroino must go up too,
-     * otherwise it can lead to a wrong game over. */
-    public boolean addLines(int lineCount) throws GameOverException {
+     * the arena. True -> game over! */
+    public boolean addLines(int lineCount) {
         boolean overTop = false;
         Random rand = new Random();
 

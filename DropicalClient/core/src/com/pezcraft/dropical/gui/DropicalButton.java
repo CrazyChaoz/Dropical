@@ -456,7 +456,7 @@ DropicalButton(String text, BitmapFont font, int x, int y, int buttonWidth, int 
     }
 
     /** Aligns the text box ({@link Label}) inside the button. That's not the text itself. Use <code>button.setTextAlignment()</code> instead.
-     * For the parameter use...<pre>{@code
+     * <br>For the parameter use...<pre>{@code
 Align.  topLeft     top         topRight
         left        center      right
         bottomLeft  bottom      bottomRight}</pre>
@@ -467,7 +467,7 @@ Align.  topLeft     top         topRight
         button.getLabel().setAlignment(labelAlign, button.getLabel().getLineAlign());
     }
     /** Aligns all lines of the text inside the button.
-     * For the parameter use...<pre>{@code
+     * <br>For the parameter use...<pre>{@code
 Align.  left  center  right}</pre>
      *
      *  @param textAlign Instead of an integer, you can use {@link Align}.
@@ -649,7 +649,7 @@ Align.  left  center  right}</pre>
 
     /** Sets the origin when rotating and scaling. The origin does not effect the button position.
      * If you want a precise origin positioning, use <code>setOrigin(int originX, int originY)</code> instead.
-     * For the parameter use...<pre>{@code
+     * <br>For the parameter use...<pre>{@code
 Align.  topLeft     top         topRight
         left        center      right
         bottomLeft  bottom      bottomRight}</pre>
@@ -661,7 +661,7 @@ Align.  topLeft     top         topRight
         button.setOrigin(alignment);
     }
     /** Sets the origin position which is relative to button's bottom left corner when rotating and scaling.
-     * The origin does not effect the button position.
+     * <br>The origin does not effect the button position.
      *
      * @param originX X position relative to button's bottom left corner.
      * @param originY Y position relative to button's bottom left corner.

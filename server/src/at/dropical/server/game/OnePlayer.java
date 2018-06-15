@@ -3,6 +3,8 @@ package at.dropical.server.game;
 import at.dropical.server.gamefield.TetrisArena;
 import at.dropical.server.gamefield.Tetromino;
 
+import java.util.function.BiConsumer;
+
 /**
  * This class manages one TetrisArena, one
  * current tetromino and one nextTetromino.
@@ -16,19 +18,16 @@ public class OnePlayer {
     private static int STARTVAL_X = TetrisArena.width / 2 - Tetromino.size / 2;
     private static int STARTVAL_Y = -1;
 
-
-    //    Level
-    private int level = 0;
-
-    //    Score
-    private int score = 0;
-
-    //    Playername
     private String playername;
 
-    //
-    private int ticks=0;
+    /* Function to execute when some lines are cleared
+     * to add lines to other players.
+     * It takes the playername and the number of lines cleared. */
+    private BiConsumer<String, Integer> onLinesCleared;
 
+    private int level = 0;
+    private int score = 0;
+    private int ticks=0;
 
     private TetrisArena arena;
     private Tetromino tetromino = Tetromino.createRandom();
@@ -36,9 +35,11 @@ public class OnePlayer {
     private int currTetrX = STARTVAL_X;
     private int currTetrY = STARTVAL_Y;
 
-    public OnePlayer(String playername) {
+    /** @param onLinesCleared (Lambda) function that addLines to other players. */
+    public OnePlayer(String playername, BiConsumer<String, Integer> onLinesCleared) {
         this.playername = playername;
         this.arena = new TetrisArena(playername);
+        this.onLinesCleared = onLinesCleared;
     }
 
     //FUNCTIONALITY
@@ -46,12 +47,20 @@ public class OnePlayer {
 
     /**
      * Places the current one and makes a new Tetromino.
+     * Automatically clears lines.
      *
      * @throws GameOverException If the placing fails.
      */
     private void placeTetromino() throws GameOverException {
-        arena.placeTetromino(tetromino, currTetrY, currTetrX);
+        boolean ok = arena.placeTetromino(tetromino, currTetrY, currTetrX);
         newNextTetromino();
+
+        if(!ok)
+            throw new GameOverException(playername);
+
+        int lines = arena.clearLines();
+        if(lines >= 1)
+            onLinesCleared.accept(playername, lines);
     }
 
     /**
@@ -66,6 +75,17 @@ public class OnePlayer {
         currTetrX = STARTVAL_X;
 
         if (!arena.checkTetromino(tetromino, currTetrY, currTetrX, true))
+            throw new GameOverException(playername);
+    }
+
+    /** Adds random lines and pushes up the tetromino. */
+    void addLines(Integer lines) throws GameOverException {
+        //First lift Tetromino up but don't go up to high.
+        int newYpos = Math.max(currTetrY - lines, STARTVAL_Y);
+        if(arena.checkTetromino(tetromino, newYpos, currTetrX, true))
+            currTetrY = newYpos;
+
+        if(arena.addLines(lines))
             throw new GameOverException(playername);
     }
 
@@ -160,5 +180,4 @@ public class OnePlayer {
         }
         return false;
     }
-
 }

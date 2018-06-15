@@ -8,7 +8,8 @@ public class JoinRequest extends Request {
     private String gameID;
     private String playerName;
 
-    /** Instruct the Server to launch a AI and add it to your game.*/
+    /** TODO Move to GameRequest
+     * Instruct the Server to launch a AI and add it to your game.*/
     private boolean playAgainsAI;
 
     //for players

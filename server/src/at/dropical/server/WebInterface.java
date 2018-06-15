@@ -145,7 +145,7 @@ class ScriptingEngine {
 
 
         stringBuilder.append("<h2>Dropical LandingPages</h2>\r\n");
-        stringBuilder.append("<a id='game' href='listOpenGame'>List Open Games</a><br>\r\n");
+        stringBuilder.append("<a id='game' href='$$listOpenGames'>List Open Games</a><br>\r\n");
         stringBuilder.append("</body>\r\n");
         stringBuilder.append("</html>\r\n");
         return stringBuilder.toString();

@@ -125,6 +125,7 @@ public class GameManager {
     }
     /** Legacy support. Returns a copy of the map. */
     public Map<String, Game> getAllGames() {
-        return new HashMap<>(gamesMap);
+        //return new HashMap<>(gamesMap);
+        return gamesMap;
     }
 }

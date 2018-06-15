@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Align;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
@@ -30,7 +29,7 @@ public class Menu implements Screen {
     //DropicalButton
     private Stage stage;
     private DropicalButton singleplayerButton;
-    private DropicalButton multiplayerLocalButton;
+    private DropicalButton againstAIButton;
     private DropicalButton multiplayerOnlineButton;
     private DropicalButton tournamentButton;
     private DropicalButton settingsButton;
@@ -79,12 +78,18 @@ public class Menu implements Screen {
         singleplayerButton.setDownTexture("GUI/buttons/cat/cat_down.png", 52, 61);
         singleplayerButton.setOverTexture("GUI/buttons/cat/cat_down.png", 52, 61);
         singleplayerButton.setDisabledTexture("GUI/buttons/cat/cat_disabled.png", 52, 61);
+        singleplayerButton.setFontColor(new Color(0x4C4C4Cff));
+        singleplayerButton.updateStyle();
         singleplayerButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if(!singleplayerButton.getButton().isDisabled()) {
-                    screenManager.setServerListScreen(new ServerList(game), game);
-                    screenManager.showScreen(screenManager.getServerListScreen());
+                    manager.createProxy("localhost");
+                    manager.joinSingleplayer();
+
+                    screenManager.setGameScreen(new Game(game, 1), game);
+                    screenManager.setCountdownScreen(new CountDown(game), game);
+                    screenManager.showScreen(screenManager.getCountdownScreen());
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -95,18 +100,19 @@ public class Menu implements Screen {
             }
         });
 
-        multiplayerLocalButton = new DropicalButton("local Multiplayer", bitmapFont, 332, 28, 260, 176);
-        multiplayerLocalButton.setUpTexture("GUI/buttons/map/map_up.png", 65, 44);
-        multiplayerLocalButton.setDownTexture("GUI/buttons/map/map_down.png", 65, 44);
-        multiplayerLocalButton.setOverTexture("GUI/buttons/map/map_down.png", 65, 44);
-        multiplayerLocalButton.setDisabledTexture("GUI/buttons/map/map_disabled.png", 65, 44);
-        multiplayerLocalButton.updateStyle();
-        multiplayerLocalButton.addListener(new InputListener() {
+        againstAIButton = new DropicalButton("Player vs AI", bitmapFont, 332, 28, 260, 176);
+        againstAIButton.setUpTexture("GUI/buttons/map/map_up.png", 65, 44);
+        againstAIButton.setDownTexture("GUI/buttons/map/map_down.png", 65, 44);
+        againstAIButton.setOverTexture("GUI/buttons/map/map_down.png", 65, 44);
+        againstAIButton.setDisabledTexture("GUI/buttons/map/map_disabled.png", 65, 44);
+        againstAIButton.setFontColor(new Color(0x4C4C4Cff));
+        againstAIButton.updateStyle();
+        againstAIButton.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!multiplayerLocalButton.isDisabled()) {
+                if(!againstAIButton.isDisabled()) {
                     manager.createProxy("localhost");
-                    manager.joinTurnier();
+                    manager.playAgainstAI();
 
                     screenManager.setGameScreen(new Game(game, 2), game);
                     screenManager.setCountdownScreen(new CountDown(game), game);
@@ -120,23 +126,37 @@ public class Menu implements Screen {
                 super.touchUp(event, x, y, pointer, button);
             }
         });
-        multiplayerLocalButton.setDisabled(true);
-
 
         multiplayerOnlineButton = new DropicalButton("Multiplayer", bitmapFont, 688, 28, 260, 176);
         multiplayerOnlineButton.setUpTexture("GUI/buttons/map/map_up.png",65, 44);
         multiplayerOnlineButton.setDownTexture("GUI/buttons/map/map_down.png", 65, 44);
         multiplayerOnlineButton.setOverTexture("GUI/buttons/map/map_down.png", 65, 44);
         multiplayerOnlineButton.setDisabledTexture("GUI/buttons/map/map_disabled.png", 65, 44);
+        multiplayerOnlineButton.setFontColor(new Color(0x4C4C4Cff));
         multiplayerOnlineButton.flipX();
         multiplayerOnlineButton.updateStyle();
-        multiplayerOnlineButton.setDisabled(true);
+        multiplayerOnlineButton.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if(!multiplayerOnlineButton.isDisabled()) {
+                    screenManager.setServerListScreen(new ServerList(game), game);
+                    screenManager.showScreen(screenManager.getServerListScreen());
+                }
+                return super.touchDown(event, x, y, pointer, button);
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+            }
+        });
 
         tournamentButton = new DropicalButton("Tournaments", bitmapFont, 984, 12, 208, 244);
         tournamentButton.setUpTexture("GUI/buttons/cat/cat_up.png", 52, 61);
         tournamentButton.setDownTexture("GUI/buttons/cat/cat_down.png", 52, 61);
         tournamentButton.setOverTexture("GUI/buttons/cat/cat_down.png", 52, 61);
         tournamentButton.setDisabledTexture("GUI/buttons/cat/cat_disabled.png", 52, 61);
+        tournamentButton.setFontColor(new Color(0x4C4C4Cff));
         tournamentButton.flipX();
         tournamentButton.updateStyle();
         tournamentButton.setDisabled(true);
@@ -146,6 +166,7 @@ public class Menu implements Screen {
         settingsButton.setDownTexture("GUI/buttons/main/main_down.png", 100, 22);
         settingsButton.setOverTexture("GUI/buttons/main/main_down.png", 100, 22);
         settingsButton.setDisabledTexture("GUI/buttons/main/main_disabled.png", 100, 22);
+        settingsButton.setFontColor(new Color(0x000000ff));
         settingsButton.updateStyle();
         settingsButton.addListener(new InputListener() {
             @Override
@@ -164,7 +185,7 @@ public class Menu implements Screen {
         });
 
         stage.addActor(singleplayerButton.getButton());
-        stage.addActor(multiplayerLocalButton.getButton());
+        stage.addActor(againstAIButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
         stage.addActor(settingsButton.getButton());
