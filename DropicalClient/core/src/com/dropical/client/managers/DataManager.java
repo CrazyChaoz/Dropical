@@ -38,7 +38,7 @@ public class DataManager implements DropicalListener {
     }
 
     public void joinSingleplayer() {
-        proxy.writeToServer(new JoinRequest("RP1", 1));
+        proxy.writeToServer(new JoinRequest(playername, 1));
     }
 
     public void playAgainstAI() {
@@ -48,7 +48,7 @@ public class DataManager implements DropicalListener {
 
     public void joinMultiplayer() {
         //proxy.writeToServer(new CreateGameRequest("Game1",2));
-        proxy.writeToServer(new JoinRequest("Game1","RP1"));
+        proxy.writeToServer(new JoinRequest("Game1",playername));
     }
 
     /*public void joinTurnier() {
