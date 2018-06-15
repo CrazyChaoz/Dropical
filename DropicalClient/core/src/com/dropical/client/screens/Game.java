@@ -212,10 +212,14 @@ public class Game implements Screen {
     private void pollPlayerInfo(int playerNo) throws Exception {
         if(playerNo == 0) {
             handleInputP1();
-            manager.getProxy().writeToServer(new HandleInputRequest("RP1", gameKeyP1));
+            if(gameKeyP1 != PlayerAction.NOKEY) {
+                manager.getProxy().writeToServer(new HandleInputRequest("RP1", gameKeyP1));
+            }
         } else {
             handleInputP2();
-            manager.getProxy().writeToServer(new HandleInputRequest("Kemps_JFX_GUI2", gameKeyP2));
+            if(gameKeyP1 != PlayerAction.NOKEY) {
+                manager.getProxy().writeToServer(new HandleInputRequest("Kemps_JFX_GUI2", gameKeyP2));
+            }
         }
     }
     private void updatePollRequestData(int playerNo) {
