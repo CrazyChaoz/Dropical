@@ -35,11 +35,7 @@ public class DataManager implements DropicalListener {
     }
 
     public void joinSingleplayer() {
-        //proxy.writeToServer(new CreateGameRequest("Game1",1));
-
-        //proxy.writeToServer(new JoinRequest("Game1","RP1"));
-        //fixme Es wird ein zweiter Spieler benötigt, damit das Spiel startet.
-        proxy.writeToServer(new JoinRequest("RP1", true));
+        proxy.writeToServer(new JoinRequest("RP1", 1));
     }
 
     public void playAgainstAI() {
@@ -48,13 +44,13 @@ public class DataManager implements DropicalListener {
     }
 
     public void joinMultiplayer() {
-        proxy.writeToServer(new CreateGameRequest("Game1",2));
+        //proxy.writeToServer(new CreateGameRequest("Game1",2));
         proxy.writeToServer(new JoinRequest("Game1","RP1"));
     }
 
-    public void joinTurnier() {
+    /*public void joinTurnier() {
         proxy.writeToServer(new JoinRequest("RP1"));
-    }
+    }*/
 
     @Override
     public void countDown(CountDownContainer container) {
