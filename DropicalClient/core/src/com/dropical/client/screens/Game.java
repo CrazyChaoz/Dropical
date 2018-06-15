@@ -133,7 +133,6 @@ public class Game implements Screen {
             gameStateP1 = gameState;
             pointsP1 = points;
             renderPlay1er1();
-            checkGameLost();
 
             //wenn Multiplayer, dann auf 2. Spieler switchen und seinen PollRequest laden + rendern
             if(anzahlSpieler == 2) {
@@ -142,7 +141,6 @@ public class Game implements Screen {
                 gameStateP2 = gameState;
                 pointsP2 = points;
                 renderPlay1er2();
-                checkGameLost();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -195,31 +193,17 @@ public class Game implements Screen {
 
     }
 
-    //wenn Gameover, dann auf GameOver-Screen wechseln
-    private void checkGameLost() {
-        if(gameState == GameState.GAME_OVER) {
-            if(gameStateP1 == GameState.GAME_LOST) {
-                screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2), game);
-                screenManager.showScreen(screenManager.getGameOverScreen());
-            }
-            if(gameStateP2 == GameState.GAME_LOST) {
-                screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 2, pointsP1, pointsP2), game);
-                screenManager.showScreen(screenManager.getGameOverScreen());
-            }
-        }
-    }
-
     private void pollPlayerInfo(int playerNo) throws Exception {
         if(playerNo == 0) {
             handleInputP1();
             if(gameKeyP1 != PlayerAction.NOKEY) {
-                manager.getProxy().writeToServer(new HandleInputRequest("RP1", gameKeyP1));
+                manager.getProxy().writeToServer(new HandleInputRequest(manager.getPlayername(), gameKeyP1));
             }
         } else {
-            handleInputP2();
-            if(gameKeyP1 != PlayerAction.NOKEY) {
-                manager.getProxy().writeToServer(new HandleInputRequest("Kemps_JFX_GUI2", gameKeyP2));
-            }
+//            handleInputP2();
+//            if(gameKeyP1 != PlayerAction.NOKEY) {
+//                manager.getProxy().writeToServer(new HandleInputRequest("Kemps_JFX_GUI2", gameKeyP2));
+//            }
         }
     }
     private void updatePollRequestData(int playerNo) {
@@ -242,6 +226,18 @@ public class Game implements Screen {
                 //verhindern der IndexOutOfBounds-Exception
                 if(ghostPosY < 0) {
                     ghostPosY = 0;
+                }
+            }
+        }
+        if(manager.getGameOverContainer() != null){
+            for(String s : manager.getGameOverContainer().getPlayernames()) {
+                if(!manager.getGameOverContainer().getLooser().equals(s)) {
+                    screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 1, pointsP1, pointsP2), game);
+                    screenManager.showScreen(screenManager.getGameOverScreen());
+                }
+                else {
+                    screenManager.setGameOverScreen(new GameOver(game, anzahlSpieler, 2, pointsP1, pointsP2), game);
+                    screenManager.showScreen(screenManager.getGameOverScreen());
                 }
             }
         }

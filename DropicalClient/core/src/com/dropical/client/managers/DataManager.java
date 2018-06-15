@@ -19,6 +19,8 @@ public class DataManager implements DropicalListener {
     private ListDataContainer listData;
     private GameOverContainer gameOverContainer;
 
+    private String playername;
+
     private static DataManager ourInstance = new DataManager();
     public static DataManager getInstance() {
         return ourInstance;
@@ -29,6 +31,7 @@ public class DataManager implements DropicalListener {
     public void createProxy(String ip) {
         try {
             proxy = new DropicalProxy(ip, 45000, this);
+            playername="PeterUI " + Math.random();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,21 +42,21 @@ public class DataManager implements DropicalListener {
 
         //proxy.writeToServer(new JoinRequest("Game1","RP1"));
         //fixme Es wird ein zweiter Spieler benötigt, damit das Spiel startet.
-        proxy.writeToServer(new JoinRequest("RP1", true));
+        proxy.writeToServer(new JoinRequest(playername, true));
     }
 
     public void playAgainstAI() {
         //Gegen AI spielen
-        proxy.writeToServer(new JoinRequest("RP1", true));
+        proxy.writeToServer(new JoinRequest(playername, true));
     }
 
     public void joinMultiplayer() {
         proxy.writeToServer(new CreateGameRequest("Game1",2));
-        proxy.writeToServer(new JoinRequest("Game1","RP1"));
+        proxy.writeToServer(new JoinRequest("Game1",playername));
     }
 
     public void joinTurnier() {
-        proxy.writeToServer(new JoinRequest("RP1"));
+        proxy.writeToServer(new JoinRequest(playername));
     }
 
     @Override
@@ -105,5 +108,9 @@ public class DataManager implements DropicalListener {
     }
     public void setGameOverContainer(GameOverContainer gameOverContainer) {
         this.gameOverContainer = gameOverContainer;
+    }
+
+    public String getPlayername() {
+        return playername;
     }
 }
