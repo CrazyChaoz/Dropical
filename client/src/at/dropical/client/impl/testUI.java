@@ -66,9 +66,9 @@ public class testUI extends Application implements DropicalListener {
         stage.show();
 
         proxy = new DropicalProxy("localhost", 45000, this);
+        proxy.writeToServer(new JoinRequest(BESCHTER_PLAYERNAME+ Math.random()));
         //fixme Change that back.
-        //proxy.writeToServer(new JoinRequest(BESCHTER_PLAYERNAME));
-        proxy.writeToServer(new JoinRequest(BESCHTER_PLAYERNAME, true));
+        //proxy.writeToServer(new JoinRequest(BESCHTER_PLAYERNAME, true));
 
     }
 
