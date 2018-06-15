@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -81,15 +80,17 @@ public class GameManager {
         Game game;
 
         if(gameID != null && !gameID.equals(""))
-            game = joinExistingGame(gameID, playerName, trans);
+            game = joinExistingGameOrCreate(gameID, playerName, trans);
         else game = autoJoinOrCreateGame(playerName, trans, playerCount);
 
         if(playAgainsAI)
             Server.startLocalAI(game.getName());
     }
 
-    private Game joinExistingGame(String gameID, String playerName, Transmitter trans) {
+    private Game joinExistingGameOrCreate(String gameID, String playerName, Transmitter trans) {
         Game game = gamesMap.get(gameID);
+        if(game == null)
+            game = createGame(gameID, 0);
         game.addPlayerAndStart(playerName, trans);
         return game;
     }
