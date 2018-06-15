@@ -87,7 +87,7 @@ public class ServerList implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 manager.createProxy("localhost");
-                manager.joinSingleplayer();
+                manager.joinMultiplayer();
 
                 screenManager.setGameScreen(new Game(game, 2), game);
                 screenManager.setCountdownScreen(new CountDown(game), game);
