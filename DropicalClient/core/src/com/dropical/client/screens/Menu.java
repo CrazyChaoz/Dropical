@@ -14,13 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
+import com.dropical.client.npc.Fish;
+import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
 
 public class Menu implements Screen {
     private DropicalCam cam;
-    private Sprite background;
+//    private Sprite background;
     private BitmapFont bitmapFont;
+    private Background background;
 
     //Manager
     private ScreenManager screenManager = ScreenManager.getInstance();
@@ -37,7 +40,8 @@ public class Menu implements Screen {
     private DropicalButton testButton;
 
     //Mobs
-    private Sprite fishSprite;
+    private int time = 0;
+    private Fish fish;
 
     private DropicalMain game;
     public Menu(DropicalMain game) {
@@ -47,9 +51,10 @@ public class Menu implements Screen {
     @Override
     public void show() {
         //Hintergrund
-        background = new Sprite(new Texture(Gdx.files.internal("GUI/background.png")));
-        background.setPosition(0, 0);
-        background.setSize(1280, 720);
+//        background = new Sprite(new Texture(Gdx.files.internal("GUI/background.png")));
+//        background.setPosition(0, 0);
+//        background.setSize(1280, 720);
+        background = new Background();
 
         //Schrift für Buttons
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
@@ -62,11 +67,8 @@ public class Menu implements Screen {
         //Manager
         manager = DataManager.getInstance();
 
-        //Mobs
-        fishSprite = new Sprite(new Texture(Gdx.files.internal("Fish/fish.png")));
-        fishSprite.setSize(56, 56);
-        fishSprite.setPosition(600,260);
-        fishSprite.rotate(-30);
+        //NPCs
+        fish = new Fish();
 
         //DropicalButton
         stage = new Stage();
@@ -204,15 +206,20 @@ public class Menu implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //NPCs
+        time++;
+        fish.update(time);
+
         //----------------------------------------------------------
 
         game.getBatch().begin();
 
         //Hintergrundbild zeichnen
+//        background.draw(game.getBatch());
         background.draw(game.getBatch());
 
         //Mobs zeichnen
-        fishSprite.draw(game.getBatch());
+        fish.draw(game.getBatch());
 
         game.getBatch().end();
 

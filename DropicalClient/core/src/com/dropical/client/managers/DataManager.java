@@ -58,21 +58,25 @@ public class DataManager implements DropicalListener {
     @Override
     public void countDown(CountDownContainer container) {
         countDownContainer = container;
+        System.out.println("coutndown");
     }
 
     @Override
     public void updateUI(GameDataContainer container) {
         gameData = container;
+        System.out.println("gamedata");
     }
 
     @Override
     public void somebodyJoinedTheLobby(ListDataContainer container) {
         listData = container;
+        System.out.println("listData");
     }
 
     @Override
     public void onGameOver(GameOverContainer container) {
         gameOverContainer = container;
+        System.out.println("ganme voer");
     }
 
     public DropicalProxy getProxy() {

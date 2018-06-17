@@ -86,12 +86,11 @@ public class ServerList implements Screen {
         localhostButton.getButton().addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                manager.createProxy("localhost");
-                manager.joinMultiplayer();
+//                manager.createProxy("localhost");
+//                manager.joinMultiplayer();
 
-                screenManager.setGameScreen(new Game(game, 2), game);
-                screenManager.setCountdownScreen(new CountDown(game), game);
-                screenManager.showScreen(screenManager.getCountdownScreen());
+                screenManager.setConnectingScreen(new Connecting(game), game);
+                screenManager.showScreen(screenManager.getConnectingScreen());
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -153,11 +152,11 @@ public class ServerList implements Screen {
             screenManager.showScreen(screenManager.getMenuScreen());
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            manager.createProxy(ipTextField.getField().getText());
-            manager.joinMultiplayer();
+//            manager.createProxy(ipTextField.getField().getText());
+//            manager.joinMultiplayer();
 
-            screenManager.setLobbyScreen(new Lobby(game), game);
-            screenManager.showScreen(screenManager.getLobbyScreen());
+            screenManager.setConnectingScreen(new Connecting(game), game);
+            screenManager.showScreen(screenManager.getConnectingScreen());
         }
     }
 

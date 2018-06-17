@@ -13,6 +13,7 @@ public class ScreenManager {
     private ServerList serverListScreen;
     private Settings settingsScreen;
     private Lobby lobbyScreen;
+    private Connecting connectingScreen;
 
     private static ScreenManager ourInstance = new ScreenManager();
     public static ScreenManager getInstance() {
@@ -79,5 +80,12 @@ public class ScreenManager {
     public void setLobbyScreen(Lobby lobbyScreen, DropicalMain main) {
         setMain(main);
         this.lobbyScreen = lobbyScreen;
+    }
+    public Connecting getConnectingScreen() {
+        return connectingScreen;
+    }
+    public void setConnectingScreen(Connecting connectingScreen, DropicalMain main) {
+        setMain(main);
+        this.connectingScreen = connectingScreen;
     }
 }
