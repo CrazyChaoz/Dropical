@@ -76,7 +76,7 @@ public class DataManager implements DropicalListener {
     @Override
     public void onGameOver(GameOverContainer container) {
         gameOverContainer = container;
-        System.out.println("ganme voer");
+        System.out.println("game over");
     }
 
     public DropicalProxy getProxy() {

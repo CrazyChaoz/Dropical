@@ -40,7 +40,7 @@ public class CountDown implements Screen {
 
         //Schrift für Steuerung-Erklärung
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
-        bitmapFont.getData().setScale(0.9f);
+        bitmapFont.getData().setScale(1.5f);
         bitmapFont.setColor(new Color(0x4C4C4Cff));
 
         manager = DataManager.getInstance();

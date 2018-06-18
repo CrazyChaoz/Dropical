@@ -70,11 +70,11 @@ public class Lobby implements Screen {
         //Hintergrundbild zeichnen
         background.draw(game.getBatch());
 
-        if(manager.getGameData().getCurrentState() != GameState.LOBBY) {
+//        if(manager.getGameData().getCurrentState() != GameState.LOBBY) {
             screenManager.setGameScreen(new Game(game, 2), game);
             screenManager.setCountdownScreen(new CountDown(game), game);
             screenManager.showScreen(screenManager.getCountdownScreen());
-        }
+//        }
 
         game.getBatch().end();
     }

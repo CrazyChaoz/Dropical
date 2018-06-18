@@ -3,12 +3,14 @@ package com.dropical.client.client;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.dropical.client.managers.ScreenManager;
 import com.dropical.client.screens.Menu;
 
 public class DropicalMain extends Game {
 	private SpriteBatch batch;
+	private Music music;
 
 	@Override
 	public void create() {
@@ -21,6 +23,10 @@ public class DropicalMain extends Game {
 		manager.setMain(this);
 		manager.setMenuScreen(new Menu(this), this);
 		manager.showScreen(manager.getMenuScreen());
+
+		music = Gdx.audio.newMusic(Gdx.files.internal("Tetris.ogg"));
+		music.play();
+		music.setLooping(true);
 	}
 
 	@Override
@@ -45,6 +51,7 @@ public class DropicalMain extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		music.dispose();
 	}
 
 	public SpriteBatch getBatch() {

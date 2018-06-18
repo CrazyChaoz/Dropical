@@ -57,7 +57,7 @@ public class Settings implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        ghostButton = new DropicalButton("Ghost", bitmapFont, 524, 552, 400, 88);
+        ghostButton = new DropicalButton("Ghost", bitmapFont, 440, 250, 400, 88);
         ghostButton.setUpTexture("GUI/buttons/main/main_up.png", 100, 22);
         ghostButton.setDownTexture("GUI/buttons/main/main_down.png", 100, 22);
         ghostButton.setOverTexture("GUI/buttons/main/main_down.png", 100, 22);
