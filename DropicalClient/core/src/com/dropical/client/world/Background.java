@@ -23,7 +23,7 @@ public class Background {
         background.setSize(1280, 720);
 
         //Beach
-//        createBeachAnimation();
+        createBeachAnimation();
     }
 
     private void createBeachAnimation() {
@@ -46,7 +46,7 @@ public class Background {
     public void draw(Batch batch) {
         background.draw(batch);
 
-//        renderBeachAnimation(batch);
+        renderBeachAnimation(batch);
     }
 
     private void renderBeachAnimation(Batch batch) {
