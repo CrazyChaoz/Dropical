@@ -4,22 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Fish {
-    private Sprite fish;
-    private int x = 0;
-    private int y = 0;
-    private int directionDegrees = 0;
-    Actor actor = new Actor();
+public class Fish extends Sprite {
+    private World world;
+    private Body body;
 
-    public Fish() {
-        fish = new Sprite(new Texture(Gdx.files.internal("Fish/fish.png")));
-        fish.setSize(28, 28);
-        fish.setPosition(0, 0);
-        fish.setOrigin(28, 28);
-        fish.setRotation(0);
-    }
+//    private Sprite fish;
+    private float x = 0;
+    private float y = 0;
+    private int directionDegrees = 0;
+
+//    public Fish() {
+//        fish = new Sprite(new Texture(Gdx.files.internal("Fish/fish.png")));
+//        fish.setSize(28, 28);
+//        fish.setPosition(0, 0);
+//        fish.setOrigin(28, 28);
+//        fish.setRotation(0);
+//    }
 
     public void followCursor() {
         float proportionX = 1;
@@ -54,16 +57,36 @@ public class Fish {
         }
     }
 
-    public void update(int time) {
+//    public void draw(Batch batch) {
+//        fish.draw(batch);
+//    }
 
-
-        fish.setPosition(x, y);
+    public Fish(World world, String name, float x, float y) {
+        super(new Texture(Gdx.files.internal(name)));
+        this.world = world;
+        setPosition(x-getWidth()/2, y-getHeight()/2);
+        createBody();
     }
 
+    private void createBody() {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(getX(), getY());
+        body = world.createBody(bodyDef);
 
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(getWidth()/2, getHeight()/2);
 
-    public void draw(Batch batch) {
-        fish.draw(batch);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        Fixture fixture = body.createFixture(fixtureDef);
+
+        shape.dispose();
+    }
+
+    public void update() {
+        this.setPosition(body.getPosition().x, body.getPosition().y);
     }
 
 }
