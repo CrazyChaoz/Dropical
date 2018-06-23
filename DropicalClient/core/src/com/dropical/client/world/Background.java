@@ -54,17 +54,17 @@ public class Background {
         beachTexture = new Texture("GUI/background_beachAni.png");
 
         TextureRegion[][] beachTmpFrames = TextureRegion.split(beachTexture, 208, 5);
-        beachAnimationFrames = new TextureRegion[4];
+        beachAnimationFrames = new TextureRegion[13];
         int index = 0;
         //Animation vorwärts in Array speichern
-        for(int i = 0; i < 4; i++) {
+        for(int i = 0; i < 13; i++) {
             for(int j = 0; j < 1; j++) {
                 beachAnimationFrames[index++] = beachTmpFrames[i][j];
             }
         }
         beachAnimation = new DropicalAnimation<TextureRegion>(1f/8f, beachAnimationFrames);
         beachAnimation.setScaling(4);
-        beachAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+        beachAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     //----------------------------------------
