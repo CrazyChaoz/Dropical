@@ -12,7 +12,7 @@ import at.dropical.shared.net.requests.JoinRequest;
 
 import java.io.IOException;
 
-public class Perpetuum_CRASHile {
+public class Perpetuum_CRASHile extends Thread{
 
     private final DropicalProxy proxy;
 
@@ -36,6 +36,8 @@ public class Perpetuum_CRASHile {
             public void onGameOver(GameOverContainer container) {}
         });
         proxy.writeToServer(new JoinRequest(name));
+
+        this.start();
     }
 
     public static void main(String[] args) throws IOException {

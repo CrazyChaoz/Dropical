@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -40,7 +41,10 @@ public class Server {
             // Only returns on Error.
             serverInstance.manager.endlesslyAcceptConnections();
 
-        } catch(IOException e) {
+        } catch(SocketException e){
+            System.out.println(e.getMessage());
+            logger().log(Level.SEVERE, e.toString());
+        }catch(IOException e) {
             logger().log(Level.SEVERE, e.toString());
         } finally {
             instance().executor.shutdownNow();
