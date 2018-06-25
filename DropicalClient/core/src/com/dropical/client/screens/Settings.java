@@ -12,15 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
-import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
+import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
 
 public class Settings implements Screen {
     private DropicalCam cam;
-    private Sprite background;
     private BitmapFont bitmapFont;
+    private Background background;
 
     //Manager
     private ScreenManager screenManager;
@@ -38,9 +38,7 @@ public class Settings implements Screen {
     @Override
     public void show() {
         //Hintergrund
-        background = new Sprite(new Texture(Gdx.files.internal("GUI/background.png")));
-        background.setPosition(0, 0);
-        background.setSize(1280, 720);
+        background = Background.getInstance();
 
         //Schrift für Steuerung-Erklärung
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
@@ -98,12 +96,18 @@ public class Settings implements Screen {
         //Buttonevents
         stage.act(delta);
 
+        background.update();
+
+        //----------------------------------------------------------
+
         game.getBatch().begin();
 
-        //Hintergrundbild zeichnen
+        //Hintergrund zeichnen
         background.draw(game.getBatch());
 
         game.getBatch().end();
+
+        //----------------------------------------------------------
 
         //Buttons rendern
         stage.draw();

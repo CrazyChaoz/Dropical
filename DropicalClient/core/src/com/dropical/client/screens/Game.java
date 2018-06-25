@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
+import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ import java.util.List;
 
 public class Game implements Screen {
     private DropicalCam cam;
-    private Sprite background;
     private Sprite overlay;
     private BitmapFont bitmapFont;
+    private Background background;
     private List<Texture> texturList = new ArrayList<Texture>();
 
     //Manager
@@ -90,9 +91,7 @@ public class Game implements Screen {
         texturList.add(new Texture("Tetrominos/ghost.png"));      //Index 8
 
         //Hintergrund
-        background = new Sprite(new Texture(Gdx.files.internal("GUI/background.png")));
-        background.setPosition(0, 0);
-        background.setSize(1280, 720);
+        background = Background.getInstance();
 
         //Overlay
         overlay = new Sprite(new Texture(Gdx.files.internal("GUI/overlay/game_running.png")));
@@ -112,11 +111,13 @@ public class Game implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        background.update();
+
         //----------------------------------------------------------
 
         game.getBatch().begin();
 
-        //Hintergrundbild zeichnen
+        //Hintergrund zeichnen
         background.draw(game.getBatch());
 
         //Overlay zeichnen

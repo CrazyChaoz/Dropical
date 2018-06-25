@@ -1,14 +1,28 @@
 package com.dropical.client.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
+import com.dropical.client.npc.Fish;
 import com.pezcraft.dropical.animation.DropicalAnimation;
 
+import java.util.ArrayList;
+
 public class Background {
+    //Singleton Stuff
+    private static Background ourInstance = new Background(10);
+    public static Background getInstance() {
+        return ourInstance;
+    }
+
+    //Hintergrundbild
     private Sprite background;
 
     //Beach
@@ -23,13 +37,30 @@ public class Background {
     private DropicalAnimation starfishAnimation;
     private float starfishElapsedTime = 0;
 
-    public Background() {
+    //Crab
+    private Texture crabTexture;
+    private TextureRegion[] crabAnimationFrames;
+    private DropicalAnimation crabAnimation;
+    private float crabElapsedTime = 0;
+
+    //Mobs
+    private ArrayList<Fish> fishList = new ArrayList<Fish>();
+    private int fishAmount = 0;
+    private World world;
+    private OrthographicCamera box2DCamera;
+    private Box2DDebugRenderer debugRenderer;
+
+    public Background(int fishAmount) {
         background = new Sprite(new Texture(Gdx.files.internal("GUI/background.png")));
         background.setPosition(0, 0);
         background.setSize(1280, 720);
 
+        this.fishAmount = fishAmount;
         createBeachAnimation();
         createStarFishAnimaton();
+        createCrabAnimation();
+        createFishWorld();
+        createFish();
     }
 
     //----------------------------------------
@@ -66,6 +97,38 @@ public class Background {
         beachAnimation.setScaling(4);
         beachAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
+    private void createCrabAnimation() {
+        crabTexture = new Texture("NPC/Crab/crabSettingsAni.png");
+
+        TextureRegion[][] beachTmpFrames = TextureRegion.split(crabTexture, 64, 80);
+        crabAnimationFrames = new TextureRegion[13];
+        int index = 0;
+        //Animation vorwärts in Array speichern
+        for(int i = 0; i < 1; i++) {
+            for(int j = 0; j < 13; j++) {
+                crabAnimationFrames[index++] = beachTmpFrames[i][j];
+            }
+        }
+        crabAnimation = new DropicalAnimation<TextureRegion>(1f/8f, crabAnimationFrames);
+        crabAnimation.setScaling(1);
+        crabAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+    }
+    private void createFishWorld() {
+        world = new World(new Vector2(0, 0), true);
+
+        box2DCamera = new OrthographicCamera();
+        box2DCamera.setToOrtho(false, 1280/10, 720/10);
+        box2DCamera.position.set(1280/2f, 720/2f, 0);
+//        debugRenderer = new Box2DDebugRenderer();
+    }
+    private void createFish() {
+        //spawn fish on random positions
+        for(int i = 0; i < fishAmount; i++) {
+            int randomX = (int) Math.floor(Math.random()*1000+100);
+            int randomY = (int) Math.floor(Math.random()*300+10);
+            fishList.add(new Fish(world, "NPC/Fish/fish.png", randomX, randomY));
+        }
+    }
 
     //----------------------------------------
 
@@ -73,6 +136,8 @@ public class Background {
         background.draw(batch);
         renderBeachAnimation(batch);
         renderStarfishAnimation(batch);
+        renderCrabAnimation(batch);
+        renderFish(batch);
     }
     private void renderBeachAnimation(Batch batch) {
         beachElapsedTime += Gdx.graphics.getDeltaTime();
@@ -92,6 +157,25 @@ public class Background {
         }
 
         starfishAnimation.draw(starfishElapsedTime, batch, 280, 320);
+    }
+    private void renderCrabAnimation(Batch batch) {
+        crabElapsedTime += Gdx.graphics.getDeltaTime();
+        crabAnimation.draw(crabElapsedTime, batch, 536, 468);
+    }
+    private void renderFish(Batch batch) {
+        for(int i = 0; i < fishAmount; i++) {
+            fishList.get(i).draw(batch);
+        }
+    }
+
+    public void update() {
+        //Mobs zeichnen
+        for(int i = 0; i < fishAmount; i++) {
+            fishList.get(i).update();
+        }
+
+//        debugRenderer.render(world, box2DCamera.combined);
+        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
 
 }

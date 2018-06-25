@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.ScreenManager;
+import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ import java.util.List;
 
 public class GameOver implements Screen {
     private DropicalCam cam;
-    private Sprite background;
     private Sprite overlay;
     private BitmapFont bitmapFont;
+    private Background background;
     private List<Texture> texturList = new ArrayList<Texture>();
 
     //Manager
@@ -576,9 +577,7 @@ public class GameOver implements Screen {
         texturList.add(new Texture("Tetrominos/ghost.png"));      //Index 8
 
         //Hintergrund
-        background = new Sprite(new Texture(Gdx.files.internal("GUI/background.png")));
-        background.setPosition(0, 0);
-        background.setSize(1280, 720);
+        background = Background.getInstance();
 
         //Overlay (je nachdem welcher Spieler verloren hat)
         overlay = new Sprite(new Texture(Gdx.files.internal("GUI/overlay/game_over_player" + playerLost + ".png")));
@@ -641,11 +640,13 @@ public class GameOver implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        background.update();
+
         //----------------------------------------------------------
 
         game.getBatch().begin();
 
-        //Hintergrundbild zeichnen
+        //Hintergrund zeichnen
         background.draw(game.getBatch());
 
         //Overlay zeichnen

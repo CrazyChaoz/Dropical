@@ -5,20 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
-import com.dropical.client.npc.Fish;
 import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
@@ -40,14 +33,6 @@ public class Menu implements Screen {
     private DropicalButton tournamentButton;
     private DropicalButton settingsButton;
 
-    private DropicalButton testButton;
-
-    //Mobs
-    private Fish[] fish = new Fish[10];
-    private World world;
-    private OrthographicCamera box2DCamera;
-    private Box2DDebugRenderer debugRenderer;
-
     private DropicalMain game;
     public Menu(DropicalMain game) {
         this.game = game;
@@ -56,7 +41,8 @@ public class Menu implements Screen {
     @Override
     public void show() {
         //Hintergrund
-        background = new Background();
+//        background = new Background(10);
+        background = Background.getInstance();
 
         //Schrift für Buttons
         bitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
@@ -68,18 +54,6 @@ public class Menu implements Screen {
 
         //Manager
         manager = DataManager.getInstance();
-
-        //NPCs
-        world = new World(new Vector2(0, 0), true);
-        for(int i = 0; i < 10; i++) {
-            int randomX = (int) Math.floor(Math.random()*1000+100);
-            int randomY = (int) Math.floor(Math.random()*300+10);
-            fish[i] = new Fish(world, "NPC/Fish/fish.png", randomX, randomY);
-        }
-        box2DCamera = new OrthographicCamera();
-        box2DCamera.setToOrtho(false, 1280/10, 720/10);
-        box2DCamera.position.set(1280/2f, 720/2f, 0);
-//        debugRenderer = new Box2DDebugRenderer();
 
         //DropicalButton
         stage = new Stage();
@@ -217,29 +191,16 @@ public class Menu implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //NPCs
-        for(int i = 0; i < 10; i++) {
-            fish[i].update();
-        }
+        background.update();
 
         //----------------------------------------------------------
 
         game.getBatch().begin();
 
-        //Hintergrundbild zeichnen
+        //Hintergrund zeichnen
         background.draw(game.getBatch());
 
-        //Mobs zeichnen
-        for(int i = 0; i < 10; i++) {
-            fish[i].draw(game.getBatch());
-        }
-
         game.getBatch().end();
-
-        //----------------------------------------------------------
-
-//        debugRenderer.render(world, box2DCamera.combined);
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
 
         //----------------------------------------------------------
 
