@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
+import com.dropical.client.npc.Crab;
 import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
@@ -31,7 +32,9 @@ public class Menu implements Screen {
     private DropicalButton againstAIButton;
     private DropicalButton multiplayerOnlineButton;
     private DropicalButton tournamentButton;
-    private DropicalButton settingsButton;
+
+    //NPCs
+    private Crab crab;
 
     private DropicalMain game;
     public Menu(DropicalMain game) {
@@ -148,20 +151,13 @@ public class Menu implements Screen {
         tournamentButton.updateStyle();
         tournamentButton.setDisabled(true);
 
-        settingsButton = new DropicalButton("Einstellungen", bitmapFont, 440, 250, 400, 88);
-        settingsButton.setUpTexture("GUI/buttons/main/main_up.png", 100, 22);
-        settingsButton.setDownTexture("GUI/buttons/main/main_down.png", 100, 22);
-        settingsButton.setOverTexture("GUI/buttons/main/main_down.png", 100, 22);
-        settingsButton.setDisabledTexture("GUI/buttons/main/main_disabled.png", 100, 22);
-        settingsButton.setFontColor(new Color(0x000000ff));
-        settingsButton.updateStyle();
-        settingsButton.addListener(new InputListener() {
+        crab = new Crab();
+        crab.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if(!settingsButton.isDisabled()) {
-                    screenManager.setSettingsScreen(new Settings(game), game);
-                    screenManager.showScreen(screenManager.getSettingsScreen());
-                }
+                screenManager.setSettingsScreen(new Settings(game), game);
+                screenManager.showScreen(screenManager.getSettingsScreen());
+
                 return super.touchDown(event, x, y, pointer, button);
             }
 
@@ -175,7 +171,7 @@ public class Menu implements Screen {
         stage.addActor(againstAIButton.getButton());
         stage.addActor(multiplayerOnlineButton.getButton());
         stage.addActor(tournamentButton.getButton());
-        stage.addActor(settingsButton.getButton());
+        stage.addActor(crab);
         stage.setViewport(cam.getViewport());
     }
 
@@ -199,6 +195,9 @@ public class Menu implements Screen {
 
         //Hintergrund zeichnen
         background.draw(game.getBatch());
+
+        //Krabbe zeichnen
+        crab.draw(game.getBatch());
 
         game.getBatch().end();
 

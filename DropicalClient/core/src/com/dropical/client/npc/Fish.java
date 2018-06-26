@@ -13,7 +13,7 @@ public class Fish extends Sprite {
     private Body body;
     private TextureRegion[][] currentFishTexture;
 
-    private enum State {STAYING, SWIMMING, JUMPING;}
+    private enum State {SWIMMING, JUMPING;}
     private State currentState;
     private float time = 0;
 
