@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
@@ -27,7 +25,6 @@ public class Connecting implements Screen {
     private DataManager manager;
 
     //TextField/Button
-    private Stage stage;
     private String status;
 
     //Connecting Animation
@@ -123,7 +120,7 @@ public class Connecting implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        cam.update(width, height);
     }
 
     @Override

@@ -5,9 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -64,8 +62,10 @@ public class ServerList implements Screen {
         ipTextField = new DropicalTextField("IP", bitmapFont, 440, 250, 400, 88);
         ipTextField.setCursorTexture("GUI/textFields/textField_cursor.png",4, 14);
         ipTextField.setBackgroundTexture("GUI/textFields/textField_background.png", 100, 22);
+        ipTextField.setFocusedTexture("GUI/textFields/textField_focus.png", 100, 22);
         ipTextField.setSelectionTexture("GUI/textFields/textField_selection.png", 1, 1);
         ipTextField.setDisabledTexture("GUI/textFields/textField_disabled.png", 100, 22);
+        ipTextField.setFontColor(new Color(0x442C0Fff));
         ipTextField.setMaxLength(16);
         ipTextField.setTextFilter(new TextField.TextFieldFilter() {
             @Override

@@ -6,9 +6,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.utils.Align;
 import com.dropical.client.client.DropicalMain;
 import com.dropical.client.managers.DataManager;
 import com.dropical.client.managers.ScreenManager;
@@ -35,6 +40,7 @@ public class Menu implements Screen {
 
     //NPCs
     private Crab crab;
+    private BitmapFont crabBitmapFont;
 
     private DropicalMain game;
     public Menu(DropicalMain game) {
@@ -146,12 +152,14 @@ public class Menu implements Screen {
         tournamentButton.setDownTexture("GUI/buttons/cat/cat_down.png", 52, 61);
         tournamentButton.setOverTexture("GUI/buttons/cat/cat_down.png", 52, 61);
         tournamentButton.setDisabledTexture("GUI/buttons/cat/cat_disabled.png", 52, 61);
-        tournamentButton.setFontColor(new Color(0x4C4C4Cff));
+        tournamentButton.setFontColor(new Color(0x898989ff)); //disabled Button color
+//        tournamentButton.setFontColor(new Color(0x4C4C4Cff)); //normal color
         tournamentButton.flipX();
         tournamentButton.updateStyle();
         tournamentButton.setDisabled(true);
 
-        crab = new Crab();
+        crab = new Crab(526, 488);
+        crab.setCenteredX(true);
         crab.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -165,7 +173,26 @@ public class Menu implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
             }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                crab.setScaling(1.1f);
+                crabBitmapFont.setColor(new Color(0xF47400ff));
+
+                super.enter(event, x, y, pointer, fromActor);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                crab.setScaling(1);
+                crabBitmapFont.setColor(new Color(0x4C4C4Cff));
+
+                super.exit(event, x, y, pointer, toActor);
+            }
         });
+        crabBitmapFont = new BitmapFont(Gdx.files.internal("BitmapFont/TetrisFont.fnt"));
+        crabBitmapFont.getData().setScale(0.5f);
+        crabBitmapFont.setColor(new Color(0x636363ff));
 
         stage.addActor(singleplayerButton.getButton());
         stage.addActor(againstAIButton.getButton());
@@ -198,6 +225,8 @@ public class Menu implements Screen {
 
         //Krabbe zeichnen
         crab.draw(game.getBatch());
+
+        crabBitmapFont.draw(game.getBatch(), "Settings", 526, 482);
 
         game.getBatch().end();
 

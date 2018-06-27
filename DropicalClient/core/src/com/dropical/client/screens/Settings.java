@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -61,6 +59,7 @@ public class Settings implements Screen {
         ghostButton.setOverTexture("GUI/buttons/main/main_down.png", 100, 22);
         ghostButton.setCheckedTexture("GUI/buttons/main/main_down.png", 100, 22);
         ghostButton.setDisabledTexture("GUI/buttons/main/main_disabled.png", 100, 22);
+        ghostButton.setFontColor(new Color(0x442C0Fff));
         ghostButton.updateStyle();
         ghostButton.addListener(new InputListener() {
             @Override

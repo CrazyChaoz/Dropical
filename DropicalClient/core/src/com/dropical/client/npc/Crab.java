@@ -16,10 +16,20 @@ public class Crab extends Actor {
     private DropicalAnimation crabAnimation;
     private float crabElapsedTime = 0;
 
+    public void setScaling(float scale) {
+        crabAnimation.setScaling(scale);
+    }
+    public void setCenteredX(boolean centeredX) {
+        crabAnimation.setCenteredX(centeredX);
+    }
+    public void setCenteredY(boolean centeredY) {
+        crabAnimation.setCenteredY(centeredY);
+    }
+
     //----------------------------------------
 
-    public Crab() {
-        setPosition(536, 468);
+    public Crab(float x, float y) {
+        setPosition(x, y);
         setBounds(getX(), getY(), 64, 80);
         createCrabAnimation();
     }
@@ -44,7 +54,7 @@ public class Crab extends Actor {
 
     public void draw(Batch batch) {
         crabElapsedTime += Gdx.graphics.getDeltaTime();
-        crabAnimation.draw(crabElapsedTime, batch, 536, 468);
+        crabAnimation.draw(crabElapsedTime, batch, getX(), getY());
     }
 
 }

@@ -19,6 +19,7 @@ import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Game implements Screen {
