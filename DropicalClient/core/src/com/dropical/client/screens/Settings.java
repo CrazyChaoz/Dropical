@@ -14,6 +14,7 @@ import com.dropical.client.managers.ScreenManager;
 import com.dropical.client.world.Background;
 import com.pezcraft.dropical.cam.DropicalCam;
 import com.pezcraft.dropical.gui.DropicalButton;
+import com.pezcraft.dropical.gui.DropicalCheckbox;
 
 public class Settings implements Screen {
     private DropicalCam cam;
@@ -24,9 +25,10 @@ public class Settings implements Screen {
     private ScreenManager screenManager;
     private Preferences settings;
 
-    //Button
+    //Button/Checkbox
     private Stage stage;
     private DropicalButton ghostButton;
+    private DropicalCheckbox ghostCheckbox;
 
     private DropicalMain game;
     public Settings(DropicalMain game) {
@@ -81,7 +83,10 @@ public class Settings implements Screen {
             }
         });
 
+        ghostCheckbox = new DropicalCheckbox("", bitmapFont, 440, 400, 80, 80);
+
         stage.addActor(ghostButton.getButton());
+        stage.addActor(ghostCheckbox.getBox());
         stage.setViewport(cam.getViewport());
 
         loadSettings();

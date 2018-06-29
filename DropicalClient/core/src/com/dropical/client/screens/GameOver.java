@@ -560,6 +560,8 @@ public class GameOver implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(null);
+
         //Hai-Animation zurücksetzen
         sharkFlyInElapsedTime = 0;
         sharkElapsedTimeP1 = 0;

@@ -71,6 +71,8 @@ public class Game implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(null);
+
         //Manager
         screenManager = ScreenManager.getInstance();
         manager = DataManager.getInstance();

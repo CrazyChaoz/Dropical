@@ -40,6 +40,8 @@ public class Connecting implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(null);
+
         //Connecting-Animation zurücksetzen
         connectingElapsedTime = 0;
 

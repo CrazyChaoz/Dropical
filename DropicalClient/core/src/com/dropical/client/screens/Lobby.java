@@ -48,6 +48,8 @@ public class Lobby implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(null);
+
         //Hintergrund
         background = Background.getInstance();
 
